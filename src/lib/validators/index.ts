@@ -17,7 +17,7 @@ export const newsSchema = z.object({
   slug: z.string().min(1, "Slug is required"),
   title: z.string().min(1, "Title is required"),
   imageUrl: z.string().url().optional().nullable(),
-  body: z.any(),
+  body: z.record(z.string(), z.unknown()).or(z.array(z.unknown())),
 });
 
 export const newsPatchSchema = newsSchema.partial();
@@ -44,8 +44,8 @@ export const gallerySchema = z.object({
 });
 
 export const admissionsPatchSchema = z.object({
-  seatMatrix: z.any().optional(),
-  importantDates: z.any().optional(),
+  seatMatrix: z.record(z.string(), z.unknown()).optional(),
+  importantDates: z.record(z.string(), z.unknown()).or(z.array(z.unknown())).optional(),
 });
 
 export const contactSchema = z.object({

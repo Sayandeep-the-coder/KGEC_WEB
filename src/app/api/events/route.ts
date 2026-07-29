@@ -5,22 +5,19 @@ import { gte, asc, desc } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { eventSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
-import { checkPublicRateLimit } from "@/lib/middlewares/ratelimit";
-import { headers } from "next/headers";
+import { enforcePublicRateLimit } from "@/lib/utils";
 
 
 export async function GET(req: NextRequest) {
-
-  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
-  const rateLimit = await checkPublicRateLimit(`public_${ip}`);
-  if (!rateLimit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
-  }
+  const rateLimited = await enforcePublicRateLimit();
+  if (rateLimited) return rateLimited;
 
 
   try {
     const { searchParams } = new URL(req.url);
     const upcoming = searchParams.get("upcoming") === "true";
+    const limit = Math.min(parseInt(searchParams.get("limit") || "20", 10), 100);
+    const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1);
 
     const whereClause = upcoming ? gte(events.eventDate, new Date()) : undefined;
     const orderClause = upcoming ? asc(events.eventDate) : desc(events.eventDate);
@@ -29,7 +26,9 @@ export async function GET(req: NextRequest) {
       .select()
       .from(events)
       .where(whereClause)
-      .orderBy(orderClause);
+      .orderBy(orderClause)
+      .limit(limit)
+      .offset((page - 1) * limit);
 
     return NextResponse.json({ data: items });
   } catch (error) {

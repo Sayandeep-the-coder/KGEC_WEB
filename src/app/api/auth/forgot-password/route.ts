@@ -8,6 +8,10 @@ import { createAdminClient } from "@/lib/config/supabase/admin";
 import { checkAuthRateLimit, incrementAuthBackoff } from "@/lib/middlewares/ratelimit";
 import crypto from "crypto";
 
+function hashOtp(otp: string): string {
+  return crypto.createHash("sha256").update(otp).digest("hex");
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -36,8 +40,11 @@ export async function POST(req: NextRequest) {
 
     // Verify the email belongs to a registered Supabase Auth user
     const supabaseAdmin = createAdminClient();
-    const { data: usersData } = await supabaseAdmin.auth.admin.listUsers();
-    const userExists = usersData?.users?.some((u) => u.email === email);
+    const { data: { users } } = await supabaseAdmin.auth.admin.listUsers({
+      page: 1,
+      perPage: 1000,
+    });
+    const userExists = users && users.some((u) => u.email === email);
 
     if (!userExists) {
       // Return success even if user doesn't exist to prevent email enumeration
@@ -52,11 +59,11 @@ export async function POST(req: NextRequest) {
     // Generate a 6-digit OTP
     const otp = crypto.randomInt(100000, 999999).toString();
 
-    // Store OTP with 10-minute expiry
+    // Store hashed OTP with 10-minute expiry
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
     await db.insert(passwordResetOtps).values({
       email,
-      otp,
+      otp: hashOtp(otp),
       expiresAt,
     });
 
