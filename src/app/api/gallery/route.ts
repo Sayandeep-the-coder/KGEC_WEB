@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { galleryImages } from "@/db/schema";
+import { db } from "@/lib/db";
+import { galleryImages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { requireAdmin } from "@/lib/auth";
+import { requireAdmin } from "@/lib/middlewares/auth";
 import { gallerySchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
-import { checkPublicRateLimit } from "@/lib/ratelimit";
+import { checkPublicRateLimit } from "@/lib/middlewares/ratelimit";
 import { headers } from "next/headers";
 
 

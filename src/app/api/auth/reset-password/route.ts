@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { passwordResetOtps } from "@/db/schema";
+import { db } from "@/lib/db";
+import { passwordResetOtps } from "@/lib/db/schema";
 import { eq, and, gt } from "drizzle-orm";
 import { resetPasswordSchema } from "@/lib/validators";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { checkAuthRateLimit, incrementAuthBackoff, clearAuthBackoff } from "@/lib/ratelimit";
+import { createAdminClient } from "@/lib/config/supabase/admin";
+import { checkAuthRateLimit, incrementAuthBackoff, clearAuthBackoff } from "@/lib/middlewares/ratelimit";
 
 export async function POST(req: NextRequest) {
   try {

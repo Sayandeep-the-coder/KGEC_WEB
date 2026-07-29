@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { placementDepartments, placementStats } from "@/db/schema";
+import { db } from "@/lib/db";
+import { placementDepartments, placementStats } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { requireAdmin } from "@/lib/auth";
+import { requireAdmin } from "@/lib/middlewares/auth";
 import { placementDeptRowSchema } from "@/lib/validators";
 import Papa from "papaparse";
 import { revalidateTag } from "next/cache";

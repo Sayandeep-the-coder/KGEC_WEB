@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { downloads, downloadCategoryEnum } from "@/db/schema";
+import { db } from "@/lib/db";
+import { downloads, downloadCategoryEnum } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
-import { requireAdmin } from "@/lib/auth";
+import { requireAdmin } from "@/lib/middlewares/auth";
 import { downloadSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
-import { checkPublicRateLimit } from "@/lib/ratelimit";
+import { checkPublicRateLimit } from "@/lib/middlewares/ratelimit";
 import { headers } from "next/headers";
 
 

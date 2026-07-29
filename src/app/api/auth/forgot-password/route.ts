@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { passwordResetOtps } from "@/db/schema";
+import { db } from "@/lib/db";
+import { passwordResetOtps } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { forgotPasswordSchema } from "@/lib/validators";
-import { sendPasswordResetOtp } from "@/lib/email";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { checkAuthRateLimit, incrementAuthBackoff } from "@/lib/ratelimit";
+import { sendPasswordResetOtp } from "@/lib/services/email";
+import { createAdminClient } from "@/lib/config/supabase/admin";
+import { checkAuthRateLimit, incrementAuthBackoff } from "@/lib/middlewares/ratelimit";
 import crypto from "crypto";
 
 export async function POST(req: NextRequest) {

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { placementRecruiters } from "@/db/schema";
-import { requireAdmin } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { placementRecruiters } from "@/lib/db/schema";
+import { requireAdmin } from "@/lib/middlewares/auth";
 import { placementRecruiterRowSchema } from "@/lib/validators";
 import Papa from "papaparse";
 import { revalidateTag } from "next/cache";

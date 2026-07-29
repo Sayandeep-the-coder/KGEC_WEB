@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { placementStats } from "@/db/schema";
+import { db } from "@/lib/db";
+import { placementStats } from "@/lib/db/schema";
 import { asc, eq } from "drizzle-orm";
-import { checkPublicRateLimit } from "@/lib/ratelimit";
+import { checkPublicRateLimit } from "@/lib/middlewares/ratelimit";
 import { headers } from "next/headers";
 
 

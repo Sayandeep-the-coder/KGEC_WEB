@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/auth";
+import { requireAdmin } from "@/lib/middlewares/auth";
 import { signedUrlSchema } from "@/lib/validators";
-import { getPresignedUploadUrl } from "@/lib/storage";
+import { getPresignedUploadUrl } from "@/lib/services/storage";
 
 export async function POST(req: NextRequest) {
   try {
