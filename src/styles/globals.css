@@ -36,11 +36,6 @@
 }
 
 body {
-  background: 
-    radial-gradient(ellipse at 20% -10%, rgba(56, 189, 248, 0.25), transparent 50%),
-    radial-gradient(ellipse at 80% 110%, rgba(99, 102, 241, 0.25), transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(15, 23, 42, 0.95), var(--kgec-page-bg));
-  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
@@ -49,7 +44,7 @@ body {
 
 /* College Footer Components */
 .kgec-footer-wrapper {
-  @apply p-4 sm:p-6 lg:p-8 bg-zinc-50 dark:bg-black w-full;
+  @apply p-4 sm:p-6 lg:p-8 w-full;
 }
 
 .kgec-footer-container {

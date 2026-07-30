@@ -9,6 +9,10 @@ const heroImages = [
     alt: "KGEC campus entrance",
   },
   {
+    src: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1800&q=85",
+    alt: "College academic building",
+  },
+  {
     src: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1800&q=85",
     alt: "College library reading hall",
   },
@@ -16,9 +20,17 @@ const heroImages = [
     src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1800&q=85",
     alt: "Students collaborating on campus",
   },
+  {
+    src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1800&q=85",
+    alt: "Technology lab and computers",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1800&q=85",
+    alt: "Campus garden and pathways",
+  },
 ];
 
-const AUTO_SCROLL_MS = 4500;
+const AUTO_SCROLL_MS = 5000;
 
 export default function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -35,71 +47,78 @@ export default function Hero() {
 
   useEffect(() => {
     const timer = window.setInterval(showNext, AUTO_SCROLL_MS);
-
     return () => window.clearInterval(timer);
   }, [showNext]);
 
   return (
-    <section
-      aria-label="KGEC campus image carousel"
-      className="relative mx-auto h-[68vh] min-h-105 max-h-170 w-full max-w-7xl overflow-hidden rounded-2xl bg-slate-950 shadow-2xl md:h-[72vh]"
-    >
-      <div
-        className="flex h-full transition-transform duration-700 ease-out"
-        style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+    <div className="w-full px-4 sm:px-6 lg:px-8 mx-auto max-w-[100rem] pt-2 pb-8">
+      <section
+        aria-label="KGEC campus image carousel"
+        className="relative w-full aspect-[21/10] min-h-[500px] max-h-[85vh] overflow-hidden rounded-[2rem] bg-slate-950 shadow-md"
       >
-        {heroImages.map((image, index) => (
-          <div key={image.src} className="relative h-full min-w-full">
-            <img
-              src={image.src}
-              alt={image.alt}
-              className="h-full w-full object-cover"
-              draggable={false}
-              loading={index === 0 ? "eager" : "lazy"}
+        <div
+          className="flex h-full transition-transform duration-700 ease-in-out"
+          style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+        >
+          {heroImages.map((image, index) => (
+            <div key={image.src} className="relative h-full min-w-full">
+              <img
+                src={image.src}
+                alt={image.alt}
+                className="h-full w-full object-cover opacity-90"
+                draggable={false}
+                loading={index === 0 ? "eager" : "lazy"}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Large KGEC Watermark */}
+        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 flex justify-center px-4">
+          <span className="select-none font-sans text-[22vw] font-bold leading-none text-white/20 xl:text-[20rem]">
+            KGEC
+          </span>
+        </div>
+
+        {/* Bottom Gradient overlay for text visibility */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/60 to-transparent z-10" />
+
+        {/* Bottom Left controls: 01 / 06 and Progress line */}
+        <div className="absolute bottom-10 left-10 z-20 flex flex-col">
+          <div className="flex items-baseline text-white font-bold tracking-wide">
+            <span className="text-4xl">{(activeIndex + 1).toString().padStart(2, "0")}</span>
+            <span className="text-white/60 text-xl mx-2">/</span>
+            <span className="text-white/60 text-xl">{heroImages.length.toString().padStart(2, "0")}</span>
+          </div>
+          
+          <div className="flex items-center w-72 h-1.5 bg-white/30 rounded-full mt-3 relative overflow-hidden">
+            <div 
+              className="absolute left-0 top-0 h-full bg-[#1e40af] rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${((activeIndex + 1) / heroImages.length) * 100}%` }}
             />
           </div>
-        ))}
-      </div>
+        </div>
 
-      <div className="pointer-events-none absolute inset-x-0 top-4 z-10 flex justify-center px-4 sm:top-0">
-        <span className="select-none font-serif text-[28vw] font-black leading-none text-white/20 sm:text-[24vw] md:text-[13rem] lg:text-[16rem]">
-          KGEC
-        </span>
-      </div>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-slate-950/55 to-transparent" />
-
-      <div className="absolute bottom-6 left-6 z-20 flex w-36 items-center gap-2 sm:w-48">
-        {heroImages.map((image, index) => (
+        {/* Right Arrow Controls */}
+        <div className="absolute right-10 bottom-10 z-20 flex items-center gap-4">
           <button
-            key={`${image.src}-indicator`}
             type="button"
-            aria-label={`Show slide ${index + 1}`}
-            aria-current={activeIndex === index}
-            onClick={() => setActiveIndex(index)}
-            className="h-1.5 flex-1 rounded-full bg-white/35 transition-colors hover:bg-white/70 aria-current:bg-white cursor-pointer"
-          />
-        ))}
-      </div>
-
-      <div className="absolute right-6 bottom-6 z-20 flex items-center gap-3">
-        <button
-          type="button"
-          aria-label="Previous hero image"
-          onClick={showPrevious}
-          className="flex size-11 items-center justify-center rounded-full border border-white/30 bg-slate-950/45 text-white shadow-lg backdrop-blur-md transition hover:border-white/70 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
-        >
-          <ChevronLeft size={20} strokeWidth={2.5} />
-        </button>
-        <button
-          type="button"
-          aria-label="Next hero image"
-          onClick={showNext}
-          className="flex size-11 items-center justify-center rounded-full border border-white/30 bg-slate-950/45 text-white shadow-lg backdrop-blur-md transition hover:border-white/70 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
-        >
-          <ChevronRight size={20} strokeWidth={2.5} />
-        </button>
-      </div>
-    </section>
+            aria-label="Previous hero image"
+            onClick={showPrevious}
+            className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md transition hover:bg-black/60 hover:border-white/40 focus:outline-none cursor-pointer"
+          >
+            <ChevronLeft size={24} strokeWidth={1.5} />
+          </button>
+          <button
+            type="button"
+            aria-label="Next hero image"
+            onClick={showNext}
+            className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md transition hover:bg-black/60 hover:border-white/40 focus:outline-none cursor-pointer"
+          >
+            <ChevronRight size={24} strokeWidth={1.5} />
+          </button>
+        </div>
+      </section>
+    </div>
   );
 }
