@@ -3,11 +3,27 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --kgec-navy: #0f2552;
+  --kgec-blue: #2b59c3;
+  --kgec-soft-blue: #f0f4ff;
+  --kgec-facility-panel: #17202c;
+  --kgec-impact-panel: #0b1325;
+  --kgec-footer-cta: #07132b;
+  --kgec-footer: #040a17;
+  --kgec-page-bg: #090d16;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-kgec-navy: var(--kgec-navy);
+  --color-kgec-blue: var(--kgec-blue);
+  --color-kgec-soft-blue: var(--kgec-soft-blue);
+  --color-kgec-facility-panel: var(--kgec-facility-panel);
+  --color-kgec-impact-panel: var(--kgec-impact-panel);
+  --color-kgec-footer-cta: var(--kgec-footer-cta);
+  --color-kgec-footer: var(--kgec-footer);
+  --color-kgec-page-bg: var(--kgec-page-bg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -20,7 +36,13 @@
 }
 
 body {
-  background: var(--background);
+  background: 
+    radial-gradient(ellipse at 20% -10%, rgba(56, 189, 248, 0.25), transparent 50%),
+    radial-gradient(ellipse at 80% 110%, rgba(99, 102, 241, 0.25), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(15, 23, 42, 0.95), var(--kgec-page-bg));
+  background-attachment: fixed;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
