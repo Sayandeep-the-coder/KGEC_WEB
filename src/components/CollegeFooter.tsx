@@ -79,7 +79,7 @@ export default function CollegeFooter() {
                     Engineering College
                   </h2>
                   <p className="kgec-footer-subtitle">(Under MAKAUT, West Bengal)</p>
-                  <p className="kgec-footer-estd">ESTD. 1961</p>
+                  <p className="kgec-footer-estd">ESTD. 1995</p>
                 </div>
               </div>
 
