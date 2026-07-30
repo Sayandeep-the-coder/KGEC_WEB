@@ -3,11 +3,27 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --kgec-navy: #0f2552;
+  --kgec-blue: #2b59c3;
+  --kgec-soft-blue: #f0f4ff;
+  --kgec-facility-panel: #17202c;
+  --kgec-impact-panel: #0b1325;
+  --kgec-footer-cta: #07132b;
+  --kgec-footer: #040a17;
+  --kgec-page-bg: #090d16;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-kgec-navy: var(--kgec-navy);
+  --color-kgec-blue: var(--kgec-blue);
+  --color-kgec-soft-blue: var(--kgec-soft-blue);
+  --color-kgec-facility-panel: var(--kgec-facility-panel);
+  --color-kgec-impact-panel: var(--kgec-impact-panel);
+  --color-kgec-footer-cta: var(--kgec-footer-cta);
+  --color-kgec-footer: var(--kgec-footer);
+  --color-kgec-page-bg: var(--kgec-page-bg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -20,7 +36,118 @@
 }
 
 body {
-  background: var(--background);
+  background: 
+    radial-gradient(ellipse at 20% -10%, rgba(56, 189, 248, 0.25), transparent 50%),
+    radial-gradient(ellipse at 80% 110%, rgba(99, 102, 241, 0.25), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(15, 23, 42, 0.95), var(--kgec-page-bg));
+  background-attachment: fixed;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* College Footer Components */
+.kgec-footer-wrapper {
+  @apply p-4 sm:p-6 lg:p-8 bg-zinc-50 dark:bg-black w-full;
+}
+
+.kgec-footer-container {
+  @apply relative overflow-hidden bg-[#061024] text-slate-300 rounded-[2rem] sm:rounded-[2.5rem];
+}
+
+.kgec-footer-watermark-wrapper {
+  @apply pointer-events-none absolute bottom-0 left-0 right-0 flex justify-center overflow-hidden select-none opacity-60;
+}
+
+.kgec-footer-watermark {
+  @apply whitespace-nowrap text-[14rem] font-black leading-none tracking-tighter text-white/[0.04] sm:text-[20rem] lg:text-[26rem] -mb-16;
+}
+
+.kgec-footer-content {
+  @apply relative z-10 mx-auto max-w-[90rem] px-8 pt-20 pb-8 sm:px-12 lg:px-16;
+}
+
+.kgec-footer-grid {
+  @apply grid grid-cols-1 gap-16 lg:grid-cols-[2fr_repeat(5,1fr)];
+}
+
+.kgec-footer-brand-section {
+  @apply flex flex-col justify-between lg:pr-12 lg:border-r lg:border-white/10;
+}
+
+.kgec-footer-logo-title {
+  @apply flex items-center gap-5;
+}
+
+.kgec-footer-logo {
+  @apply relative flex h-20 w-20 sm:h-24 sm:w-24 shrink-0 items-center justify-center overflow-hidden;
+}
+
+.kgec-footer-title {
+  @apply text-xl sm:text-2xl font-bold uppercase leading-snug tracking-wide text-white font-serif;
+}
+
+.kgec-footer-subtitle {
+  @apply mt-2 text-sm text-slate-400;
+}
+
+.kgec-footer-estd {
+  @apply mt-1 text-sm font-medium tracking-wide text-amber-500;
+}
+
+.kgec-footer-social-section {
+  @apply mt-16 lg:mt-24;
+}
+
+.kgec-footer-social-heading {
+  @apply text-xs font-semibold uppercase tracking-widest text-slate-400;
+}
+
+.kgec-footer-social-links {
+  @apply mt-5 flex gap-6;
+}
+
+.kgec-footer-social-link {
+  @apply text-white transition-colors hover:text-amber-500;
+}
+
+.kgec-footer-social-icon {
+  @apply h-5 w-5;
+}
+
+.kgec-footer-nav {
+  @apply z-10;
+}
+
+.kgec-footer-nav-title {
+  @apply text-sm font-bold tracking-wider text-white uppercase;
+}
+
+.kgec-footer-nav-divider {
+  @apply mt-4 mb-6 h-[2px] w-8 bg-amber-500;
+}
+
+.kgec-footer-nav-list {
+  @apply space-y-4;
+}
+
+.kgec-footer-nav-link {
+  @apply text-sm text-slate-300 transition-colors hover:text-amber-400;
+}
+
+.kgec-footer-bottom-bar {
+  @apply relative mt-20 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-slate-400 sm:flex-row z-10;
+}
+
+.kgec-footer-bottom-links {
+  @apply flex items-center gap-4;
+}
+
+.kgec-footer-bottom-link {
+  @apply hover:text-amber-400 transition-colors;
+}
+
+.kgec-footer-bottom-separator {
+  @apply text-white/20;
 }
