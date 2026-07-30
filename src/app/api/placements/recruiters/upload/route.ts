@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { placementRecruiters } from "@/db/schema";
-import { requireAdmin } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { placementRecruiters } from "@/lib/db/schema";
+import { requireAdmin } from "@/lib/middlewares/auth";
 import { placementRecruiterRowSchema } from "@/lib/validators";
 import Papa from "papaparse";
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: NextRequest) {
   try {
@@ -68,19 +68,21 @@ export async function POST(req: NextRequest) {
     });
 
     if (validRows.length > 0) {
-      for (const row of validRows) {
-        await db
-          .insert(placementRecruiters)
-          .values(row)
-          .onConflictDoUpdate({
-            target: [placementRecruiters.year, placementRecruiters.company],
-            set: {
-              offers: row.offers,
-            },
-          });
-      }
+      await db.transaction(async (tx) => {
+        for (const row of validRows) {
+          await tx
+            .insert(placementRecruiters)
+            .values(row)
+            .onConflictDoUpdate({
+              target: [placementRecruiters.year, placementRecruiters.company],
+              set: {
+                offers: row.offers,
+              },
+            });
+        }
+      });
 
-      revalidateTag("placements", "max");
+      revalidatePath("/training-and-placement");
     }
 
     return NextResponse.json({

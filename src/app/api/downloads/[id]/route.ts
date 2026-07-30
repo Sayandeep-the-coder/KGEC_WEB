@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { downloads } from "@/db/schema";
+import { db } from "@/lib/db";
+import { downloads } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { requireAdmin } from "@/lib/auth";
+import { requireAdmin } from "@/lib/middlewares/auth";
 import { revalidatePath } from "next/cache";
 
 export async function DELETE(

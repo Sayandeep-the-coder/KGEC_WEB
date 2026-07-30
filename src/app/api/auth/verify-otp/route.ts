@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { passwordResetOtps } from "@/db/schema";
+import { db } from "@/lib/db";
+import { passwordResetOtps } from "@/lib/db/schema";
 import { eq, and, gt } from "drizzle-orm";
 import { verifyOtpSchema } from "@/lib/validators";
-import { checkAuthRateLimit, incrementAuthBackoff } from "@/lib/ratelimit";
+import { checkAuthRateLimit, incrementAuthBackoff } from "@/lib/middlewares/ratelimit";
+import crypto from "crypto";
 
 const MAX_ATTEMPTS = 5;
+
+function hashOtp(otp: string): string {
+  return crypto.createHash("sha256").update(otp).digest("hex");
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -66,8 +71,8 @@ export async function POST(req: NextRequest) {
       .set({ attempts: otpRecord.attempts + 1 })
       .where(eq(passwordResetOtps.id, otpRecord.id));
 
-    // Verify OTP
-    if (otpRecord.otp !== otp) {
+    // Verify OTP (compare hashed values)
+    if (otpRecord.otp !== hashOtp(otp)) {
       await incrementAuthBackoff(ip, email);
       return NextResponse.json(
         { error: "Invalid OTP. Please try again." },

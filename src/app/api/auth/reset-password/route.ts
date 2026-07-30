@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { passwordResetOtps } from "@/db/schema";
+import { db } from "@/lib/db";
+import { passwordResetOtps } from "@/lib/db/schema";
 import { eq, and, gt } from "drizzle-orm";
 import { resetPasswordSchema } from "@/lib/validators";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { checkAuthRateLimit, incrementAuthBackoff, clearAuthBackoff } from "@/lib/ratelimit";
+import { createAdminClient } from "@/lib/config/supabase/admin";
+import { checkAuthRateLimit, incrementAuthBackoff, clearAuthBackoff } from "@/lib/middlewares/ratelimit";
+import crypto from "crypto";
+
+function hashOtp(otp: string): string {
+  return crypto.createHash("sha256").update(otp).digest("hex");
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -50,8 +55,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Double-check OTP matches
-    if (otpRecord.otp !== otp) {
+    // Double-check OTP matches (compare hashed values)
+    if (otpRecord.otp !== hashOtp(otp)) {
       await incrementAuthBackoff(ip, email);
       return NextResponse.json(
         { error: "Invalid OTP." },
@@ -63,8 +68,11 @@ export async function POST(req: NextRequest) {
     const supabaseAdmin = createAdminClient();
 
     // Look up user by email
-    const { data: usersData } = await supabaseAdmin.auth.admin.listUsers();
-    const user = usersData?.users?.find((u) => u.email === email);
+    const { data: { users } } = await supabaseAdmin.auth.admin.listUsers({
+      page: 1,
+      perPage: 1000,
+    });
+    const user = users?.find((u) => u.email === email);
 
     if (!user) {
       await incrementAuthBackoff(ip, email);

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { contactSubmissions } from "@/db/schema";
+import { db } from "@/lib/db";
+import { contactSubmissions } from "@/lib/db/schema";
 import { contactSchema } from "@/lib/validators";
-import { checkPublicRateLimit } from "@/lib/ratelimit";
-import { sendContactNotification } from "@/lib/email";
+import { checkPublicRateLimit } from "@/lib/middlewares/ratelimit";
+import { sendContactNotification } from "@/lib/services/email";
 
 export async function POST(req: NextRequest) {
   try {

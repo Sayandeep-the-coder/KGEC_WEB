@@ -20,48 +20,32 @@ Official portal for **Kalyani Government Engineering College** — rebuilt on a 
 
 ```
 src/
-├── db/
-│   ├── schema.ts            # Drizzle table & enum definitions
-│   ├── index.ts             # Pooled DB client
-│   └── migrations/          # Drizzle Kit migration output
-├── lib/
-│   ├── supabase/
-│   │   ├── server.ts        # Server-side SSR client (cookies)
-│   │   ├── client.ts        # Browser-side client
-│   │   └── admin.ts         # Service-role client
-│   ├── auth.ts              # requireAdmin() helper
-│   ├── storage.ts           # Supabase Storage S3 presigned URL helper
-│   ├── ratelimit.ts         # Upstash Redis rate limiter
-│   ├── email.ts             # Resend notification helper
-│   └── validators/
-│       └── index.ts         # Zod schemas for all resources
-└── app/
-    ├── layout.tsx
-    ├── page.tsx
-    └── api/
-        ├── health/              GET     – keep-alive ping
-        ├── auth/[...supabase]/  GET|POST – Supabase session exchange
-        ├── notices/             GET|POST
-        │   └── [id]/            GET|PATCH|DELETE
-        ├── news/                GET|POST
-        │   └── [slug]/          GET|PATCH|DELETE
-        ├── events/              GET|POST
-        │   └── [id]/            GET|PATCH|DELETE
-        ├── downloads/           GET|POST
-        │   └── [id]/            DELETE
-        ├── gallery/             GET|POST
-        │   └── [id]/            DELETE
-        ├── admissions/
-        │   └── [program]/       GET|PATCH
-        ├── placements/
-        │   ├── stats/           GET
-        │   ├── departments/     GET
-        │   │   └── upload/      POST (CSV)
-        │   └── recruiters/      GET
-        │       └── upload/      POST (CSV)
-        ├── contact/             POST (rate-limited)
-        └── storage/
-            └── signed-url/      POST (admin, Supabase S3 presigned URL)
+├── app/
+│   ├── (public)/          # Public-facing web pages
+│   ├── admin/             # Secure admin dashboard pages
+│   └── api/               # Next.js 16 Route Handlers (API Layer)
+│       ├── health/
+│       ├── auth/
+│       ├── notices/
+│       └── ...
+└── lib/
+    ├── config/            # Constants and environment configuration
+    │   ├── env.ts         # Zod validated process.env
+    │   └── supabase/      # Supabase clients (server, client, admin)
+    ├── db/                # Drizzle ORM Setup
+    │   ├── schema.ts      # Table & enum definitions
+    │   ├── index.ts       # Pooled Postgres client
+    │   └── migrations/
+    ├── middlewares/       # Cross-cutting API protections
+    │   ├── auth.ts        # requireAdmin() session guard
+    │   └── ratelimit.ts   # Upstash Redis Sliding Window / Backoff
+    ├── services/          # External API integrations
+    │   ├── email.ts       # Gmail API (OAuth2)
+    │   └── storage.ts     # Supabase Storage S3 Presigned URLs
+    ├── utils/             # Generic helpers (formatting, styling)
+    │   └── index.ts
+    └── validators/        # Zod request payload schemas
+        └── index.ts
 ```
 
 ## API Conventions
@@ -157,7 +141,7 @@ src/
 | `POST` | `/api/placements/departments/upload` | Admin | `multipart/form-data` with `file` (CSV). Columns: `year, department, students_placed, median_salary, highest_salary` | `{ inserted: number, errors: [{ row, message }] }` |
 | `POST` | `/api/placements/recruiters/upload` | Admin | `multipart/form-data` with `file` (CSV). Columns: `year, company, offers` | `{ inserted: number, errors: [{ row, message }] }` |
 
-> CSV uploads use `onConflictDoUpdate` (upsert on composite unique keys). Department uploads also recompute the aggregate `placement_stats` row for each affected year.
+> CSV uploads enforce a strict `< 5MB` file size and `text/csv` MIME type before memory ingestion. They use `onConflictDoUpdate` (upsert on composite unique keys). Department uploads also recompute the aggregate `placement_stats` row for each affected year.
 
 ### Contact
 
@@ -169,9 +153,9 @@ src/
 
 | Method | Path | Auth | Body | Response |
 | --- | --- | --- | --- | --- |
-| `POST` | `/api/storage/signed-url` | Admin | `{ bucket: "notices"\|"downloads"\|"gallery"\|"news", filename }` | `{ data: { uploadUrl, publicUrl, key } }` |
+| `POST` | `/api/storage/signed-url` | Admin | `{ bucket: "notices"\|"downloads"\|"gallery"\|"news", filename, contentType }` | `{ data: { uploadUrl, publicUrl, key } }` |
 
-> The admin UI calls this endpoint first to get a presigned PUT URL, uploads the file directly to Supabase Storage via its S3-compatible API, then creates the DB record with the returned `publicUrl`.
+> The admin UI calls this endpoint first to get a presigned PUT URL. The `contentType` must be one of `image/jpeg`, `image/png`, `image/webp`, or `application/pdf`. The returned `uploadUrl` contains a cryptographic signature locking the upload to this exact MIME type, preventing arbitrary file execution. The UI then uploads the file directly to Supabase Storage and creates the DB record with the returned `publicUrl`.
 
 ## Getting Started
 
@@ -181,7 +165,7 @@ src/
 - A Supabase project (free tier)
 - A Supabase project with Storage buckets configured (free tier)
 - An Upstash Redis database (free tier)
-- A Resend account (free tier) — optional, for contact form email
+- A Google Cloud Platform (GCP) project — for Gmail API OAuth2 (free)
 
 ### 1. Install dependencies
 
@@ -258,6 +242,11 @@ Public pages use ISR (`revalidate` or tag-based). Concurrent users hit Vercel's 
 - **Public Endpoints**: Moderate sliding window limits on all `GET` routes and `/api/contact`.
 - **Admin Endpoints**: Looser limits on data mutation routes (`POST`, `PATCH`, `DELETE`) protected by `requireAdmin()`.
 - **Auth Flow**: Custom exponential backoff (`delay = base * (2 ^ attempts)`) keyed by both IP and Email. This secures endpoints like `/api/auth/forgot-password` against brute-forcing without permanently locking out users. Admin writes trigger `revalidatePath` / `revalidateTag` for immediate cache busting.
+
+**File Upload Security**:
+- Assets are stored completely outside the runtime on isolated **Supabase Storage**.
+- CSV endpoints enforce hard `< 5MB` bounds and strict `text/csv` checks before the file ever hits memory to prevent DoS attacks.
+- S3 signed URLs are strictly typed and cryptographically enforce a whitelist of MIME types (`image/jpeg`, `image/png`, `image/webp`, `application/pdf`) directly inside the `PutObjectCommand` AWS signature.
 
 ## Free-Tier Limits to Watch
 

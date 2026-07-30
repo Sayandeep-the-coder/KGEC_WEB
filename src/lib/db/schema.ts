@@ -26,6 +26,7 @@ export const notices = pgTable("notices", {
   category: noticeCategoryEnum("category").default("general").notNull(),
   isNew: boolean("is_new").default(true).notNull(),
   publishedAt: timestamp("published_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const news = pgTable("news", {
@@ -35,6 +36,7 @@ export const news = pgTable("news", {
   imageUrl: text("image_url"),
   body: jsonb("body").notNull(),
   publishedAt: timestamp("published_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const events = pgTable("events", {
@@ -43,6 +45,7 @@ export const events = pgTable("events", {
   description: text("description"),
   eventDate: timestamp("event_date").notNull(),
   externalLink: text("external_link"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const downloads = pgTable("downloads", {
@@ -51,6 +54,7 @@ export const downloads = pgTable("downloads", {
   fileUrl: text("file_url").notNull(),
   category: downloadCategoryEnum("category").default("general").notNull(),
   uploadedAt: timestamp("uploaded_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const galleryImages = pgTable("gallery_images", {

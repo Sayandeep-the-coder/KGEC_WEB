@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { placementDepartments, placementStats } from "@/db/schema";
+import { db } from "@/lib/db";
+import { placementDepartments, placementStats } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { requireAdmin } from "@/lib/auth";
+import { requireAdmin } from "@/lib/middlewares/auth";
 import { placementDeptRowSchema } from "@/lib/validators";
 import Papa from "papaparse";
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: NextRequest) {
   try {
@@ -73,72 +73,74 @@ export async function POST(req: NextRequest) {
     });
 
     if (validRows.length > 0) {
-      // Upsert department rows
-      for (const row of validRows) {
-        await db
-          .insert(placementDepartments)
-          .values(row)
-          .onConflictDoUpdate({
-            target: [placementDepartments.year, placementDepartments.department],
-            set: {
-              studentsPlaced: row.studentsPlaced,
-              medianSalary: row.medianSalary,
-              highestSalary: row.highestSalary,
-            },
-          });
-      }
-
-      // Identify all unique years affected by this upload
-      const affectedYears = Array.from(new Set(validRows.map((r) => r.year)));
-
-      // Recompute aggregate placementStats for each affected year
-      for (const year of affectedYears) {
-        const deptRecords = await db
-          .select()
-          .from(placementDepartments)
-          .where(eq(placementDepartments.year, year));
-
-        if (deptRecords.length > 0) {
-          const totalStudentsPlaced = deptRecords.reduce((acc, curr) => acc + curr.studentsPlaced, 0);
-
-          const maxHighestSalary = deptRecords.reduce((max, curr) => {
-            if (curr.highestSalary !== null && (max === null || curr.highestSalary > max)) {
-              return curr.highestSalary;
-            }
-            return max;
-          }, null as number | null);
-
-          const validMedians = deptRecords
-            .map((r) => r.medianSalary)
-            .filter((s): s is number => s !== null);
-
-          let avgMedianSalary: number | null = null;
-          if (validMedians.length > 0) {
-            avgMedianSalary = Math.round(
-              validMedians.reduce((a, b) => a + b, 0) / validMedians.length
-            );
-          }
-
-          await db
-            .insert(placementStats)
-            .values({
-              year,
-              studentsPlaced: totalStudentsPlaced,
-              medianSalary: avgMedianSalary,
-              highestSalary: maxHighestSalary,
-            })
+      await db.transaction(async (tx) => {
+        // Upsert department rows
+        for (const row of validRows) {
+          await tx
+            .insert(placementDepartments)
+            .values(row)
             .onConflictDoUpdate({
-              target: placementStats.year,
+              target: [placementDepartments.year, placementDepartments.department],
               set: {
-                studentsPlaced: totalStudentsPlaced,
-                medianSalary: avgMedianSalary,
-                highestSalary: maxHighestSalary,
+                studentsPlaced: row.studentsPlaced,
+                medianSalary: row.medianSalary,
+                highestSalary: row.highestSalary,
               },
             });
         }
-      }
 
-      revalidateTag("placements", "max");
+        // Identify all unique years affected by this upload
+        const affectedYears = Array.from(new Set(validRows.map((r) => r.year)));
+
+        // Recompute aggregate placementStats for each affected year
+        for (const year of affectedYears) {
+          const deptRecords = await tx
+            .select()
+            .from(placementDepartments)
+            .where(eq(placementDepartments.year, year));
+
+          if (deptRecords.length > 0) {
+            const totalStudentsPlaced = deptRecords.reduce((acc, curr) => acc + curr.studentsPlaced, 0);
+
+            const maxHighestSalary = deptRecords.reduce((max, curr) => {
+              if (curr.highestSalary !== null && (max === null || curr.highestSalary > max)) {
+                return curr.highestSalary;
+              }
+              return max;
+            }, null as number | null);
+
+            const validMedians = deptRecords
+              .map((r) => r.medianSalary)
+              .filter((s): s is number => s !== null);
+
+            let avgMedianSalary: number | null = null;
+            if (validMedians.length > 0) {
+              avgMedianSalary = Math.round(
+                validMedians.reduce((a, b) => a + b, 0) / validMedians.length
+              );
+            }
+
+            await tx
+              .insert(placementStats)
+              .values({
+                year,
+                studentsPlaced: totalStudentsPlaced,
+                medianSalary: avgMedianSalary,
+                highestSalary: maxHighestSalary,
+              })
+              .onConflictDoUpdate({
+                target: placementStats.year,
+                set: {
+                  studentsPlaced: totalStudentsPlaced,
+                  medianSalary: avgMedianSalary,
+                  highestSalary: maxHighestSalary,
+                },
+              });
+          }
+        }
+      });
+
+      revalidatePath("/training-and-placement");
     }
 
     return NextResponse.json({

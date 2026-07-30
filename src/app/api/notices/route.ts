@@ -1,21 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { notices, noticeCategoryEnum } from "@/db/schema";
+import { db } from "@/lib/db";
+import { notices, noticeCategoryEnum } from "@/lib/db/schema";
 import { eq, desc, count } from "drizzle-orm";
-import { requireAdmin } from "@/lib/auth";
+import { requireAdmin } from "@/lib/middlewares/auth";
 import { noticeSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
-import { checkPublicRateLimit } from "@/lib/ratelimit";
-import { headers } from "next/headers";
+import { enforcePublicRateLimit } from "@/lib/utils";
 
 
 export async function GET(req: NextRequest) {
-
-  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
-  const rateLimit = await checkPublicRateLimit(`public_${ip}`);
-  if (!rateLimit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
-  }
+  const rateLimited = await enforcePublicRateLimit();
+  if (rateLimited) return rateLimited;
 
 
   try {

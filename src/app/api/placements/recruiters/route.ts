@@ -1,23 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { placementRecruiters } from "@/db/schema";
+import { db } from "@/lib/db";
+import { placementRecruiters } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
-import { checkPublicRateLimit } from "@/lib/ratelimit";
-import { headers } from "next/headers";
+import { enforcePublicRateLimit } from "@/lib/utils";
 
 
 export async function GET(req: NextRequest) {
-
-  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
-  const rateLimit = await checkPublicRateLimit(`public_${ip}`);
-  if (!rateLimit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
-  }
+  const rateLimited = await enforcePublicRateLimit();
+  if (rateLimited) return rateLimited;
 
 
   try {
     const { searchParams } = new URL(req.url);
     const yearParam = searchParams.get("year");
+    const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 200);
+    const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1);
 
     const whereClause = yearParam && !isNaN(parseInt(yearParam, 10))
       ? eq(placementRecruiters.year, parseInt(yearParam, 10))
@@ -27,7 +24,9 @@ export async function GET(req: NextRequest) {
       .select()
       .from(placementRecruiters)
       .where(whereClause)
-      .orderBy(desc(placementRecruiters.year));
+      .orderBy(desc(placementRecruiters.year))
+      .limit(limit)
+      .offset((page - 1) * limit);
 
     return NextResponse.json({ data });
   } catch (error) {

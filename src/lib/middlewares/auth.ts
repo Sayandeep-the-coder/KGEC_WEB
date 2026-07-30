@@ -1,6 +1,6 @@
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/lib/config/supabase/server";
 import { NextResponse } from "next/server";
-import { checkAdminRateLimit } from "@/lib/ratelimit";
+import { checkAdminRateLimit } from "@/lib/middlewares/ratelimit";
 import { headers } from "next/headers";
 
 export async function requireAdmin() {
