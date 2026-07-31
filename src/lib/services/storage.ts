@@ -3,7 +3,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 // Supabase Storage exposes an S3-compatible API.
 // Generate S3 access keys from: Supabase Dashboard → Settings → S3 Access Keys
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
+const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
 const s3AccessKeyId = process.env.SUPABASE_S3_ACCESS_KEY || "placeholder-access-key";
 const s3SecretAccessKey = process.env.SUPABASE_S3_SECRET_KEY || "placeholder-secret-key";
 const s3Region = process.env.SUPABASE_S3_REGION || "us-east-1";

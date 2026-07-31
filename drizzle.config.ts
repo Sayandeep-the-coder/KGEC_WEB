@@ -5,6 +5,9 @@ export default defineConfig({
   out: "./src/lib/db/migrations",
   dialect: "postgresql",
   dbCredentials: {
-    url: process.env.DATABASE_URL || "",
+    // Use DIRECT_URL (port 5432) for migrations — the Supavisor pooler
+    // (port 6543) doesn't support the extended query protocol needed
+    // by drizzle-kit for schema introspection.
+    url: process.env.DIRECT_URL || process.env.DATABASE_URL || "",
   },
 });
