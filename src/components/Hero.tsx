@@ -47,8 +47,7 @@ export default function Hero() {
   // Real slides occupy positions 1..TOTAL. Position 0 = last-clone, TOTAL+1 = first-clone.
   const [position, setPosition] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(true);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const isSnapping = useRef(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // The "real" activeIndex for UI display (0-based, 0..TOTAL-1)
   const activeIndex =
@@ -58,58 +57,49 @@ export default function Hero() {
         ? 0
         : position - 1;
 
-  const snapToReal = useCallback(() => {
-    // After a transition to a clone slide completes, instantly jump to
-    // the corresponding real slide without a visible transition.
-    if (isSnapping.current) return;
-
-    if (position === TOTAL + 1) {
-      // Scrolled past last real slide → snap to real first slide
-      isSnapping.current = true;
-      setIsTransitioning(false);
-      setPosition(1);
-      // Re-enable transitions after the browser paints the snap
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsTransitioning(true);
-          isSnapping.current = false;
-        });
-      });
-    } else if (position === 0) {
-      // Scrolled before first real slide → snap to real last slide
-      isSnapping.current = true;
-      setIsTransitioning(false);
-      setPosition(TOTAL);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsTransitioning(true);
-          isSnapping.current = false;
-        });
-      });
-    }
-  }, [position]);
-
-  // Listen for transitionend to snap clones → real slides
+  // Handle the snapping after transition ends via a reliable timeout
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
+    if (!isAnimating) return;
 
-    const handleTransitionEnd = () => snapToReal();
-    track.addEventListener("transitionend", handleTransitionEnd);
-    return () => track.removeEventListener("transitionend", handleTransitionEnd);
-  }, [snapToReal]);
+    const timer = setTimeout(() => {
+      // Transition is complete
+      let currentPosition = position;
+      
+      // Snap without animation if we reached a clone
+      if (position === TOTAL + 1) {
+        setIsTransitioning(false);
+        setPosition(1);
+        currentPosition = 1;
+      } else if (position === 0) {
+        setIsTransitioning(false);
+        setPosition(TOTAL);
+        currentPosition = TOTAL;
+      }
+
+      // Small delay to allow the browser to paint the snap before enabling transitions again
+      setTimeout(() => {
+        setIsTransitioning(true);
+        setIsAnimating(false);
+      }, 50);
+      
+    }, TRANSITION_MS);
+
+    return () => clearTimeout(timer);
+  }, [position, isAnimating]);
 
   const showNext = useCallback(() => {
-    if (isSnapping.current) return;
+    if (isAnimating) return;
+    setIsAnimating(true);
     setIsTransitioning(true);
     setPosition((p) => p + 1);
-  }, []);
+  }, [isAnimating]);
 
   const showPrevious = useCallback(() => {
-    if (isSnapping.current) return;
+    if (isAnimating) return;
+    setIsAnimating(true);
     setIsTransitioning(true);
     setPosition((p) => p - 1);
-  }, []);
+  }, [isAnimating]);
 
   // Auto-scroll
   useEffect(() => {
@@ -121,10 +111,9 @@ export default function Hero() {
     <div className="w-full px-4 sm:px-6 lg:px-8 mx-auto max-w-[100rem] pt-2 pb-8">
       <section
         aria-label="KGEC campus image carousel"
-        className="relative w-full aspect-[21/10] min-h-[500px] max-h-[85vh] overflow-hidden rounded-[2rem] bg-slate-950 shadow-md"
+        className="relative w-full aspect-[21/10] min-h-[500px] max-h-[85vh] overflow-hidden rounded-2xl bg-slate-950 shadow-md"
       >
         <div
-          ref={trackRef}
           className={`flex h-full${isTransitioning ? " transition-transform duration-700 ease-in-out" : ""}`}
           style={{ transform: `translateX(-${position * 100}%)` }}
         >
