@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const heroImages = [
@@ -63,17 +63,13 @@ export default function Hero() {
 
     const timer = setTimeout(() => {
       // Transition is complete
-      let currentPosition = position;
-      
       // Snap without animation if we reached a clone
       if (position === TOTAL + 1) {
         setIsTransitioning(false);
         setPosition(1);
-        currentPosition = 1;
       } else if (position === 0) {
         setIsTransitioning(false);
         setPosition(TOTAL);
-        currentPosition = TOTAL;
       }
 
       // Small delay to allow the browser to paint the snap before enabling transitions again

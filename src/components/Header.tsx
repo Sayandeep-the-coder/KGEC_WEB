@@ -268,6 +268,7 @@ export default function Header() {
 
               <Link
                 href="/admin"
+                prefetch={false}
                 className="flex items-center gap-2 rounded-full bg-[#0a1730] px-6 py-2 text-[13px] font-bold text-white transition-colors hover:bg-[#12274d]"
               >
                 Login
@@ -356,6 +357,7 @@ export default function Header() {
             </button>
             <Link
               href="/admin"
+              prefetch={false}
               onClick={closeMobileMenu}
               className="flex items-center justify-center gap-2 rounded-2xl bg-[#0a1730] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#12274d]"
             >
