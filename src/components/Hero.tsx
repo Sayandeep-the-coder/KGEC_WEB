@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const heroImages = [
@@ -31,20 +31,87 @@ const heroImages = [
 ];
 
 const AUTO_SCROLL_MS = 5000;
+const TRANSITION_MS = 700;
+const TOTAL = heroImages.length;
+
+// Build the extended slide list: [lastClone, ...originals, firstClone]
+// This lets us scroll continuously in either direction.
+const extendedImages = [
+  heroImages[TOTAL - 1], // clone of last slide at position 0
+  ...heroImages,         // real slides at positions 1..TOTAL
+  heroImages[0],         // clone of first slide at position TOTAL+1
+];
 
 export default function Hero() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  // `position` tracks the index inside extendedImages (1-based for real slides).
+  // Real slides occupy positions 1..TOTAL. Position 0 = last-clone, TOTAL+1 = first-clone.
+  const [position, setPosition] = useState(1);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isSnapping = useRef(false);
 
-  const showPrevious = useCallback(() => {
-    setActiveIndex((current) =>
-      current === 0 ? heroImages.length - 1 : current - 1
-    );
-  }, []);
+  // The "real" activeIndex for UI display (0-based, 0..TOTAL-1)
+  const activeIndex =
+    position === 0
+      ? TOTAL - 1
+      : position === TOTAL + 1
+        ? 0
+        : position - 1;
+
+  const snapToReal = useCallback(() => {
+    // After a transition to a clone slide completes, instantly jump to
+    // the corresponding real slide without a visible transition.
+    if (isSnapping.current) return;
+
+    if (position === TOTAL + 1) {
+      // Scrolled past last real slide → snap to real first slide
+      isSnapping.current = true;
+      setIsTransitioning(false);
+      setPosition(1);
+      // Re-enable transitions after the browser paints the snap
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsTransitioning(true);
+          isSnapping.current = false;
+        });
+      });
+    } else if (position === 0) {
+      // Scrolled before first real slide → snap to real last slide
+      isSnapping.current = true;
+      setIsTransitioning(false);
+      setPosition(TOTAL);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsTransitioning(true);
+          isSnapping.current = false;
+        });
+      });
+    }
+  }, [position]);
+
+  // Listen for transitionend to snap clones → real slides
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const handleTransitionEnd = () => snapToReal();
+    track.addEventListener("transitionend", handleTransitionEnd);
+    return () => track.removeEventListener("transitionend", handleTransitionEnd);
+  }, [snapToReal]);
 
   const showNext = useCallback(() => {
-    setActiveIndex((current) => (current + 1) % heroImages.length);
+    if (isSnapping.current) return;
+    setIsTransitioning(true);
+    setPosition((p) => p + 1);
   }, []);
 
+  const showPrevious = useCallback(() => {
+    if (isSnapping.current) return;
+    setIsTransitioning(true);
+    setPosition((p) => p - 1);
+  }, []);
+
+  // Auto-scroll
   useEffect(() => {
     const timer = window.setInterval(showNext, AUTO_SCROLL_MS);
     return () => window.clearInterval(timer);
@@ -57,17 +124,18 @@ export default function Hero() {
         className="relative w-full aspect-[21/10] min-h-[500px] max-h-[85vh] overflow-hidden rounded-[2rem] bg-slate-950 shadow-md"
       >
         <div
-          className="flex h-full transition-transform duration-700 ease-in-out"
-          style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+          ref={trackRef}
+          className={`flex h-full${isTransitioning ? " transition-transform duration-700 ease-in-out" : ""}`}
+          style={{ transform: `translateX(-${position * 100}%)` }}
         >
-          {heroImages.map((image, index) => (
-            <div key={image.src} className="relative h-full min-w-full">
+          {extendedImages.map((image, index) => (
+            <div key={`slide-${index}`} className="relative h-full min-w-full">
               <img
                 src={image.src}
                 alt={image.alt}
                 className="h-full w-full object-cover opacity-90"
                 draggable={false}
-                loading={index === 0 ? "eager" : "lazy"}
+                loading={index <= 1 ? "eager" : "lazy"}
               />
             </div>
           ))}
@@ -122,3 +190,4 @@ export default function Hero() {
     </div>
   );
 }
+
