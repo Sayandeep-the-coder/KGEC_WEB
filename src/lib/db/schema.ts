@@ -85,6 +85,7 @@ export const notices = pgTable(
     title: text("title").notNull(),
     type: noticeTypeEnum("type").default("general").notNull(),
     fileUrl: text("file_url"),
+    pdfUrl: text("pdf_url"),
     fileName: text("file_name"),
     fileType: text("file_type"),
     isActive: boolean("is_active").default(true).notNull(),

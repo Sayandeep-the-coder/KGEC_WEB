@@ -1,44 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { notices, noticeTypeEnum } from "@/lib/db/schema";
-import { eq, desc, count, and } from "drizzle-orm";
+import { notices } from "@/lib/db/schema";
+import { eq, desc } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { noticeSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
+import { handleApiError } from "@/lib/errors";
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
-    const limit = Math.min(parseInt(searchParams.get("limit") || "20", 10), 100);
-    const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1);
+    const { searchParams } = req.nextUrl;
     const type = searchParams.get("type");
+    const limit = Math.min(parseInt(searchParams.get("limit") || "20", 10), 100);
 
-    const conditions = [];
+    let query = db.select().from(notices);
 
-    if (type && (noticeTypeEnum.enumValues as string[]).includes(type)) {
-      conditions.push(
-        eq(notices.type, type as (typeof noticeTypeEnum.enumValues)[number])
-      );
+    if (type) {
+      // @ts-expect-error type query check
+      query = query.where(eq(notices.type, type));
     }
 
-    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+    const data = await query
+      .orderBy(desc(notices.publishedAt))
+      .limit(limit);
 
-    const [data, totalResult] = await Promise.all([
-      db
-        .select()
-        .from(notices)
-        .where(whereClause)
-        .orderBy(desc(notices.publishedAt))
-        .limit(limit)
-        .offset((page - 1) * limit),
-      db.select({ count: count() }).from(notices).where(whereClause),
-    ]);
-
-    return NextResponse.json({ data, count: Number(totalResult[0]?.count || 0) });
+    return NextResponse.json({ data });
   } catch (error) {
-    console.error("GET /api/v1/notices error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "GET /api/v1/notices");
   }
 }
 
@@ -56,10 +45,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const { title, type, fileUrl, fileName, fileType, isActive } = result.data;
+
     const [newNotice] = await db
       .insert(notices)
       .values({
-        ...result.data,
+        title,
+        type,
+        fileUrl: fileUrl || null,
+        pdfUrl: fileUrl || null,
+        fileName: fileName || null,
+        fileType: fileType || null,
+        isActive: isActive ?? true,
         createdBy: auth.admin!.id,
       })
       .returning();
@@ -77,7 +74,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ data: newNotice }, { status: 201 });
   } catch (error) {
-    console.error("POST /api/v1/notices error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "POST /api/v1/notices");
   }
 }

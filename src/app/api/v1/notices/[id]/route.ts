@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/middlewares/auth";
 import { noticePatchSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
+import { handleApiError } from "@/lib/errors";
 
 export async function GET(
   req: NextRequest,
@@ -21,8 +22,7 @@ export async function GET(
 
     return NextResponse.json({ data: notice });
   } catch (error) {
-    console.error("GET /api/v1/notices/[id] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "GET /api/v1/notices/[id]");
   }
 }
 
@@ -45,9 +45,22 @@ export async function PATCH(
       );
     }
 
+    const { title, type, fileUrl, fileName, fileType, isActive } = result.data;
+
+    const updateData: Record<string, unknown> = {};
+    if (title !== undefined) updateData.title = title;
+    if (type !== undefined) updateData.type = type;
+    if (fileUrl !== undefined) {
+      updateData.fileUrl = fileUrl;
+      updateData.pdfUrl = fileUrl;
+    }
+    if (fileName !== undefined) updateData.fileName = fileName;
+    if (fileType !== undefined) updateData.fileType = fileType;
+    if (isActive !== undefined) updateData.isActive = isActive;
+
     const [updated] = await db
       .update(notices)
-      .set(result.data)
+      .set(updateData)
       .where(eq(notices.id, id))
       .returning();
 
@@ -68,8 +81,7 @@ export async function PATCH(
 
     return NextResponse.json({ data: updated });
   } catch (error) {
-    console.error("PATCH /api/v1/notices/[id] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "PATCH /api/v1/notices/[id]");
   }
 }
 
@@ -104,7 +116,6 @@ export async function DELETE(
 
     return NextResponse.json({ data: { success: true } });
   } catch (error) {
-    console.error("DELETE /api/v1/notices/[id] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "DELETE /api/v1/notices/[id]");
   }
 }

@@ -4,6 +4,7 @@ import { contactSubmissions } from "@/lib/db/schema";
 import { contactSchema } from "@/lib/validators";
 import { checkContactRateLimit } from "@/lib/middlewares/ratelimit";
 import { sendContactNotification } from "@/lib/services/email";
+import { handleApiError } from "@/lib/errors";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,8 +15,7 @@ export async function POST(req: NextRequest) {
     if (!success) {
       return NextResponse.json(
         {
-          error:
-            "Too many contact form submissions. Please try again later.",
+          error: "Too many contact form submissions. Please try again later.",
         },
         { status: 429 }
       );
@@ -50,7 +50,6 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("POST /api/v1/contact error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "POST /api/v1/contact");
   }
 }

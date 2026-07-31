@@ -29,11 +29,12 @@ export const staffRoleEnum = z.enum(staffRoleValues);
 // ─── Notices ────────────────────────────────────────────────────────────────
 
 export const noticeSchema = z.object({
-  title: z.string().min(1, "Title is required"),
+  title: z.string().min(3, "Title must be at least 3 characters").max(255, "Title cannot exceed 255 characters"),
   type: noticeTypeEnum.default("general"),
-  fileUrl: z.string().url("Valid file URL is required").optional().nullable(),
-  fileName: z.string().optional().nullable(),
-  fileType: z.string().optional().nullable(),
+  fileUrl: z.string().url("Valid file URL is required").or(z.literal("")).optional().nullable(),
+  fileName: z.string().max(255).optional().nullable(),
+  fileType: z.string().max(100).optional().nullable(),
+  isActive: z.boolean().optional().default(true),
 });
 
 export const noticePatchSchema = noticeSchema.partial();
@@ -41,10 +42,17 @@ export const noticePatchSchema = noticeSchema.partial();
 // ─── News ───────────────────────────────────────────────────────────────────
 
 export const newsSchema = z.object({
-  slug: z.string().min(1, "Slug is required"),
-  title: z.string().min(1, "Title is required"),
-  imageUrl: z.string().url().optional().nullable(),
-  body: z.record(z.string(), z.unknown()).or(z.array(z.unknown())),
+  slug: z
+    .string()
+    .min(3, "Slug must be at least 3 characters")
+    .max(100, "Slug cannot exceed 100 characters")
+    .regex(/^[a-z0-9-]+$/, "Slug must only contain lowercase alphanumeric characters and hyphens"),
+  title: z.string().min(3, "Title must be at least 3 characters").max(255, "Title cannot exceed 255 characters"),
+  excerpt: z.string().max(500, "Excerpt cannot exceed 500 characters").optional().nullable(),
+  imageUrl: z.string().url("Valid image URL is required").or(z.literal("")).optional().nullable(),
+  category: z.string().max(50).optional().default("campus"),
+  body: z.union([z.string(), z.record(z.string(), z.unknown()), z.array(z.unknown())]),
+  isPublished: z.boolean().optional().default(true),
 });
 
 export const newsPatchSchema = newsSchema.partial();
@@ -52,10 +60,12 @@ export const newsPatchSchema = newsSchema.partial();
 // ─── Events ─────────────────────────────────────────────────────────────────
 
 export const eventSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().optional().nullable(),
+  title: z.string().min(3, "Title must be at least 3 characters").max(255, "Title cannot exceed 255 characters"),
+  description: z.string().max(2000, "Description cannot exceed 2000 characters").optional().nullable(),
+  location: z.string().max(255, "Location cannot exceed 255 characters").optional().nullable(),
+  imageUrl: z.string().url().or(z.literal("")).optional().nullable(),
   eventDate: z.union([z.string(), z.date()]).transform((val) => new Date(val)),
-  externalLink: z.string().url().optional().nullable(),
+  externalLink: z.string().url().or(z.literal("")).optional().nullable(),
 });
 
 export const eventPatchSchema = eventSchema.partial();
@@ -63,18 +73,22 @@ export const eventPatchSchema = eventSchema.partial();
 // ─── Downloads ──────────────────────────────────────────────────────────────
 
 export const downloadSchema = z.object({
-  title: z.string().min(1, "Title is required"),
+  title: z.string().min(3, "Title must be at least 3 characters").max(255, "Title cannot exceed 255 characters"),
   fileUrl: z.string().url("Valid file URL is required"),
   category: downloadCategoryEnum.default("general"),
 });
 
+export const downloadPatchSchema = downloadSchema.partial();
+
 // ─── Gallery ────────────────────────────────────────────────────────────────
 
 export const gallerySchema = z.object({
-  album: z.string().min(1, "Album name is required"),
+  album: z.string().min(2, "Album name must be at least 2 characters").max(100, "Album cannot exceed 100 characters"),
   imageUrl: z.string().url("Valid image URL is required"),
-  caption: z.string().optional().nullable(),
+  caption: z.string().max(300, "Caption cannot exceed 300 characters").optional().nullable(),
 });
+
+export const galleryPatchSchema = gallerySchema.partial();
 
 // ─── Admissions ─────────────────────────────────────────────────────────────
 
@@ -89,15 +103,15 @@ export const admissionsPatchSchema = z.object({
 // ─── Contact ────────────────────────────────────────────────────────────────
 
 export const contactSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  message: z.string().min(10, "Message must be at least 10 characters long"),
+  name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name cannot exceed 100 characters"),
+  email: z.string().email("Invalid email address").max(255),
+  message: z.string().min(10, "Message must be at least 10 characters long").max(2000, "Message cannot exceed 2000 characters"),
 });
 
 // ─── Placement CSV rows ─────────────────────────────────────────────────────
 
 export const placementDeptRowSchema = z.object({
-  year: z.number().int("Year must be an integer"),
+  year: z.number().int("Year must be an integer").min(2000).max(2100),
   department: z.string().min(1, "Department is required"),
   students_placed: z
     .number()
@@ -108,7 +122,7 @@ export const placementDeptRowSchema = z.object({
 });
 
 export const placementRecruiterRowSchema = z.object({
-  year: z.number().int("Year must be an integer"),
+  year: z.number().int("Year must be an integer").min(2000).max(2100),
   company: z.string().min(1, "Company is required"),
   offers: z
     .number()
@@ -120,7 +134,7 @@ export const placementRecruiterRowSchema = z.object({
 
 export const departmentEnrollmentRowSchema = z
   .object({
-    year: z.number().int("Year must be an integer"),
+    year: z.number().int("Year must be an integer").min(2000).max(2100),
     department: z.string().min(1, "Department is required"),
     total_students: z.number().int().nonnegative(),
     male_students: z.number().int().nonnegative(),
@@ -137,10 +151,12 @@ export const departmentEnrollmentRowSchema = z
 // ─── Staff ──────────────────────────────────────────────────────────────────
 
 export const staffSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Valid email is required"),
-  employeeId: z.string().min(1, "Employee ID is required"),
-  photoUrl: z.string().url().optional().nullable(),
+  name: z.string().min(2, "Name must be at least 2 characters").max(150, "Name cannot exceed 150 characters"),
+  email: z.string().email("Valid email is required").max(255),
+  employeeId: z.string().min(2, "Employee ID must be at least 2 characters").max(30).regex(/^[A-Za-z0-9_-]+$/, "Employee ID contains invalid characters"),
+  photoUrl: z.string().url().or(z.literal("")).optional().nullable(),
+  phone: z.string().max(20).optional().nullable(),
+  designation: z.string().max(100).optional().nullable(),
   role: staffRoleEnum,
   department: departmentEnum.optional().nullable(),
   education: z
@@ -165,7 +181,7 @@ export const staffPatchSchema = staffSchema.partial();
 
 export const allowlistSchema = z.object({
   email: z.string().email("Valid email is required"),
-  name: z.string().optional().nullable(),
+  name: z.string().max(150).optional().nullable(),
 });
 
 // ─── Signed URL ─────────────────────────────────────────────────────────────
@@ -200,4 +216,11 @@ export const signedUrlSchema = z.object({
 
 export const recruiterLogoPatchSchema = z.object({
   logoUrl: z.string().url("Valid logo URL is required"),
+});
+
+// ─── Query Params Validation ────────────────────────────────────────────────
+
+export const paginationQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  offset: z.coerce.number().int().min(0).default(0),
 });
