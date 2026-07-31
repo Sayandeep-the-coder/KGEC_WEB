@@ -48,7 +48,7 @@ export default function Footer() {
           initial={{ y: "100%", opacity: 0 }}
           animate={isInView ? { y: "5%", opacity: 1 } : { y: "100%", opacity: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[28vw] font-black tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-b from-white/70 to-[#0a1730]"
+          className="text-[28vw] font-black tracking-tighter leading-none text-transparent bg-clip-text bg-linear-to-b from-white/10 to-[#0a1730]"
         >
           KGEC
         </motion.span>
