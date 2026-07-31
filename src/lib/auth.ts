@@ -55,6 +55,7 @@ export const {
 
   // Use the versioned API path for all auth routes
   basePath: "/api/v1/auth",
+  secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET || "kgec-development-secret-key-32-chars-long",
 
   session: {
     strategy: "jwt",
