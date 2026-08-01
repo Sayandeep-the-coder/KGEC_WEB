@@ -90,6 +90,11 @@ const slideVariants = {
   }),
 };
 
+const swipeConfidenceThreshold = 10000;
+const swipePower = (offset: number, velocity: number) => {
+  return Math.abs(offset) * velocity;
+};
+
 export default function Facilities() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
@@ -99,6 +104,11 @@ export default function Facilities() {
   const showNext = useCallback(() => {
     setDirection(1);
     setActiveIndex((current) => (current + 1) % facilities.length);
+  }, []);
+
+  const showPrev = useCallback(() => {
+    setDirection(-1);
+    setActiveIndex((current) => (current - 1 + facilities.length) % facilities.length);
   }, []);
 
   const changeSlide = (index: number) => {
@@ -113,7 +123,7 @@ export default function Facilities() {
   }, [showNext]);
 
   return (
-    <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-4 md:py-6 h-full flex flex-col justify-center">
+    <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-4 md:py-6 h-full flex flex-col justify-center overflow-hidden touch-pan-y">
       <div className="relative w-full h-[88vh] min-h-[500px] overflow-hidden rounded-2xl bg-slate-950 shadow-md group">
         
         <AnimatePresence initial={false} custom={direction}>
@@ -125,7 +135,19 @@ export default function Facilities() {
             animate="center"
             exit="exit"
             transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
-            className="absolute inset-0 flex flex-col bg-slate-950"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={(e, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x);
+
+              if (swipe < -swipeConfidenceThreshold) {
+                showNext();
+              } else if (swipe > swipeConfidenceThreshold) {
+                showPrev();
+              }
+            }}
+            className="absolute inset-0 flex flex-col bg-slate-950 cursor-grab active:cursor-grabbing"
           >
             {/* Background Image Layer */}
             <div className="absolute inset-0 w-full h-full">
