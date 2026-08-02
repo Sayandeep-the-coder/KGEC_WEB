@@ -128,6 +128,7 @@ export default function Facilities() {
         
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
+            suppressHydrationWarning
             key={activeIndex}
             custom={direction}
             variants={slideVariants}
