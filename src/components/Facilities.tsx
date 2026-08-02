@@ -124,7 +124,7 @@ export default function Facilities() {
 
   return (
     <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-4 md:py-6 h-full flex flex-col justify-center overflow-hidden touch-pan-y">
-      <div className="relative w-full h-[88vh] min-h-125 overflow-hidden rounded-2xl bg-slate-950 shadow-md group">
+      <div className="relative w-full h-[85vh] lg:h-[88vh] min-h-[600px] overflow-hidden rounded-2xl bg-slate-950 shadow-md">
         
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
@@ -162,7 +162,12 @@ export default function Facilities() {
             </div>
 
             {/* Content Layer */}
-            <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-between z-10 pointer-events-none">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              className="absolute inset-0 p-8 md:p-12 flex flex-col justify-between z-10 pointer-events-none"
+            >
               
               {/* Top Row: Eyebrow, Heading, and Right Label */}
               <div className="flex justify-between items-start">
@@ -212,8 +217,7 @@ export default function Facilities() {
                   </span>
                 </div>
               </div>
-
-            </div>
+            </motion.div>
           </motion.div>
         </AnimatePresence>
 

@@ -1,199 +1,222 @@
 "use client";
 
-import { useState } from "react";
-import { Play, ArrowUpRight } from "lucide-react";
+import { MoveUpRight } from "lucide-react";
+import Link from "next/link";
+import { CSSProperties } from "react";
+import { motion } from "framer-motion";
 
-export interface GalleryItem {
-  id: string;
-  album: string;
-  imageUrl: string;
-  caption?: string | null;
-}
-
-interface GalleryProps {
-  items?: GalleryItem[];
-}
-
-const DEFAULT_FALLBACK_IMAGES = [
-  "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1525921472402-364b4c81a293?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1511629091441-ee46146481b6?auto=format&fit=crop&w=800&q=80",
+const galleryData = [
+  {
+    id: 1,
+    type: "video",
+    src: "https://dfdx9u0psdezh.cloudfront.net/CommunitySection/krYucg76Kc.webm",
+    poster: "https://dfdx9u0psdezh.cloudfront.net/CommunitySection/krYucg76Kc.webp",
+    desktopStyle: { gridColumn: "1 / span 5", gridRow: "1 / span 8" },
+  },
+  {
+    id: 2,
+    type: "youtube",
+    youtubeId: "thz4lJmRO74",
+    desktopStyle: { gridColumn: "6 / span 8", gridRow: "1 / span 4" },
+  },
+  {
+    id: 3,
+    type: "image",
+    src: "/images/gallery/independence_day.jpg",
+    title: "Independence Day",
+    description:
+      "Celebrating the spirit of freedom at the iconic Central Library and Main Building.",
+    desktopStyle: { gridColumn: "14 / span 5", gridRow: "1 / span 4" },
+    objectPosition: "object-center",
+  },
+  {
+    id: 4,
+    type: "image",
+    src: "/images/gallery/espektro_aftermovie.png",
+    title: "Espektro '25",
+    description:
+      "The biggest cultural fest of Kalyani! Three days of non-stop music, dance, and creativity.",
+    desktopStyle: { gridColumn: "6 / span 4", gridRow: "5 / span 4" },
+    objectPosition: "object-[10%_40%]",
+  },
+  {
+    id: 5,
+    type: "image",
+    src: "/images/gallery/hackathon_coding.jpg",
+    title: "Hackathon Nights",
+    description:
+      "Students deeply engaged in problem-solving and pushing the boundaries of code.",
+    desktopStyle: { gridColumn: "10 / span 4", gridRow: "5 / span 4" },
+    objectPosition: "object-center",
+  },
+  {
+    id: 6,
+    type: "image",
+    src: "/images/gallery/binary_group.png",
+    title: "Binary V2",
+    description:
+      "A massive shoutout to the participants, organizers, and winners of Binary V2 hackathon!",
+    desktopStyle: { gridColumn: "1 / span 13", gridRow: "9 / span 4" },
+    objectPosition: "object-[10%_30%]",
+  },
+  {
+    id: 7,
+    type: "video",
+    src: "https://dfdx9u0psdezh.cloudfront.net/CommunitySection/nrzKSGhzfc.webm",
+    poster: "https://dfdx9u0psdezh.cloudfront.net/CommunitySection/nrzKSGhzfc.webp",
+    desktopStyle: { gridColumn: "14 / span 5", gridRow: "5 / span 8" },
+  },
 ];
 
-export default function Gallery({ items = [] }: GalleryProps) {
-  const [selectedAlbum, setSelectedAlbum] = useState<string>("All");
-
-  const albums = ["All", ...Array.from(new Set(items.map((it) => it.album)))];
-  const filteredItems =
-    selectedAlbum === "All"
-      ? items
-      : items.filter((it) => it.album === selectedAlbum);
-
-  const displayUrls =
-    filteredItems.length > 0
-      ? filteredItems.map((it) => it.imageUrl)
-      : DEFAULT_FALLBACK_IMAGES;
-
+function GalleryCard({
+  item,
+  desktop = false,
+  index = 0,
+}: {
+  item: any;
+  desktop?: boolean;
+  index?: number;
+}) {
   return (
-    <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-8 h-full flex flex-col justify-center">
-      <div className="text-center max-w-3xl mx-auto mb-8">
-        <span className="text-xs font-bold tracking-widest text-[#0a1730] uppercase block">
-          CAMPUS LIFE & MOMENTS
-        </span>
-        <div className="w-8 h-0.5 bg-blue-600 mx-auto my-2" />
-        <h2 className="text-3xl md:text-4xl font-bold font-serif text-[#0a1730] mt-2">
-          Experience KGEC
-        </h2>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      className={`rounded-2xl group text-white relative overflow-hidden bg-[#0a1730] shadow-lg ${desktop ? "" : "min-h-[400px]"
+        }`}
+      style={desktop ? (item.desktopStyle as CSSProperties) : undefined}
+    >
+      {item.type === "youtube" ? (
+        <div className="w-full h-full relative flex items-center justify-center bg-black">
+          <iframe
+            className="w-full h-full border-none"
+            src={`https://www.youtube.com/embed/${item.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${item.youtubeId}&controls=0&modestbranding=1&rel=0`}
+            title={item.title || "YouTube video"}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      ) : item.type === "video" ? (
+        <div className="w-full h-full relative">
+          <video
+            className="object-cover object-center w-full h-full outline-none"
+            poster={item.poster}
+            src={item.src}
+            playsInline
+            preload="auto"
+            loop
+            muted
+            autoPlay
+          />
+        </div>
+      ) : (
+        <>
+          <img
+            alt={item.title || "Gallery Image"}
+            className={`w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-105 group-hover:grayscale will-change-transform ${item.objectPosition}`}
+            loading="lazy"
+            src={item.src}
+          />
 
-        {/* Album filters */}
-        {albums.length > 1 && (
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-6">
-            {albums.map((album) => (
-              <button
-                key={album}
-                onClick={() => setSelectedAlbum(album)}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  selectedAlbum === album
-                    ? "bg-[#1B2A4A] text-white shadow-sm"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-              >
-                {album}
-              </button>
-            ))}
+          {/* Desktop Hover Overlay */}
+          {item.title && (
+            <div className="absolute max-lg:hidden lg:flex bottom-0 group-hover:translate-y-0 transition-transform duration-500 translate-y-full left-0 bg-gradient-to-t from-[#022448] via-[#022448]/90 to-transparent pt-20 pb-6 px-6 w-full z-20">
+              <div className="mt-auto">
+                <h1 className="font-bold capitalize text-2xl mb-1.5 drop-shadow-md">
+                  {item.title}
+                </h1>
+                <p className="text-blue-100/90 text-sm leading-relaxed drop-shadow-sm">
+                  {item.description}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Mobile Persistent Overlay */}
+          {item.title && (
+            <div className="absolute lg:hidden bottom-0 left-0 bg-gradient-to-t from-black via-black/80 to-transparent pt-12 pb-5 px-5 w-full z-20">
+              <h1 className="font-bold capitalize text-xl mb-1 drop-shadow-sm">
+                {item.title}
+              </h1>
+              <p className="text-white/80 text-xs drop-shadow-sm">
+                {item.description}
+              </p>
+            </div>
+          )}
+
+          {item.title && (
+            <div className="absolute flex items-center justify-center top-4 group-hover:rotate-45 transition-all duration-500 right-4 p-2.5 md:p-3 bg-[#022448]/90 backdrop-blur-md rounded-full shadow-lg z-20">
+              <MoveUpRight className="h-4 w-4 md:h-5 md:w-5 text-[#79acfd] font-bold" />
+            </div>
+          )}
+        </>
+      )}
+    </motion.div>
+  );
+}
+
+export default function Gallery() {
+  return (
+    <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-4 md:py-6 h-full flex flex-col justify-center overflow-hidden relative touch-pan-y">
+      <div className="relative z-10 w-full min-h-[88vh] overflow-hidden rounded-2xl bg-gradient-to-br from-[#022448] via-[#1e3a5f] to-[#022448] flex flex-col items-center justify-center py-8 lg:py-12 text-white shadow-md border border-white/5">
+        {/* Title area */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col items-center justify-center w-full z-10"
+        >
+          <h1 className="relative w-fit px-4 uppercase mx-auto bg-blue-500/10 border text-blue-200 border-blue-500/30 text-sm md:text-base font-light leading-none py-1.5 inline-block z-10">
+            Gallery
+            <span className="absolute w-[3px] h-[3px] bg-[#79acfd] z-10 top-0 left-0 -translate-x-1/2 -translate-y-1/2"></span>
+            <span className="absolute w-[3px] h-[3px] bg-[#79acfd] z-10 top-0 right-0 translate-x-1/2 -translate-y-1/2"></span>
+            <span className="corner-dot-bl absolute w-[3px] h-[3px] bg-[#79acfd] z-10 bottom-0 left-0 -translate-x-1/2 translate-y-1/2"></span>
+            <span className="corner-dot-br absolute w-[3px] h-[3px] bg-[#79acfd] z-10 bottom-0 right-0 translate-x-1/2 translate-y-1/2"></span>
+          </h1>
+
+          <div className="flex justify-center px-5 mb-8 z-10">
+            <div className="text-center shrink-0 mt-4 text-3xl md:text-5xl lg:text-[54px] capitalize leading-tight w-[95%] md:w-[85%] lg:w-[70%] font-medium text-white drop-shadow-md">
+              A visual journey through excellence, innovation, and culture.
+            </div>
           </div>
-        )}
-      </div>
+        </motion.div>
 
-      <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-6 md:grid-rows-4 gap-2 md:gap-3 h-[55vh] md:h-[65vh] max-h-175 min-h-100">
-        {/* Box 1: Large feature */}
-        <div className="col-span-2 row-span-2 relative rounded-2xl md:rounded-3xl overflow-hidden shadow-sm group">
-          <div
-            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            style={{ backgroundImage: `url('${displayUrls[0] || DEFAULT_FALLBACK_IMAGES[0]}')` }}
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/10 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-          <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-            <span className="text-white font-bold text-lg md:text-xl leading-tight">
-              {filteredItems[0]?.caption || "Academic Excellence"}
-            </span>
-            <button className="h-8 w-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black transition-colors">
-              <ArrowUpRight size={16} strokeWidth={2} />
-            </button>
-          </div>
+        <div className="flex mb-12 sm:mb-16 z-10 relative">
+          <Link
+            href="/gallery"
+            className="text-white text-center group text-lg md:text-xl font-bold py-3 sm:py-4 px-8 sm:px-10 rounded-2xl outline-none hover:shadow-[0_0px_30px_5px_rgba(37,99,235,0.4)] transition-all duration-300 bg-gradient-to-r from-blue-600 to-[#1e3a5f] border border-blue-400/20"
+          >
+            <div className="relative overflow-hidden w-max cursor-pointer mx-auto">
+              <div className="transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                Explore Gallery <span className="text-[#79acfd]">→</span>
+              </div>
+              <div className="absolute inset-0 translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0 text-[#79acfd]">
+                Explore Gallery <span>→</span>
+              </div>
+            </div>
+          </Link>
         </div>
 
-        {/* Box 2: Tall */}
-        <div className="col-span-1 row-span-2 relative rounded-xl md:rounded-2xl overflow-hidden shadow-sm group">
-          <div
-            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            style={{ backgroundImage: `url('${displayUrls[1] || DEFAULT_FALLBACK_IMAGES[1]}')` }}
-          />
+        {/* Mobile View */}
+        <div className="sm:hidden flex flex-col gap-4 px-5 mx-auto w-full z-10">
+          {galleryData.map((item, i) => (
+            <GalleryCard key={item.id} item={item} index={i} />
+          ))}
         </div>
 
-        {/* Box 3: Small top */}
-        <div className="col-span-1 row-span-1 relative rounded-xl md:rounded-2xl overflow-hidden shadow-sm group hidden md:block">
-          <div
-            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            style={{ backgroundImage: `url('${displayUrls[2] || DEFAULT_FALLBACK_IMAGES[2]}')` }}
-          />
-        </div>
-
-        {/* Box 4: Small top right */}
-        <div className="col-span-1 row-span-1 relative rounded-xl md:rounded-2xl overflow-hidden shadow-sm group hidden md:block">
-          <div
-            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            style={{ backgroundImage: `url('${displayUrls[3] || DEFAULT_FALLBACK_IMAGES[3]}')` }}
-          />
-        </div>
-
-        {/* Box 5: Wide middle right */}
-        <div className="col-span-2 row-span-1 relative rounded-xl md:rounded-2xl overflow-hidden shadow-sm group hidden md:block">
-          <div
-            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            style={{ backgroundImage: `url('${displayUrls[4] || DEFAULT_FALLBACK_IMAGES[4]}')` }}
-          />
-          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center">
-            <button className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 hover:scale-110 transition-transform">
-              <Play size={16} fill="currentColor" className="ml-1" />
-            </button>
-          </div>
-        </div>
-
-        {/* Box 6: Tall bottom left */}
-        <div className="col-span-1 row-span-2 relative rounded-xl md:rounded-2xl overflow-hidden shadow-sm group">
-          <div
-            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            style={{ backgroundImage: `url('${displayUrls[5] || DEFAULT_FALLBACK_IMAGES[5]}')` }}
-          />
-        </div>
-
-        {/* Box 7: Wide middle */}
-        <div className="col-span-2 row-span-1 relative rounded-xl md:rounded-2xl overflow-hidden shadow-sm group">
-          <div
-            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            style={{ backgroundImage: `url('${displayUrls[6] || DEFAULT_FALLBACK_IMAGES[6]}')` }}
-          />
-          <div className="absolute inset-0 bg-linear-to-r from-[#0a1730]/90 to-transparent" />
-          <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-center">
-            <h4 className="text-white font-bold text-sm md:text-lg mb-2">
-              {filteredItems[6]?.caption || "Campus Tour"}
-            </h4>
-            <button className="w-fit flex items-center gap-2 text-[10px] md:text-xs font-bold text-white bg-white/20 backdrop-blur-md px-3 py-1.5 md:px-4 md:py-2 rounded-full hover:bg-white hover:text-[#0a1730] transition-colors">
-              <Play size={10} fill="currentColor" /> Watch Video
-            </button>
-          </div>
-        </div>
-
-        {/* Box 8: Small middle right */}
-        <div className="col-span-1 row-span-1 relative rounded-xl md:rounded-2xl overflow-hidden shadow-sm group">
-          <div
-            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            style={{ backgroundImage: `url('${displayUrls[7] || DEFAULT_FALLBACK_IMAGES[7]}')` }}
-          />
-        </div>
-
-        {/* Box 9: Tall right */}
-        <div className="col-span-1 row-span-2 relative rounded-xl md:rounded-2xl overflow-hidden shadow-sm group hidden md:block">
-          <div
-            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            style={{ backgroundImage: `url('${displayUrls[8] || DEFAULT_FALLBACK_IMAGES[8]}')` }}
-          />
-        </div>
-
-        {/* Box 10: Stat Block */}
-        <div className="col-span-1 row-span-1 bg-[#0a1730] text-white rounded-xl md:rounded-2xl p-4 flex flex-col justify-center shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-2 md:p-4 opacity-10 transform translate-x-2 -translate-y-2 md:translate-x-4 md:-translate-y-4 group-hover:scale-110 transition-transform">
-            <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22h20L12 2zm0 3.8l7.2 14.2H4.8L12 5.8z"/></svg>
-          </div>
-          <span className="text-[9px] md:text-[10px] font-bold tracking-widest text-blue-400 uppercase mb-1">
-            Community
-          </span>
-          <h4 className="text-xl md:text-3xl font-bold text-white">4.5k+</h4>
-        </div>
-
-        {/* Box 11: Small bottom */}
-        <div className="col-span-1 row-span-1 relative rounded-xl md:rounded-2xl overflow-hidden shadow-sm group">
-          <div
-            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            style={{ backgroundImage: `url('${displayUrls[9] || DEFAULT_FALLBACK_IMAGES[9]}')` }}
-          />
-        </div>
-
-        {/* Box 12: Small bottom */}
-        <div className="col-span-1 row-span-1 relative rounded-xl md:rounded-2xl overflow-hidden shadow-sm group hidden md:block">
-          <div
-            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            style={{ backgroundImage: `url('${displayUrls[10] || DEFAULT_FALLBACK_IMAGES[10]}')` }}
-          />
+        {/* Desktop View (Bento Grid) */}
+        <div
+          className="max-sm:hidden grid gap-3 md:gap-4 lg:gap-5 px-4 md:px-6 lg:px-12 mx-auto lg:h-[80vh] w-full z-10"
+          style={{
+            gridTemplateColumns: "repeat(18, minmax(0, 1fr))",
+            gridTemplateRows: "repeat(12, minmax(0, 1fr))",
+          }}
+        >
+          {galleryData.map((item, i) => (
+            <GalleryCard key={item.id} item={item} desktop index={i} />
+          ))}
         </div>
       </div>
     </section>

@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Highlights from "@/components/Highlights";
 import Impact from "@/components/Impact";
+import Announcements from "@/components/Announcements";
 import Facilities from "@/components/Facilities";
 import Achievements from "@/components/Achievements";
 import Gallery from "@/components/Gallery";
@@ -10,11 +11,11 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <div
-      className="h-screen w-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory font-sans bg-white scroll-smooth"
+      className="h-screen w-full overflow-y-auto overflow-x-hidden lg:snap-y lg:snap-mandatory font-sans bg-white scroll-smooth"
       id="main-scroll"
     >
       {/* Section 1: Header + Hero */}
-      <section className="snap-start min-h-screen w-full flex flex-col bg-white">
+      <section className="lg:snap-start lg:min-h-screen w-full flex flex-col bg-white">
         <Header />
         <div className="flex-1 flex flex-col justify-center">
           <Hero />
@@ -22,27 +23,32 @@ export default function Home() {
       </section>
 
       {/* Section 2: Highlights */}
-      <section className="snap-start min-h-screen w-full flex flex-col justify-center bg-white">
+      <section className="lg:snap-start lg:min-h-screen w-full flex flex-col justify-center bg-white">
         <Highlights />
       </section>
 
       {/* Section 3: Impact */}
-      <section className="snap-start min-h-screen w-full flex flex-col justify-center bg-white">
+      <section className="lg:snap-start lg:min-h-screen w-full flex flex-col justify-center bg-white">
         <Impact />
       </section>
 
-      {/* Section 4: Facilities */}
-      <section className="snap-start min-h-screen w-full flex flex-col justify-center bg-white">
+      {/* Section 4: Announcements */}
+      <section className="lg:snap-start lg:min-h-screen w-full flex flex-col justify-center bg-white">
+        <Announcements />
+      </section>
+
+      {/* Section 5: Facilities */}
+      <section className="lg:snap-start lg:min-h-screen w-full flex flex-col justify-center bg-white">
         <Facilities />
       </section>
 
       {/* Section 5: Achievements */}
-      <section className="snap-start min-h-screen w-full flex flex-col justify-center bg-white">
+      <section className="lg:snap-start lg:min-h-screen w-full flex flex-col justify-center bg-white">
         <Achievements />
       </section>
 
       {/* Section 6: Gallery */}
-      <section className="snap-start min-h-screen w-full flex flex-col justify-center bg-white">
+      <section className="lg:snap-start lg:min-h-screen w-full flex flex-col justify-center bg-white">
         <Gallery />
       </section>
 
@@ -51,7 +57,7 @@ export default function Home() {
         min-h-screen so the snap section fully fills the viewport.
         Footer content sits at the bottom of this snap slot — reveal from below effect.
       */}
-      <section className="snap-start min-h-screen w-full flex flex-col justify-end bg-white">
+      <section className="lg:snap-start lg:min-h-screen w-full flex flex-col justify-end bg-white">
         <Footer />
       </section>
     </div>
