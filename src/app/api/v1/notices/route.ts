@@ -14,10 +14,10 @@ export async function GET(req: NextRequest) {
     const type = searchParams.get("type");
     const limit = Math.min(parseInt(searchParams.get("limit") || "20", 10), 100);
 
-    let query = db.select().from(notices);
+    let query = db.select().from(notices).$dynamic();
 
     const VALID_TYPES = ["general", "admission", "placement", "academic", "exam", "result"] as const;
-    if (type && VALID_TYPES.includes(type as any)) {
+    if (type && (VALID_TYPES as readonly string[]).includes(type)) {
       query = query.where(eq(notices.type, type as typeof VALID_TYPES[number]));
     }
 
