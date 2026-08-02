@@ -105,9 +105,12 @@ export async function POST(req: NextRequest) {
     const safeUuid = crypto.randomUUID();
     const key = `${safeUuid}${sanitizedExt}`;
 
+    const actualBucket = "Kgec_Web";
+    const actualKey = `${bucket}/${key}`;
+
     const command = new PutObjectCommand({
-      Bucket: bucket,
-      Key: key,
+      Bucket: actualBucket,
+      Key: actualKey,
       Body: buffer,
       ContentType: file.type || "application/octet-stream",
     });
@@ -115,7 +118,7 @@ export async function POST(req: NextRequest) {
     await storageClient.send(command);
 
     const supabaseUrl = process.env.SUPABASE_URL || "https://wekqgjampevtlfigznet.supabase.co";
-    const publicUrl = `${supabaseUrl}/storage/v1/object/public/${bucket}/${key}`;
+    const publicUrl = `${supabaseUrl}/storage/v1/object/public/${actualBucket}/${actualKey}`;
 
     const res = NextResponse.json(
       {

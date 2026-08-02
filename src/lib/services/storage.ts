@@ -29,9 +29,12 @@ export const storageClient = new S3Client({
 export async function getPresignedUploadUrl(bucket: string, filename: string, contentType: string) {
   const key = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
 
+  const actualBucket = "Kgec_Web";
+  const actualKey = `${bucket}/${key}`;
+
   const command = new PutObjectCommand({
-    Bucket: bucket,
-    Key: key,
+    Bucket: actualBucket,
+    Key: actualKey,
     ContentType: contentType,
   });
 
@@ -39,7 +42,7 @@ export async function getPresignedUploadUrl(bucket: string, filename: string, co
 
   // Public URL for Supabase Storage public buckets:
   // https://<project-ref>.supabase.co/storage/v1/object/public/<bucket>/<key>
-  const publicUrl = `${supabaseUrl}/storage/v1/object/public/${bucket}/${key}`;
+  const publicUrl = `${supabaseUrl}/storage/v1/object/public/${actualBucket}/${actualKey}`;
 
-  return { uploadUrl, publicUrl, key };
+  return { uploadUrl, publicUrl, key: actualKey };
 }
