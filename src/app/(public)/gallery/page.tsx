@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import GalleryComponent from "@/components/Gallery";
 import Link from "next/link";
 import {
   Camera,
@@ -89,7 +88,33 @@ export default async function GalleryPage() {
 
       {/* Main Content */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-12">
-        <GalleryComponent items={images} />
+        {images.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {images.map((image) => (
+              <div key={image.id} className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="aspect-square relative">
+                  <img 
+                    src={image.imageUrl} 
+                    alt={image.caption || image.album || "Gallery Image"} 
+                    loading="lazy"
+                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" 
+                  />
+                </div>
+                {(image.caption || image.album) && (
+                  <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 to-transparent p-4 pt-12 text-white pointer-events-none">
+                    <p className="text-sm font-semibold truncate">{image.album}</p>
+                    {image.caption && <p className="text-xs text-white/70 truncate mt-1">{image.caption}</p>}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20 text-slate-500">
+            <ImageIcon className="mx-auto h-12 w-12 opacity-20 mb-4" />
+            <p>No images found in the gallery.</p>
+          </div>
+        )}
       </main>
 
       <Footer />

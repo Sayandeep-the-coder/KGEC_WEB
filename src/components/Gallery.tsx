@@ -8,16 +8,21 @@ import { motion } from "framer-motion";
 const galleryData = [
   {
     id: 1,
-    type: "video",
-    src: "https://dfdx9u0psdezh.cloudfront.net/CommunitySection/krYucg76Kc.webm",
-    poster: "https://dfdx9u0psdezh.cloudfront.net/CommunitySection/krYucg76Kc.webp",
+    type: "image",
+    src: "/images/events/event_techtix.png",
+    title: "Techtix",
+    description: "Annual Techno-Management Fest filled with innovation and technology.",
     desktopStyle: { gridColumn: "1 / span 5", gridRow: "1 / span 8" },
+    objectPosition: "object-center",
   },
   {
     id: 2,
-    type: "youtube",
-    youtubeId: "thz4lJmRO74",
+    type: "image",
+    src: "/images/events/event_exotica.png",
+    title: "Exotica",
+    description: "Welcoming the freshers with a grand celebration and cultural events.",
     desktopStyle: { gridColumn: "6 / span 8", gridRow: "1 / span 4" },
+    objectPosition: "object-center",
   },
   {
     id: 3,
@@ -61,10 +66,12 @@ const galleryData = [
   },
   {
     id: 7,
-    type: "video",
-    src: "https://dfdx9u0psdezh.cloudfront.net/CommunitySection/nrzKSGhzfc.webm",
-    poster: "https://dfdx9u0psdezh.cloudfront.net/CommunitySection/nrzKSGhzfc.webp",
+    type: "image",
+    src: "/images/events/event_alhambra.png",
+    title: "Alhambra",
+    description: "The Annual Cultural Fiesta showcasing immense talent and passion.",
     desktopStyle: { gridColumn: "14 / span 5", gridRow: "5 / span 8" },
+    objectPosition: "object-center",
   },
 ];
 
@@ -73,7 +80,17 @@ function GalleryCard({
   desktop = false,
   index = 0,
 }: {
-  item: any;
+  item: {
+    id: number;
+    type: string;
+    src?: string;
+    youtubeId?: string;
+    poster?: string;
+    title?: string;
+    description?: string;
+    desktopStyle: React.CSSProperties;
+    objectPosition?: string;
+  };
   desktop?: boolean;
   index?: number;
 }) {
@@ -135,7 +152,7 @@ function GalleryCard({
 
           {/* Mobile Persistent Overlay */}
           {item.title && (
-            <div className="absolute lg:hidden bottom-0 left-0 bg-gradient-to-t from-black via-black/80 to-transparent pt-12 pb-5 px-5 w-full z-20">
+            <div className="absolute lg:hidden bottom-0 left-0 bg-linear-to-t from-black via-black/80 to-transparent pt-12 pb-5 px-5 w-full z-20">
               <h1 className="font-bold capitalize text-xl mb-1 drop-shadow-sm">
                 {item.title}
               </h1>
@@ -159,7 +176,7 @@ function GalleryCard({
 export default function Gallery() {
   return (
     <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-4 md:py-6 h-full flex flex-col justify-center overflow-hidden relative touch-pan-y">
-      <div className="relative z-10 w-full min-h-[88vh] overflow-hidden rounded-2xl bg-gradient-to-br from-[#022448] via-[#1e3a5f] to-[#022448] flex flex-col items-center justify-center py-8 lg:py-12 text-white shadow-md border border-white/5">
+      <div className="relative z-10 w-full min-h-[88vh] overflow-hidden rounded-2xl bg-linear-to-br from-[#022448] via-[#1e3a5f] to-[#022448] flex flex-col items-center justify-center py-8 lg:py-12 text-white shadow-md border border-white/5">
         {/* Title area */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
@@ -170,10 +187,10 @@ export default function Gallery() {
         >
           <h1 className="relative w-fit px-4 uppercase mx-auto bg-blue-500/10 border text-blue-200 border-blue-500/30 text-sm md:text-base font-light leading-none py-1.5 inline-block z-10">
             Gallery
-            <span className="absolute w-[3px] h-[3px] bg-[#79acfd] z-10 top-0 left-0 -translate-x-1/2 -translate-y-1/2"></span>
-            <span className="absolute w-[3px] h-[3px] bg-[#79acfd] z-10 top-0 right-0 translate-x-1/2 -translate-y-1/2"></span>
-            <span className="corner-dot-bl absolute w-[3px] h-[3px] bg-[#79acfd] z-10 bottom-0 left-0 -translate-x-1/2 translate-y-1/2"></span>
-            <span className="corner-dot-br absolute w-[3px] h-[3px] bg-[#79acfd] z-10 bottom-0 right-0 translate-x-1/2 translate-y-1/2"></span>
+            <span className="absolute w-0.75 h-0.75 bg-[#79acfd] z-10 top-0 left-0 -translate-x-1/2 -translate-y-1/2"></span>
+            <span className="absolute w-0.75 h-0.75 bg-[#79acfd] z-10 top-0 right-0 translate-x-1/2 -translate-y-1/2"></span>
+            <span className="corner-dot-bl absolute w-0.75 h-0.75 bg-[#79acfd] z-10 bottom-0 left-0 -translate-x-1/2 translate-y-1/2"></span>
+            <span className="corner-dot-br absolute w-0.75 h-0.75 bg-[#79acfd] z-10 bottom-0 right-0 translate-x-1/2 translate-y-1/2"></span>
           </h1>
 
           <div className="flex justify-center px-5 mb-8 z-10">
@@ -186,7 +203,7 @@ export default function Gallery() {
         <div className="flex mb-12 sm:mb-16 z-10 relative">
           <Link
             href="/gallery"
-            className="text-white text-center group text-lg md:text-xl font-bold py-3 sm:py-4 px-8 sm:px-10 rounded-2xl outline-none hover:shadow-[0_0px_30px_5px_rgba(37,99,235,0.4)] transition-all duration-300 bg-gradient-to-r from-blue-600 to-[#1e3a5f] border border-blue-400/20"
+            className="text-white text-center group text-lg md:text-xl font-bold py-3 sm:py-4 px-8 sm:px-10 rounded-2xl outline-none hover:shadow-[0_0px_30px_5px_rgba(37,99,235,0.4)] transition-all duration-300 bg-linear-to-r from-blue-600 to-[#1e3a5f] border border-blue-400/20"
           >
             <div className="relative overflow-hidden w-max cursor-pointer mx-auto">
               <div className="transition-transform duration-300 ease-out group-hover:-translate-y-full">

@@ -187,24 +187,23 @@ export default function Header() {
   };
 
   return (
-    <header className="relative z-50 w-full bg-white shadow-sm xl:shadow-none">
+    <header className="sticky top-0 z-50 w-full bg-white shadow-sm xl:shadow-none">
       <div className="mx-auto flex max-w-[100rem] items-center justify-between gap-4 px-4 py-2 sm:px-6 lg:px-8 xl:items-stretch xl:gap-8">
-        <Link href="/" className="flex min-w-0 shrink-0 items-center gap-3">
+        <Link href="/" className="flex min-w-0 shrink items-center gap-2 sm:gap-3">
           <Image
             src="/dark-logo.png"
             alt="KGEC Logo"
             width={64}
             height={64}
-            className="h-12 w-auto shrink-0 object-contain sm:h-14"
+            className="h-10 w-auto shrink-0 object-contain sm:h-12 md:h-14"
           />
-          <div className="min-w-0">
-            <h1 className="font-serif text-[11px] sm:text-[13px] md:text-[16px] font-bold uppercase leading-tight tracking-wide text-[#0a1730]">
+          <div className="min-w-0 flex-1">
+            <h1 className="font-serif text-[10px] leading-[1.2] sm:text-[12px] md:text-[15px] lg:text-[16px] font-bold uppercase tracking-wide text-[#0a1730]">
               {COLLEGE_NAME_LINE_1}
-              <br className="hidden sm:block" />
-              <span className="sm:hidden"> </span>
+              <br />
               {COLLEGE_NAME_LINE_2}
             </h1>
-            <p className="mt-0.5 text-[8px] sm:text-[9px] md:text-[10px] font-bold tracking-wider text-slate-500">
+            <p className="mt-0.5 text-[7px] sm:text-[9px] md:text-[10px] font-bold tracking-wider text-slate-500">
               {ESTABLISHED_YEAR}
             </p>
           </div>
@@ -219,12 +218,12 @@ export default function Header() {
             setIsMenuOpen((current) => !current);
             setOpenMobileGroup(null);
           }}
-          className="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-[#0a1730] shadow-sm transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0a1730] xl:hidden"
+          className="inline-flex w-11 h-11 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-[#0a1730] shadow-sm transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0a1730] xl:hidden"
         >
           {isMenuOpen ? (
-            <X className="size-5" strokeWidth={2.5} />
+            <X className="w-5 h-5" strokeWidth={2.5} />
           ) : (
-            <Menu className="size-5" strokeWidth={2.5} />
+            <Menu className="w-5 h-5" strokeWidth={2.5} />
           )}
         </button>
 
@@ -334,7 +333,7 @@ export default function Header() {
 
       <div
         id="mobile-header-menu"
-        className={`border-t border-slate-200 bg-white px-4 shadow-xl transition-[max-height,opacity] duration-300 ease-out xl:hidden ${
+        className={`absolute inset-x-0 top-full border-t border-slate-200 bg-white px-4 shadow-xl transition-[max-height,opacity] duration-300 ease-out xl:hidden ${
           isMenuOpen
             ? "max-h-[calc(100vh-4rem)] overflow-y-auto py-4 opacity-100"
             : "max-h-0 overflow-hidden py-0 opacity-0"
