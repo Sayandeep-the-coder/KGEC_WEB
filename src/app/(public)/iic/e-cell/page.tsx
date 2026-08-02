@@ -4,10 +4,8 @@ import Link from "next/link";
 import {
   Flame,
   Sparkles,
-  Rocket,
   Users,
   Trophy,
-  Briefcase,
   ArrowRight,
   ArrowLeft,
   Coins,

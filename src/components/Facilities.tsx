@@ -124,7 +124,7 @@ export default function Facilities() {
 
   return (
     <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-4 md:py-6 h-full flex flex-col justify-center overflow-hidden touch-pan-y">
-      <div className="relative w-full h-[88vh] min-h-[500px] overflow-hidden rounded-2xl bg-slate-950 shadow-md group">
+      <div className="relative w-full h-[88vh] min-h-125 overflow-hidden rounded-2xl bg-slate-950 shadow-md group">
         
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
@@ -156,8 +156,8 @@ export default function Facilities() {
                 style={{ backgroundImage: `url('${activeFacility.image}')` }}
               />
               {/* Gradient Overlays for Text Readability */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30" />
+              <div className="absolute inset-0 bg-linear-to-b from-black/40 via-transparent to-black/60" />
+              <div className="absolute inset-0 bg-linear-to-r from-black/50 via-transparent to-black/30" />
             </div>
 
             {/* Content Layer */}

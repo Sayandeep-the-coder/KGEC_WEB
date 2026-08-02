@@ -23,7 +23,8 @@ export default function AdminMobileNav({ userName, userEmail }: { userName: stri
 
   // Close menu when route changes
   useEffect(() => {
-    setIsOpen(false);
+    const timer = setTimeout(() => setIsOpen(false), 0);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   // Prevent background scrolling when menu is open

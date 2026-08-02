@@ -104,7 +104,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-bold text-[#225eaa] mb-4">Our Mission</h3>
                 <h4 className="text-xl md:text-2xl font-bold text-[#022448] font-serif mb-6 leading-tight">
-                  "Creating engineers<br/>who build tomorrow."
+                  &quot;Creating engineers<br/>who build tomorrow.&quot;
                 </h4>
                 <p className="text-[#43474e] text-sm leading-relaxed max-w-sm">
                   To impart high-quality technical education, foster innovative research, and nurture ethical values to prepare engineers and technological leaders for societal development.
@@ -122,7 +122,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-bold text-[#d4a373] mb-4">Our Vision</h3>
                 <h4 className="text-xl md:text-2xl font-bold text-[#022448] font-serif mb-6 leading-tight">
-                  "Global excellence<br/>through innovation."
+                  &quot;Global excellence<br/>through innovation.&quot;
                 </h4>
                 <p className="text-[#43474e] text-sm leading-relaxed max-w-sm">
                   To achieve global recognition as a center of excellence in engineering education, innovation, and technological leadership for sustainable nation-building.
@@ -135,7 +135,7 @@ export default function AboutPage() {
         {/* PRINCIPAL'S DESK */}
         <div className="w-full max-w-[1200px] px-6 py-24">
           <span className="text-[#225eaa] text-xs font-bold uppercase tracking-widest mb-4 block">
-            PRINCIPAL'S DESK
+            PRINCIPAL&apos;S DESK
             <div className="h-0.5 w-8 bg-[#225eaa] mt-2"></div>
           </span>
           
@@ -170,9 +170,9 @@ export default function AboutPage() {
             {/* Right Quote Card */}
             <div className="lg:col-span-4 bg-[#022448] rounded-2xl p-6 sm:p-10 text-white flex flex-col justify-center relative overflow-hidden shadow-xl">
               <div className="absolute right-0 bottom-0 w-64 h-64 opacity-5 pointer-events-none" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/blueprint.png')" }} />
-              <div className="text-6xl text-[#225eaa] mb-4 opacity-50 font-serif leading-none">"</div>
+              <div className="text-6xl text-[#225eaa] mb-4 opacity-50 font-serif leading-none">&quot;</div>
               <p className="text-2xl md:text-3xl font-serif leading-tight mb-8 relative z-10">
-                Education is the most powerful weapon which you can use to change the world."
+                &quot;Education is the most powerful weapon which you can use to change the world.&quot;
               </p>
               <div className="h-1 w-12 bg-[#76A9FA]"></div>
             </div>

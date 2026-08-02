@@ -83,7 +83,7 @@ export default function DepartmentsClient() {
             className="absolute inset-0 bg-cover bg-center transition-all duration-700 opacity-40 mix-blend-overlay"
             style={{ backgroundImage: `url(${bgImage})` }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-kgec-navy/80 to-transparent"></div>
+          <div className="absolute inset-0 bg-linear-to-r from-kgec-navy/80 to-transparent"></div>
           
           <div className="relative z-10">
             <span className="text-xs font-bold uppercase tracking-widest text-blue-300 block mb-2">
@@ -104,7 +104,7 @@ export default function DepartmentsClient() {
             return (
               <div
                 key={dept.slug}
-                className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 flex flex-col justify-between shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden min-h-[260px] sm:min-h-[280px]"
+                className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 flex flex-col justify-between shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden min-h-65 sm:min-h-70"
                 onMouseEnter={() => setHoveredDept(dept.slug)}
                 onMouseLeave={() => setHoveredDept(null)}
               >

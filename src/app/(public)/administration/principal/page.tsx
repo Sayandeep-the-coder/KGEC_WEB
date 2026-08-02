@@ -29,7 +29,7 @@ export default async function PrincipalPage() {
   const name = principalData?.name || "Dr. Sourabh Kumar Das";
   const email = principalData?.email || "principal@kgec.edu.in";
   const education = (principalData?.education as Array<{ degree: string; institution: string; year?: number }>) || [];
-  const _research = (principalData?.researchPaperLinks as Array<{ title: string; url: string }>) || [];
+
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">

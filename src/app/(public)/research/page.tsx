@@ -3,7 +3,6 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import {
   FlaskConical,
-  Award,
   BookOpen,
   Sparkles,
   Cpu,
@@ -11,7 +10,6 @@ import {
   Globe,
   Layers,
   ArrowRight,
-  ShieldCheck,
   CheckCircle2
 } from "lucide-react";
 
