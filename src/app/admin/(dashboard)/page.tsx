@@ -29,47 +29,47 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Metric Tiles */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-        <Link href="/admin/messages" className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-500/50 transition-all group">
-          <Mail className="text-blue-600 mb-3 group-hover:scale-110 transition-transform" size={24} />
-          <span className="text-xs text-slate-500 block font-semibold">Enquiries</span>
-          <h3 className="text-2xl font-bold text-slate-900 mt-1">{data.counts.messages}</h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
+        <Link href="/admin/messages" className="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-500/50 transition-all group">
+          <Mail className="text-blue-600 mb-2 sm:mb-3 group-hover:scale-110 transition-transform" size={24} />
+          <span className="text-[10px] sm:text-xs text-slate-500 block font-semibold truncate">Enquiries</span>
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">{data.counts.messages}</h3>
         </Link>
 
-        <Link href="/admin/notices" className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-500/50 transition-all group">
-          <Bell className="text-blue-600 mb-3 group-hover:scale-110 transition-transform" size={24} />
-          <span className="text-xs text-slate-500 block font-semibold">Notices</span>
-          <h3 className="text-2xl font-bold text-slate-900 mt-1">{data.counts.notices}</h3>
+        <Link href="/admin/notices" className="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-500/50 transition-all group">
+          <Bell className="text-blue-600 mb-2 sm:mb-3 group-hover:scale-110 transition-transform" size={24} />
+          <span className="text-[10px] sm:text-xs text-slate-500 block font-semibold truncate">Notices</span>
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">{data.counts.notices}</h3>
         </Link>
 
-        <Link href="/admin/news" className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all group">
-          <Newspaper className="text-emerald-600 mb-3 group-hover:scale-110 transition-transform" size={24} />
-          <span className="text-xs text-slate-500 block font-semibold">News</span>
-          <h3 className="text-2xl font-bold text-slate-900 mt-1">{data.counts.news}</h3>
+        <Link href="/admin/news" className="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all group">
+          <Newspaper className="text-emerald-600 mb-2 sm:mb-3 group-hover:scale-110 transition-transform" size={24} />
+          <span className="text-[10px] sm:text-xs text-slate-500 block font-semibold truncate">News</span>
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">{data.counts.news}</h3>
         </Link>
 
-        <Link href="/admin/events" className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-purple-500/50 transition-all group">
-          <Calendar className="text-purple-600 mb-3 group-hover:scale-110 transition-transform" size={24} />
-          <span className="text-xs text-slate-500 block font-semibold">Events</span>
-          <h3 className="text-2xl font-bold text-slate-900 mt-1">{data.counts.events}</h3>
+        <Link href="/admin/events" className="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-purple-500/50 transition-all group">
+          <Calendar className="text-purple-600 mb-2 sm:mb-3 group-hover:scale-110 transition-transform" size={24} />
+          <span className="text-[10px] sm:text-xs text-slate-500 block font-semibold truncate">Events</span>
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">{data.counts.events}</h3>
         </Link>
 
-        <Link href="/admin/downloads" className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-amber-500/50 transition-all group">
-          <Download className="text-amber-600 mb-3 group-hover:scale-110 transition-transform" size={24} />
-          <span className="text-xs text-slate-500 block font-semibold">Downloads</span>
-          <h3 className="text-2xl font-bold text-slate-900 mt-1">{data.counts.downloads}</h3>
+        <Link href="/admin/downloads" className="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-amber-500/50 transition-all group">
+          <Download className="text-amber-600 mb-2 sm:mb-3 group-hover:scale-110 transition-transform" size={24} />
+          <span className="text-[10px] sm:text-xs text-slate-500 block font-semibold truncate">Downloads</span>
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">{data.counts.downloads}</h3>
         </Link>
 
-        <Link href="/admin/gallery" className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-pink-500/50 transition-all group">
-          <ImageIcon className="text-pink-600 mb-3 group-hover:scale-110 transition-transform" size={24} />
-          <span className="text-xs text-slate-500 block font-semibold">Gallery</span>
-          <h3 className="text-2xl font-bold text-slate-900 mt-1">{data.counts.gallery}</h3>
+        <Link href="/admin/gallery" className="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-pink-500/50 transition-all group">
+          <ImageIcon className="text-pink-600 mb-2 sm:mb-3 group-hover:scale-110 transition-transform" size={24} />
+          <span className="text-[10px] sm:text-xs text-slate-500 block font-semibold truncate">Gallery</span>
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">{data.counts.gallery}</h3>
         </Link>
 
-        <Link href="/admin/staff" className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-indigo-500/50 transition-all group">
-          <Users className="text-indigo-600 mb-3 group-hover:scale-110 transition-transform" size={24} />
-          <span className="text-xs text-slate-500 block font-semibold">Staff</span>
-          <h3 className="text-2xl font-bold text-slate-900 mt-1">{data.counts.staff}</h3>
+        <Link href="/admin/staff" className="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-indigo-500/50 transition-all group">
+          <Users className="text-indigo-600 mb-2 sm:mb-3 group-hover:scale-110 transition-transform" size={24} />
+          <span className="text-[10px] sm:text-xs text-slate-500 block font-semibold truncate">Staff</span>
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">{data.counts.staff}</h3>
         </Link>
       </div>
 

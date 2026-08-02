@@ -180,7 +180,7 @@ export default function AdminMessagesPage() {
         </div>
 
         {/* Right Column: Message Detail View */}
-        <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm min-h-105 flex flex-col justify-between">
+        <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm min-h-105 flex flex-col justify-between">
           {selectedMessage ? (
             <div className="space-y-6">
               {/* Detail Header */}

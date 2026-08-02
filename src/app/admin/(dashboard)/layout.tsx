@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Shield, Bell, Newspaper, Calendar, Download, Image as ImageIcon, Users, Briefcase, LogOut, ArrowUpRight, Mail } from "lucide-react";
+import AdminMobileNav from "@/components/admin/AdminMobileNav";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -12,7 +13,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col md:flex-row font-sans w-full">
+      <AdminMobileNav userName={session.user.name || session.user.email || "Admin"} userEmail={session.user.email || ""} />
+
       {/* Sidebar Nav */}
       <aside className="w-64 bg-[#0f2552] text-white border-r border-slate-800/10 p-6 shrink-0 hidden md:flex flex-col justify-between shadow-xl">
         <div>
@@ -85,7 +88,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto p-6 md:p-10 bg-slate-50">
+      <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-10 bg-slate-50 w-full">
         {children}
       </main>
     </div>
