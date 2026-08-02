@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { getAdminDashboardData } from "@/lib/services/dashboard";
-import { Bell, Newspaper, Calendar, Download, Image as ImageIcon, Users, ShieldAlert, ArrowUpRight, ExternalLink, Plus } from "lucide-react";
+import { Bell, Newspaper, Calendar, Download, Image as ImageIcon, Users, ShieldAlert, ArrowUpRight, ExternalLink, Plus, Mail } from "lucide-react";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +29,13 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Metric Tiles */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+        <Link href="/admin/messages" className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-500/50 transition-all group">
+          <Mail className="text-blue-600 mb-3 group-hover:scale-110 transition-transform" size={24} />
+          <span className="text-xs text-slate-500 block font-semibold">Enquiries</span>
+          <h3 className="text-2xl font-bold text-slate-900 mt-1">{data.counts.messages}</h3>
+        </Link>
+
         <Link href="/admin/notices" className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-500/50 transition-all group">
           <Bell className="text-blue-600 mb-3 group-hover:scale-110 transition-transform" size={24} />
           <span className="text-xs text-slate-500 block font-semibold">Notices</span>

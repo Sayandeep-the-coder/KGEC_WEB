@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { notices } from "@/lib/db/schema";
 import { ilike, desc } from "drizzle-orm";
+import { handleApiError } from "@/lib/errors";
 
 export async function GET(req: NextRequest) {
   try {
@@ -25,7 +26,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ data });
   } catch (error) {
-    console.error("GET /api/v1/notices/search error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "GET /api/v1/notices/search");
   }
 }

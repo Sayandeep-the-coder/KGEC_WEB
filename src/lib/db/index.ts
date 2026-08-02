@@ -5,5 +5,10 @@ import * as schema from "./schema";
 const connectionString = process.env.DATABASE_URL || "postgres://postgres:postgres@localhost:5432/postgres";
 
 // For serverless / pooled connections (Supavisor port 6543)
-const client = postgres(connectionString, { max: 10, idle_timeout: 20, connect_timeout: 10 });
+export const client = postgres(connectionString, {
+  prepare: false,
+  max: 10,
+  idle_timeout: 20,
+  connect_timeout: 15,
+});
 export const db = drizzle(client, { schema });

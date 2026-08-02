@@ -1,3 +1,10 @@
+import AdministrationRolePage from "../[role]/page";
+
+export const metadata = {
+  title: "Office of the Accounts Officer | Kalyani Government Engineering College",
+  description: "Fiscal planning, state budget allocation, research grant disbursements, student fees, and audit compliance at KGEC.",
+};
+
 export default function Page() {
-  return <div>Placeholder for src/app/(public)/administration/accounts-officer/page.tsx</div>;
+  return <AdministrationRolePage params={Promise.resolve({ role: "accounts-officer" })} />;
 }

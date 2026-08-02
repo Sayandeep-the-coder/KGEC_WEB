@@ -10,14 +10,16 @@ export async function GET(req: NextRequest) {
 
     if (yearParam) {
       const year = parseInt(yearParam, 10);
-      if (!isNaN(year)) {
-        const [stat] = await db
-          .select()
-          .from(placementStats)
-          .where(eq(placementStats.year, year));
-
-        return NextResponse.json({ data: stat || null });
+      if (isNaN(year)) {
+        return NextResponse.json({ error: "Invalid year parameter" }, { status: 400 });
       }
+
+      const [stat] = await db
+        .select()
+        .from(placementStats)
+        .where(eq(placementStats.year, year));
+
+      return NextResponse.json({ data: stat || null });
     }
 
     const stats = await db
@@ -25,9 +27,9 @@ export async function GET(req: NextRequest) {
       .from(placementStats)
       .orderBy(asc(placementStats.year));
 
-    return NextResponse.json({ data: stats });
+    return NextResponse.json({ data: stats || [] });
   } catch (error) {
     console.error("GET /api/v1/placements/stats error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

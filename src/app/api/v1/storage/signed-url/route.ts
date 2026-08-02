@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { signedUrlSchema } from "@/lib/validators";
 import { getPresignedUploadUrl } from "@/lib/services/storage";
+import { handleApiError } from "@/lib/errors";
 
 export async function POST(req: NextRequest) {
   try {
@@ -33,7 +34,6 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("POST /api/v1/storage/signed-url error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "POST /api/v1/storage/signed-url");
   }
 }

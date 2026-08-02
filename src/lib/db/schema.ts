@@ -106,8 +106,11 @@ export const news = pgTable("news", {
   id: uuid("id").defaultRandom().primaryKey(),
   slug: text("slug").notNull().unique(),
   title: text("title").notNull(),
+  excerpt: text("excerpt"),
   imageUrl: text("image_url"),
+  category: text("category").default("campus").notNull(),
   body: jsonb("body").notNull(),
+  isPublished: boolean("is_published").default(true).notNull(),
   publishedAt: timestamp("published_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -119,6 +122,8 @@ export const events = pgTable("events", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: text("title").notNull(),
   description: text("description"),
+  imageUrl: text("image_url"),
+  location: text("location"),
   eventDate: timestamp("event_date", { withTimezone: true }).notNull(),
   externalLink: text("external_link"),
 });
@@ -180,6 +185,8 @@ export const placementDepartments = pgTable(
     studentsPlaced: integer("students_placed").notNull(),
     medianSalary: integer("median_salary"),
     highestSalary: integer("highest_salary"),
+    placementRate: numeric("placement_rate"),
+    totalOffers: integer("total_offers"),
   },
   (t) => ({
     yearDeptUnique: unique().on(t.year, t.department),
@@ -244,6 +251,8 @@ export const staff = pgTable(
     employeeId: text("employee_id").notNull().unique(),
     photoUrl: text("photo_url"),
     role: staffRoleEnum("role").notNull(),
+    designation: text("designation"),
+    specialization: text("specialization"),
     department: departmentEnum("department"),
     education: jsonb("education"),
     researchPaperLinks: jsonb("research_paper_links"),
@@ -295,3 +304,72 @@ export const auditLog = pgTable(
     createdAtIdx: index("audit_log_created_at_idx").on(t.createdAt),
   })
 );
+
+// ─── Alumni ─────────────────────────────────────────────────────────────────
+
+export const alumniCategoryEnum = pgEnum("alumni_category", [
+  "space_research",
+  "big_tech",
+  "founder",
+  "academia",
+  "general",
+]);
+
+export const alumni = pgTable(
+  "alumni",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    name: text("name").notNull(),
+    batchYear: integer("batch_year").notNull(),
+    department: text("department").notNull(),
+    currentRole: text("current_role").notNull(),
+    company: text("company").notNull(),
+    location: text("location"),
+    category: alumniCategoryEnum("category").default("general").notNull(),
+    bio: text("bio"),
+    photoUrl: text("photo_url"),
+    linkedinUrl: text("linkedin_url"),
+    featured: boolean("featured").default(false).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => ({
+    categoryIdx: index("alumni_category_idx").on(t.category),
+    batchIdx: index("alumni_batch_idx").on(t.batchYear),
+  })
+);
+
+// ─── Department Details ─────────────────────────────────────────────────────
+
+export const departmentDetails = pgTable(
+  "department_details",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    slug: text("slug").notNull().unique(),
+    name: text("name").notNull(),
+    code: text("code").notNull(),
+    established: text("established").notNull(),
+    degreesOffered: jsonb("degrees_offered").notNull(),
+    headOfDepartment: text("head_of_department").notNull(),
+    overview: text("overview").notNull(),
+    detailedOverview: jsonb("detailed_overview").notNull(),
+    vision: text("vision").notNull(),
+    mission: jsonb("mission").notNull(),
+    laboratories: jsonb("laboratories").notNull(),
+    seatMatrix: jsonb("seat_matrix").notNull(),
+    totalAnnualCapacity: integer("total_annual_capacity").notNull(),
+    enrollment5Year: jsonb("enrollment_5_year"),
+    placement5Year: jsonb("placement_5_year"),
+    recentMetrics: jsonb("recent_metrics"),
+    studentAchievements: text("student_achievements").notNull(),
+    achievementHighlights: jsonb("achievement_highlights").notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => ({
+    slugIdx: index("department_details_slug_idx").on(t.slug),
+  })
+);
+

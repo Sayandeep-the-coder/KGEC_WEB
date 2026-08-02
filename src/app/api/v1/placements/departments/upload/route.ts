@@ -7,6 +7,7 @@ import { placementDeptRowSchema } from "@/lib/validators";
 import Papa from "papaparse";
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
+import { handleApiError } from "@/lib/errors";
 
 export async function POST(req: NextRequest) {
   try {
@@ -64,6 +65,8 @@ export async function POST(req: NextRequest) {
       studentsPlaced: number;
       medianSalary: number | null;
       highestSalary: number | null;
+      placementRate: string | null;
+      totalOffers: number | null;
     }> = [];
 
     const errors: Array<{ row: number; message: string }> = [];
@@ -85,6 +88,8 @@ export async function POST(req: NextRequest) {
           studentsPlaced: parsed.data.students_placed,
           medianSalary: parsed.data.median_salary ?? null,
           highestSalary: parsed.data.highest_salary ?? null,
+          placementRate: parsed.data.placement_rate !== undefined && parsed.data.placement_rate !== null ? String(parsed.data.placement_rate) : null,
+          totalOffers: parsed.data.total_offers ?? null,
         });
       }
     });
@@ -108,6 +113,8 @@ export async function POST(req: NextRequest) {
                 studentsPlaced: row.studentsPlaced,
                 medianSalary: row.medianSalary,
                 highestSalary: row.highestSalary,
+                placementRate: row.placementRate,
+                totalOffers: row.totalOffers,
               },
             });
         }
@@ -189,10 +196,6 @@ export async function POST(req: NextRequest) {
       data: { inserted: validRows.length, errors },
     });
   } catch (error) {
-    console.error(
-      "POST /api/v1/placements/departments/upload error:",
-      error
-    );
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "POST /api/v1/placements/departments/upload");
   }
 }

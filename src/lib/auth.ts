@@ -1,6 +1,5 @@
 import NextAuth, { DefaultSession } from "next-auth";
 import Google from "next-auth/providers/google";
-import Credentials from "next-auth/providers/credentials";
 import "next-auth/jwt";
 import { db } from "@/lib/db";
 import { adminAllowlist } from "@/lib/db/schema";
@@ -39,44 +38,18 @@ export const {
   basePath: "/api/v1/auth",
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID || "placeholder-google-client-id",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "placeholder-google-client-secret",
-    }),
-    Credentials({
-      id: "credentials",
-      name: "Allowlisted Admin Email",
-      credentials: {
-        email: { label: "Admin Email", type: "email" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || typeof credentials.email !== "string") {
-          return null;
-        }
-
-        const cleanEmail = credentials.email.trim().toLowerCase();
-
-        const [admin] = await db
-          .select()
-          .from(adminAllowlist)
-          .where(eq(adminAllowlist.email, cleanEmail));
-
-        if (!admin) {
-          return null;
-        }
-
-        return {
-          id: admin.id,
-          email: admin.email,
-          name: admin.name || "KGEC Administrator",
-          adminId: admin.id,
-          adminEmail: admin.email,
-          adminName: admin.name || "KGEC Administrator",
-        };
-      },
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
 
-  secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET || "kgec-development-secret-key-32-chars-long",
+  secret: (() => {
+    const secret = process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET;
+    if (!secret && process.env.NODE_ENV === "production") {
+      throw new Error("NEXTAUTH_SECRET or AUTH_SECRET must be set in production");
+    }
+    return secret || "kgec-dev-only-secret-not-for-production";
+  })(),
 
   session: {
     strategy: "jwt",
@@ -96,16 +69,21 @@ export const {
 
       if (!user.email) return false;
 
-      const [admin] = await db
-        .select()
-        .from(adminAllowlist)
-        .where(eq(adminAllowlist.email, user.email.toLowerCase()));
+      try {
+        const [admin] = await db
+          .select()
+          .from(adminAllowlist)
+          .where(eq(adminAllowlist.email, user.email.toLowerCase()));
 
-      if (!admin) {
-        return "/admin/access-denied";
+        if (!admin) {
+          return "/admin/access-denied";
+        }
+
+        return true;
+      } catch (err) {
+        console.error("Auth signIn query error:", err);
+        return false; // fail-closed: deny login if allowlist cannot be verified
       }
-
-      return true;
     },
 
     async jwt({ token, user }) {
@@ -113,16 +91,20 @@ export const {
         token.adminId = user.adminId || token.sub;
         token.adminEmail = (user.email || token.email) ?? undefined;
         token.adminName = (user.name || token.name) ?? undefined;
-      } else if (token.email) {
-        const [admin] = await db
-          .select()
-          .from(adminAllowlist)
-          .where(eq(adminAllowlist.email, token.email.toLowerCase()));
+      } else if (token.email && !token.adminId) {
+        try {
+          const [admin] = await db
+            .select()
+            .from(adminAllowlist)
+            .where(eq(adminAllowlist.email, token.email.toLowerCase()));
 
-        if (admin) {
-          token.adminId = admin.id;
-          token.adminEmail = admin.email ?? undefined;
-          token.adminName = admin.name ?? undefined;
+          if (admin) {
+            token.adminId = admin.id;
+            token.adminEmail = admin.email ?? undefined;
+            token.adminName = admin.name ?? undefined;
+          }
+        } catch (err) {
+          console.error("Auth jwt db lookup error:", err);
         }
       }
       return token;

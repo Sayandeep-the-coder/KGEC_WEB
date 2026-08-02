@@ -2,12 +2,15 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { notFound } from "next/navigation";
 import { GraduationCap, Calendar, CheckCircle2 } from "lucide-react";
+import { db } from "@/lib/db";
+import { admissions, admissionProgramEnum } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 interface PageProps {
   params: Promise<{ program: string }>;
 }
 
-const PROGRAM_MAP: Record<string, { apiKey: string; title: string; desc: string }> = {
+const PROGRAM_MAP: Record<string, { apiKey: "ug_btech" | "pg_mtech" | "pg_mca"; title: string; desc: string }> = {
   "ug-btech": {
     apiKey: "ug_btech",
     title: "B.Tech Admissions (Undergraduate)",
@@ -27,20 +30,26 @@ const PROGRAM_MAP: Record<string, { apiKey: string; title: string; desc: string 
 
 interface AdmissionsData {
   program: string;
-  seatMatrix: Record<string, number> | null;
+  seatMatrix: Record<string, number> | Array<{ department?: string; name?: string; seats?: number; code?: string }> | null;
   importantDates: Array<{ event: string; date: string }> | null;
 }
 
-async function getAdmissionsData(apiKey: string): Promise<AdmissionsData | null> {
+async function getAdmissionsData(programKey: "ug_btech" | "pg_mtech" | "pg_mca"): Promise<AdmissionsData | null> {
   try {
-    const res = await fetch(`http://localhost:3000/api/v1/admissions/${apiKey}`, {
-      next: { revalidate: 300 },
-    });
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json.data || null;
+    const [row] = await db
+      .select()
+      .from(admissions)
+      .where(eq(admissions.program, programKey));
+
+    if (!row) return null;
+
+    return {
+      program: row.program,
+      seatMatrix: row.seatMatrix as any,
+      importantDates: row.importantDates as any,
+    };
   } catch (err) {
-    console.error("Error fetching admissions data:", err);
+    console.error("Error fetching admissions data from db:", err);
     return null;
   }
 }
@@ -60,7 +69,7 @@ export default async function AdmissionProgramPage({ params }: PageProps) {
       <Header />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12">
-        <div className="bg-kgec-navy text-white rounded-3xl p-8 md:p-12 mb-12 shadow-xl">
+        <div className="bg-[#1B2A4A] text-white rounded-3xl p-8 md:p-12 mb-12 shadow-xl">
           <span className="text-xs font-bold uppercase tracking-widest text-blue-300 block mb-2">
             ADMISSIONS & SEAT MATRIX
           </span>
@@ -76,18 +85,27 @@ export default async function AdmissionProgramPage({ params }: PageProps) {
           {/* Seat Matrix */}
           <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
             <div className="flex items-center gap-2 mb-4">
-              <GraduationCap className="text-kgec-navy" size={20} />
+              <GraduationCap className="text-[#1B2A4A]" size={20} />
               <h2 className="text-xl font-bold text-slate-900">Seat Matrix Breakdown</h2>
             </div>
 
-            {admissionsData?.seatMatrix && Object.keys(admissionsData.seatMatrix).length > 0 ? (
+            {admissionsData?.seatMatrix ? (
               <div className="divide-y divide-slate-100">
-                {Object.entries(admissionsData.seatMatrix).map(([dept, seats]) => (
-                  <div key={dept} className="py-3 flex justify-between text-sm">
-                    <span className="font-semibold text-slate-800 uppercase">{dept}</span>
-                    <span className="font-bold text-kgec-blue">{seats} Seats</span>
-                  </div>
-                ))}
+                {Array.isArray(admissionsData.seatMatrix) ? (
+                  admissionsData.seatMatrix.map((item: any, idx: number) => (
+                    <div key={idx} className="py-3 flex justify-between text-sm">
+                      <span className="font-semibold text-slate-800 uppercase">{item.department || item.name || item.code}</span>
+                      <span className="font-bold text-[#2E5C9E]">{item.seats} Seats</span>
+                    </div>
+                  ))
+                ) : (
+                  Object.entries(admissionsData.seatMatrix).map(([dept, seats]) => (
+                    <div key={dept} className="py-3 flex justify-between text-sm">
+                      <span className="font-semibold text-slate-800 uppercase">{dept}</span>
+                      <span className="font-bold text-[#2E5C9E]">{seats as number} Seats</span>
+                    </div>
+                  ))
+                )}
               </div>
             ) : (
               <div className="py-8 text-center text-slate-500 text-xs">
@@ -99,7 +117,7 @@ export default async function AdmissionProgramPage({ params }: PageProps) {
           {/* Important Dates */}
           <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
             <div className="flex items-center gap-2 mb-4">
-              <Calendar className="text-kgec-navy" size={20} />
+              <Calendar className="text-[#1B2A4A]" size={20} />
               <h2 className="text-xl font-bold text-slate-900">Important Schedule & Dates</h2>
             </div>
 

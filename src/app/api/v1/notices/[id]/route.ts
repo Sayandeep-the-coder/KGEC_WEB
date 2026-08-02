@@ -7,6 +7,7 @@ import { noticePatchSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
 import { handleApiError } from "@/lib/errors";
+import { validateUuid } from "@/lib/utils";
 
 export async function GET(
   req: NextRequest,
@@ -14,6 +15,8 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const invalid = validateUuid(id);
+    if (invalid) return invalid;
     const [notice] = await db.select().from(notices).where(eq(notices.id, id));
 
     if (!notice) {
@@ -35,6 +38,8 @@ export async function PATCH(
     if (auth.error) return auth.error;
 
     const { id } = await params;
+    const invalid = validateUuid(id);
+    if (invalid) return invalid;
     const body = await req.json();
     const result = noticePatchSchema.safeParse(body);
 
@@ -94,6 +99,8 @@ export async function DELETE(
     if (auth.error) return auth.error;
 
     const { id } = await params;
+    const invalid = validateUuid(id);
+    if (invalid) return invalid;
     const [deleted] = await db
       .delete(notices)
       .where(eq(notices.id, id))

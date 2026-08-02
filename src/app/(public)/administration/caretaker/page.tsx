@@ -1,3 +1,10 @@
+import AdministrationRolePage from "../[role]/page";
+
+export const metadata = {
+  title: "Campus Caretaker & Estate Management | Kalyani Government Engineering College",
+  description: "Campus physical infrastructure maintenance, utilities management, civil amenities, and campus estate upkeep at KGEC.",
+};
+
 export default function Page() {
-  return <div>Placeholder for src/app/(public)/administration/caretaker/page.tsx</div>;
+  return <AdministrationRolePage params={Promise.resolve({ role: "caretaker" })} />;
 }

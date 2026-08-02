@@ -12,8 +12,28 @@ const CONTACT_LIMIT = parseInt(process.env.RATE_LIMIT_CONTACT_MAX || (isDev ? "5
 // In-Memory Sliding Window Rate Limiter for local / serverless fallback
 class MemoryRateLimiter {
   private hits: Map<string, number[]> = new Map();
+  private callCount = 0;
+  private readonly CLEANUP_INTERVAL = 1000; // Run cleanup every 1000 calls
+
+  private cleanup(windowMs: number) {
+    const windowStart = Date.now() - windowMs;
+    for (const [key, timestamps] of this.hits.entries()) {
+      const valid = timestamps.filter((ts) => ts > windowStart);
+      if (valid.length === 0) {
+        this.hits.delete(key);
+      } else {
+        this.hits.set(key, valid);
+      }
+    }
+  }
 
   limit(key: string, maxHits: number, windowMs: number) {
+    this.callCount++;
+    if (this.callCount >= this.CLEANUP_INTERVAL) {
+      this.cleanup(windowMs);
+      this.callCount = 0;
+    }
+
     const now = Date.now();
     const windowStart = now - windowMs;
 
@@ -73,23 +93,34 @@ const contactUpstash = redis
 export type RateLimitTier = "auth" | "public" | "admin" | "contact";
 
 export async function checkRateLimit(identifier: string, tier: RateLimitTier) {
+  try {
+    if (tier === "auth" && authUpstash) {
+      return await authUpstash.limit(identifier);
+    }
+    if (tier === "admin" && adminUpstash) {
+      return await adminUpstash.limit(identifier);
+    }
+    if (tier === "contact" && contactUpstash) {
+      return await contactUpstash.limit(identifier);
+    }
+    if (tier === "public" && publicUpstash) {
+      return await publicUpstash.limit(identifier);
+    }
+  } catch {
+    // Upstash network or DNS failure -> graceful fallback to local memory limiter
+  }
+
   if (tier === "auth") {
-    if (authUpstash) return await authUpstash.limit(identifier);
     return memoryLimiter.limit(`auth:${identifier}`, AUTH_LIMIT, 60_000);
   }
-
   if (tier === "admin") {
-    if (adminUpstash) return await adminUpstash.limit(identifier);
     return memoryLimiter.limit(`admin:${identifier}`, ADMIN_LIMIT, 60_000);
   }
-
   if (tier === "contact") {
-    if (contactUpstash) return await contactUpstash.limit(identifier);
     return memoryLimiter.limit(`contact:${identifier}`, CONTACT_LIMIT, 3_600_000);
   }
 
   // Public tier default
-  if (publicUpstash) return await publicUpstash.limit(identifier);
   return memoryLimiter.limit(`public:${identifier}`, PUBLIC_LIMIT, 60_000);
 }
 

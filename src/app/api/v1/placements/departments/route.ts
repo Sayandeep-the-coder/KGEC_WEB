@@ -8,24 +8,25 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const yearParam = searchParams.get("year");
 
-    if (!yearParam || isNaN(parseInt(yearParam, 10))) {
-      return NextResponse.json(
-        { error: "Query parameter 'year' is required" },
-        { status: 400 }
-      );
+    let data = [];
+
+    if (yearParam && !isNaN(parseInt(yearParam, 10))) {
+      const year = parseInt(yearParam, 10);
+      data = await db
+        .select()
+        .from(placementDepartments)
+        .where(eq(placementDepartments.year, year))
+        .orderBy(desc(placementDepartments.studentsPlaced));
+    } else {
+      data = await db
+        .select()
+        .from(placementDepartments)
+        .orderBy(desc(placementDepartments.year), desc(placementDepartments.studentsPlaced));
     }
-
-    const year = parseInt(yearParam, 10);
-
-    const data = await db
-      .select()
-      .from(placementDepartments)
-      .where(eq(placementDepartments.year, year))
-      .orderBy(desc(placementDepartments.studentsPlaced));
 
     return NextResponse.json({ data });
   } catch (error) {
     console.error("GET /api/v1/placements/departments error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

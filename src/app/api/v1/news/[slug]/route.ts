@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/middlewares/auth";
 import { newsPatchSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
+import { handleApiError } from "@/lib/errors";
 
 export async function GET(
   req: NextRequest,
@@ -21,8 +22,7 @@ export async function GET(
 
     return NextResponse.json({ data: item });
   } catch (error) {
-    console.error("GET /api/v1/news/[slug] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "GET /api/v1/news/[slug]");
   }
 }
 
@@ -69,8 +69,7 @@ export async function PATCH(
 
     return NextResponse.json({ data: updated });
   } catch (error) {
-    console.error("PATCH /api/v1/news/[slug] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "PATCH /api/v1/news/[slug]");
   }
 }
 
@@ -102,7 +101,6 @@ export async function DELETE(
 
     return NextResponse.json({ data: { success: true } });
   } catch (error) {
-    console.error("DELETE /api/v1/news/[slug] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "DELETE /api/v1/news/[slug]");
   }
 }

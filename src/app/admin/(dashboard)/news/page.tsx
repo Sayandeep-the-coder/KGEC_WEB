@@ -330,7 +330,7 @@ export default function AdminNewsPage() {
                 {filteredNews.map((item) => (
                   <tr key={item.id}>
                     <td className="py-3.5 px-3 font-semibold text-slate-900 max-w-xs truncate">{item.title}</td>
-                    <td className="py-3.5 px-3 font-mono text-slate-500 text-[11px] truncate max-w-[150px]">{item.slug}</td>
+                    <td className="py-3.5 px-3 font-mono text-slate-500 text-[11px] truncate max-w-37.5">{item.slug}</td>
                     <td className="py-3.5 px-3">
                       <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                         {item.category || "general"}

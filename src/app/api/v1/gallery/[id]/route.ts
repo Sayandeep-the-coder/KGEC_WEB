@@ -6,6 +6,8 @@ import { requireAdmin } from "@/lib/middlewares/auth";
 import { galleryPatchSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
+import { handleApiError } from "@/lib/errors";
+import { validateUuid } from "@/lib/utils";
 
 export async function GET(
   req: NextRequest,
@@ -13,6 +15,8 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const invalid = validateUuid(id);
+    if (invalid) return invalid;
     const [item] = await db
       .select()
       .from(galleryImages)
@@ -24,8 +28,7 @@ export async function GET(
 
     return NextResponse.json({ data: item });
   } catch (error) {
-    console.error("GET /api/v1/gallery/[id] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "GET /api/v1/gallery/[id]");
   }
 }
 
@@ -38,6 +41,8 @@ export async function PATCH(
     if (auth.error) return auth.error;
 
     const { id } = await params;
+    const invalid = validateUuid(id);
+    if (invalid) return invalid;
     const body = await req.json();
     const result = galleryPatchSchema.safeParse(body);
 
@@ -70,8 +75,7 @@ export async function PATCH(
 
     return NextResponse.json({ data: updated });
   } catch (error) {
-    console.error("PATCH /api/v1/gallery/[id] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "PATCH /api/v1/gallery/[id]");
   }
 }
 
@@ -84,6 +88,8 @@ export async function DELETE(
     if (auth.error) return auth.error;
 
     const { id } = await params;
+    const invalid = validateUuid(id);
+    if (invalid) return invalid;
     const [deleted] = await db
       .delete(galleryImages)
       .where(eq(galleryImages.id, id))
@@ -108,7 +114,6 @@ export async function DELETE(
 
     return NextResponse.json({ data: { success: true } });
   } catch (error) {
-    console.error("DELETE /api/v1/gallery/[id] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "DELETE /api/v1/gallery/[id]");
   }
 }

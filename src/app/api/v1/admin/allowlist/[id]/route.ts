@@ -4,6 +4,8 @@ import { adminAllowlist } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { writeAuditLog } from "@/lib/audit";
+import { handleApiError } from "@/lib/errors";
+import { validateUuid } from "@/lib/utils";
 
 export async function DELETE(
   req: NextRequest,
@@ -14,6 +16,8 @@ export async function DELETE(
     if (auth.error) return auth.error;
 
     const { id } = await params;
+    const invalid = validateUuid(id);
+    if (invalid) return invalid;
 
     // Prevent self-removal
     if (id === auth.admin!.id) {
@@ -46,7 +50,6 @@ export async function DELETE(
 
     return NextResponse.json({ data: { success: true } });
   } catch (error) {
-    console.error("DELETE /api/v1/admin/allowlist/[id] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "DELETE /api/v1/admin/allowlist/[id]");
   }
 }

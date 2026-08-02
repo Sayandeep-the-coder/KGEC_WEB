@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Akira Expanded';
+  font-style: normal;
+  font-weight: 400 900;
+  src: local('Akira Expanded'), local('Akira Expanded Demo'), local('Akira Expanded Super Bold'),
+       url('https://fonts.cdnfonts.com/s/37506/Akira%20Expanded%20Demo.woff') format('woff');
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -11,6 +20,7 @@
   --kgec-footer-cta: #07132b;
   --kgec-footer: #040a17;
   --kgec-page-bg: #090d16;
+  --font-akira: 'Akira Expanded', 'Syncopate', 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 @theme inline {
@@ -26,6 +36,12 @@
   --color-kgec-page-bg: var(--kgec-page-bg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-akira: var(--font-akira);
+}
+
+.font-akira {
+  font-family: var(--font-akira), 'Akira Expanded', 'Syncopate', sans-serif !important;
+  text-transform: uppercase;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,7 +69,7 @@ body {
 }
 
 .kgec-footer-container {
-  @apply relative overflow-hidden bg-[#061024] text-slate-300 rounded-[2rem] sm:rounded-[2.5rem];
+  @apply relative overflow-hidden bg-[#061024] text-slate-300 rounded-4xl sm:rounded-[2.5rem];
 }
 
 .kgec-footer-watermark-wrapper {
@@ -61,11 +77,11 @@ body {
 }
 
 .kgec-footer-watermark {
-  @apply whitespace-nowrap text-[14rem] font-black leading-none tracking-tighter text-white/[0.04] sm:text-[20rem] lg:text-[26rem] -mb-16;
+  @apply whitespace-nowrap text-[14rem] font-black leading-none tracking-tighter text-white/4 sm:text-[20rem] lg:text-[26rem] -mb-16;
 }
 
 .kgec-footer-content {
-  @apply relative z-10 mx-auto max-w-[90rem] px-8 pt-20 pb-8 sm:px-12 lg:px-16;
+  @apply relative z-10 mx-auto max-w-360 px-8 pt-20 pb-8 sm:px-12 lg:px-16;
 }
 
 .kgec-footer-grid {
@@ -125,7 +141,7 @@ body {
 }
 
 .kgec-footer-nav-divider {
-  @apply mt-4 mb-6 h-[2px] w-8 bg-amber-500;
+  @apply mt-4 mb-6 h-0.5 w-8 bg-amber-500;
 }
 
 .kgec-footer-nav-list {

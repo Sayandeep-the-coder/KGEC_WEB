@@ -10,6 +10,7 @@ import { departmentEnrollmentRowSchema } from "@/lib/validators";
 import Papa from "papaparse";
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
+import { handleApiError } from "@/lib/errors";
 
 export async function POST(req: NextRequest) {
   try {
@@ -188,10 +189,6 @@ export async function POST(req: NextRequest) {
       data: { inserted: validRows.length, errors },
     });
   } catch (error) {
-    console.error(
-      "POST /api/v1/enrollment/departments/upload error:",
-      error
-    );
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "POST /api/v1/enrollment/departments/upload");
   }
 }

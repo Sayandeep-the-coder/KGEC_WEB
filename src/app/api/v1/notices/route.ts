@@ -16,9 +16,9 @@ export async function GET(req: NextRequest) {
 
     let query = db.select().from(notices);
 
-    if (type) {
-      // @ts-expect-error type query check
-      query = query.where(eq(notices.type, type));
+    const VALID_TYPES = ["general", "admission", "placement", "academic", "exam", "result"] as const;
+    if (type && VALID_TYPES.includes(type as any)) {
+      query = query.where(eq(notices.type, type as typeof VALID_TYPES[number]));
     }
 
     const data = await query

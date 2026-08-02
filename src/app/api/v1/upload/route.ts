@@ -60,6 +60,14 @@ export async function POST(req: NextRequest) {
     const file = formData.get("file") as File | null;
     const bucket = (formData.get("bucket") as string) || "notices";
 
+    const ALLOWED_BUCKETS = ["notices", "downloads", "gallery", "news", "staff", "recruiters"];
+    if (!ALLOWED_BUCKETS.includes(bucket)) {
+      return NextResponse.json(
+        { error: `Invalid bucket. Allowed: ${ALLOWED_BUCKETS.join(", ")}` },
+        { status: 400 }
+      );
+    }
+
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { getAdminDashboardData } from "@/lib/services/dashboard";
+import { handleApiError } from "@/lib/errors";
 
 export async function GET() {
   try {
@@ -11,7 +12,6 @@ export async function GET() {
 
     return NextResponse.json({ data });
   } catch (error) {
-    console.error("GET /api/v1/admin/dashboard error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "GET /api/v1/admin/dashboard");
   }
 }

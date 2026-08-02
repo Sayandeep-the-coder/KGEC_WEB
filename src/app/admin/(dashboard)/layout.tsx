@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Shield, Bell, Newspaper, Calendar, Download, Image as ImageIcon, Users, Briefcase, LogOut, ArrowUpRight } from "lucide-react";
+import { Shield, Bell, Newspaper, Calendar, Download, Image as ImageIcon, Users, Briefcase, LogOut, ArrowUpRight, Mail } from "lucide-react";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -30,6 +30,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link href="/admin" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-200 hover:bg-white/10 hover:text-white transition-all">
               <Shield size={16} />
               <span>Overview</span>
+            </Link>
+            <Link href="/admin/messages" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-200 hover:bg-white/10 hover:text-white transition-all">
+              <Mail size={16} />
+              <span>Enquiries / Inbox</span>
             </Link>
             <Link href="/admin/notices" className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-200 hover:bg-white/10 hover:text-white transition-all">
               <Bell size={16} />

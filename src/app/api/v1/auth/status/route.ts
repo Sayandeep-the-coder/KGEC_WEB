@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { adminAllowlist } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { handleApiError } from "@/lib/errors";
 
 export async function GET() {
   try {
@@ -19,7 +20,6 @@ export async function GET() {
 
     return NextResponse.json({ data: { isAdmin: !!admin } });
   } catch (error) {
-    console.error("GET /api/v1/auth/status error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "GET /api/v1/auth/status");
   }
 }

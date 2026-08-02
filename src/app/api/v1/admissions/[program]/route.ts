@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/middlewares/auth";
 import { admissionsPatchSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
+import { handleApiError } from "@/lib/errors";
 
 export async function GET(
   req: NextRequest,
@@ -21,7 +22,7 @@ export async function GET(
       );
     }
 
-    const [item] = await db
+    const [row] = await db
       .select()
       .from(admissions)
       .where(
@@ -31,23 +32,29 @@ export async function GET(
         )
       );
 
-    if (!item) {
-      return NextResponse.json({
-        data: { program, seatMatrix: null, importantDates: null },
-      });
+    if (!row) {
+      return NextResponse.json(
+        {
+          data: {
+            id: program,
+            program,
+            seatMatrix: [],
+            importantDates: [],
+          },
+        }
+      );
     }
 
     return NextResponse.json({
       data: {
-        id: item.id,
-        program: item.program,
-        seatMatrix: item.seatMatrix,
-        importantDates: item.importantDates,
+        id: row.id,
+        program: row.program,
+        seatMatrix: row.seatMatrix,
+        importantDates: row.importantDates,
       },
     });
   } catch (error) {
-    console.error("GET /api/v1/admissions/[program] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "GET /api/v1/admissions/[program]");
   }
 }
 
@@ -115,7 +122,6 @@ export async function PATCH(
 
     return NextResponse.json({ data: updated });
   } catch (error) {
-    console.error("PATCH /api/v1/admissions/[program] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "PATCH /api/v1/admissions/[program]");
   }
 }

@@ -105,7 +105,7 @@ export const admissionsPatchSchema = z.object({
 export const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name cannot exceed 100 characters"),
   email: z.string().email("Invalid email address").max(255),
-  message: z.string().min(10, "Message must be at least 10 characters long").max(2000, "Message cannot exceed 2000 characters"),
+  message: z.string().min(2, "Message must be at least 2 characters").max(2000, "Message cannot exceed 2000 characters"),
 });
 
 // ─── Placement CSV rows ─────────────────────────────────────────────────────
@@ -119,6 +119,8 @@ export const placementDeptRowSchema = z.object({
     .nonnegative("Students placed must be a non-negative integer"),
   median_salary: z.number().int().nullable().optional(),
   highest_salary: z.number().int().nullable().optional(),
+  placement_rate: z.union([z.number(), z.string()]).nullable().optional(),
+  total_offers: z.number().int().nullable().optional(),
 });
 
 export const placementRecruiterRowSchema = z.object({
@@ -157,6 +159,7 @@ export const staffSchema = z.object({
   photoUrl: z.string().url().or(z.literal("")).optional().nullable(),
   phone: z.string().max(20).optional().nullable(),
   designation: z.string().max(100).optional().nullable(),
+  specialization: z.string().max(255).optional().nullable(),
   role: staffRoleEnum,
   department: departmentEnum.optional().nullable(),
   education: z

@@ -116,13 +116,20 @@ export async function sendContactNotification(name: string, email: string, messa
   }
 
   const adminEmail = process.env.ADMIN_EMAIL || "contact@kgec.ac.in";
-  const subject = `New Contact Submission from ${name}`;
 
-  const escapedMessage = message
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/\n/g, "<br />");
+  // Escape ALL user-supplied fields before HTML interpolation
+  const escapeHtml = (str: string) =>
+    str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+  const escapedName = escapeHtml(name);
+  const escapedEmail = escapeHtml(email);
+  const escapedMessage = escapeHtml(message).replace(/\n/g, "<br />");
+
+  const subject = `New Contact Submission from ${escapedName}`;
 
   const body = emailLayout(
     subject,
@@ -131,7 +138,7 @@ export async function sendContactNotification(name: string, email: string, messa
       New Contact Submission
     </p>
     <h2 style="margin:0 0 24px; font-size:20px; color:#111827; font-weight:700;">
-      ${name} reached out via the website
+      ${escapedName} reached out via the website
     </h2>
 
     <!-- Sender details -->
@@ -142,13 +149,13 @@ export async function sendContactNotification(name: string, email: string, messa
             <tr>
               <td style="padding:4px 0;">
                 <span style="font-size:12px; color:#6b7280; font-weight:600;">NAME</span><br />
-                <span style="font-size:15px; color:#111827;">${name}</span>
+                <span style="font-size:15px; color:#111827;">${escapedName}</span>
               </td>
             </tr>
             <tr>
               <td style="padding:4px 0;">
                 <span style="font-size:12px; color:#6b7280; font-weight:600;">EMAIL</span><br />
-                <a href="mailto:${email}" style="font-size:15px; color:#2563eb; text-decoration:none;">${email}</a>
+                <a href="mailto:${escapedEmail}" style="font-size:15px; color:#2563eb; text-decoration:none;">${escapedEmail}</a>
               </td>
             </tr>
           </table>
@@ -165,7 +172,7 @@ export async function sendContactNotification(name: string, email: string, messa
     </div>
 
     <p style="margin:24px 0 0; font-size:13px; color:#9ca3af; text-align:center;">
-      Reply directly to this email to respond to <strong>${name}</strong>.
+      Reply directly to this email to respond to <strong>${escapedName}</strong>.
     </p>
     `
   );

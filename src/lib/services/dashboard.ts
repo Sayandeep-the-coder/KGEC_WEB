@@ -7,6 +7,7 @@ import {
   galleryImages,
   staff,
   auditLog,
+  contactSubmissions,
 } from "@/lib/db/schema";
 import { count, desc } from "drizzle-orm";
 
@@ -18,6 +19,7 @@ export interface AdminDashboardMetrics {
     downloads: number;
     gallery: number;
     staff: number;
+    messages: number;
   };
   recentNotices: Array<{
     id: string;
@@ -55,6 +57,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardMetrics> {
       totalDownloadsResult,
       totalGalleryResult,
       totalStaffResult,
+      totalMessagesResult,
       recentNoticesResult,
       recentNewsResult,
       recentEventsResult,
@@ -66,6 +69,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardMetrics> {
       db.select({ count: count() }).from(downloads).catch(() => [{ count: 0 }]),
       db.select({ count: count() }).from(galleryImages).catch(() => [{ count: 0 }]),
       db.select({ count: count() }).from(staff).catch(() => [{ count: 0 }]),
+      db.select({ count: count() }).from(contactSubmissions).catch(() => [{ count: 0 }]),
       db
         .select({
           id: notices.id,
@@ -121,6 +125,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardMetrics> {
         downloads: totalDownloadsResult[0]?.count ?? 0,
         gallery: totalGalleryResult[0]?.count ?? 0,
         staff: totalStaffResult[0]?.count ?? 0,
+        messages: totalMessagesResult[0]?.count ?? 0,
       },
       recentNotices: recentNoticesResult || [],
       recentNews: recentNewsResult || [],
@@ -130,7 +135,7 @@ export async function getAdminDashboardData(): Promise<AdminDashboardMetrics> {
   } catch (error) {
     console.error("Error fetching admin dashboard data:", error);
     return {
-      counts: { notices: 0, news: 0, events: 0, downloads: 0, gallery: 0, staff: 0 },
+      counts: { notices: 0, news: 0, events: 0, downloads: 0, gallery: 0, staff: 0, messages: 0 },
       recentNotices: [],
       recentNews: [],
       recentEvents: [],

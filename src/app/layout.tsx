@@ -28,6 +28,18 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700;800&family=Montserrat:wght@800;900&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.cdnfonts.com/css/akira-expanded"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans bg-white">
         <Providers>{children}</Providers>
       </body>

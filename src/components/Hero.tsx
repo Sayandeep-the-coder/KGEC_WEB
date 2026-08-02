@@ -107,7 +107,7 @@ export default function Hero() {
     <div className="w-full px-4 sm:px-6 lg:px-8 mx-auto max-w-[100rem] pt-2 pb-8">
       <section
         aria-label="KGEC campus image carousel"
-        className="relative w-full aspect-[21/10] min-h-[500px] max-h-[85vh] overflow-hidden rounded-2xl bg-slate-950 shadow-md"
+        className="relative w-full aspect-21/10 min-h-125 max-h-[85vh] overflow-hidden rounded-2xl bg-slate-950 shadow-md"
       >
         <div
           className={`flex h-full${isTransitioning ? " transition-transform duration-700 ease-in-out" : ""}`}
@@ -126,15 +126,15 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Large KGEC Watermark */}
-        <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 flex justify-center px-4">
-          <span className="select-none font-sans text-[22vw] font-bold leading-none text-white/20 xl:text-[20rem]">
+        {/* Large Edge-to-Edge KGEC Typography */}
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center overflow-hidden select-none px-2">
+          <span className="font-akira text-[22vw] font-black leading-none tracking-tight text-white/25 drop-shadow-[0_15px_35px_rgba(0,0,0,0.5)] whitespace-nowrap select-none">
             KGEC
           </span>
         </div>
 
         {/* Bottom Gradient overlay for text visibility */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/60 to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-linear-to-t from-black/60 to-transparent z-10" />
 
         {/* Bottom Left controls: 01 / 06 and Progress line */}
         <div className="absolute bottom-10 left-10 z-20 flex flex-col">

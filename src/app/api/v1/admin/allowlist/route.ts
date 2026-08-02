@@ -4,6 +4,7 @@ import { adminAllowlist } from "@/lib/db/schema";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { allowlistSchema } from "@/lib/validators";
 import { writeAuditLog } from "@/lib/audit";
+import { handleApiError } from "@/lib/errors";
 
 export async function GET() {
   try {
@@ -14,8 +15,7 @@ export async function GET() {
 
     return NextResponse.json({ data });
   } catch (error) {
-    console.error("GET /api/v1/admin/allowlist error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "GET /api/v1/admin/allowlist");
   }
 }
 
@@ -54,7 +54,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ data: newEntry }, { status: 201 });
   } catch (error) {
-    console.error("POST /api/v1/admin/allowlist error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "POST /api/v1/admin/allowlist");
   }
 }

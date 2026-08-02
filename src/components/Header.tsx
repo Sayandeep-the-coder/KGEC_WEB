@@ -30,14 +30,15 @@ type HeaderNavItem = HeaderRoute & {
 
 const UTILITY_LINKS = [
   { label: "Library", icon: BookOpen, href: "/downloads?category=general" },
-  { label: "Jobs", icon: Briefcase, href: "/training-and-placement/notices" },
-  { label: "Alumni", icon: Users, href: "/contact" },
+  { label: "Placements", icon: Briefcase, href: "/training-and-placement" },
+  { label: "Alumni", icon: Users, href: "/alumni" },
   { label: "Staff", icon: Users, lockIcon: Lock, href: "/administration/hods" },
 ];
 
 const CURRENT_STUDENT_LINKS: HeaderRoute[] = [
   { label: "Notices", href: "/notices" },
   { label: "Downloads", href: "/downloads" },
+  { label: "Campus Life", href: "/campus-life" },
   { label: "Gallery", href: "/gallery" },
   { label: "Contact Office", href: "/contact" },
 ];
@@ -49,9 +50,10 @@ const MAIN_NAV_LINKS: HeaderNavItem[] = [
     label: "About",
     href: "/about",
     children: [
-      { label: "Institute Information", href: "/about" },
+      { label: "Institute Profile", href: "/about" },
       { label: "Green Campus", href: "/about/green-campus" },
       { label: "Principal's Desk", href: "/administration/principal" },
+      { label: "Student Demographics", href: "/student-strength" },
       { label: "Administration", href: "/administration/registrar" },
     ],
   },
@@ -59,7 +61,7 @@ const MAIN_NAV_LINKS: HeaderNavItem[] = [
     label: "Academics",
     href: "/departments",
     children: [
-      { label: "Departments", href: "/departments" },
+      { label: "Departments Overview", href: "/departments" },
       { label: "Academic Downloads", href: "/downloads?category=general" },
       { label: "Mandatory Disclosure", href: "/downloads?category=mandatory-disclosure" },
       { label: "Academic Notices", href: "/notices" },
@@ -69,9 +71,9 @@ const MAIN_NAV_LINKS: HeaderNavItem[] = [
     label: "Admissions",
     href: "/admission/ug-btech",
     children: [
-      { label: "UG B.Tech", href: "/admission/ug-btech" },
-      { label: "PG M.Tech", href: "/admission/pg-mtech" },
-      { label: "PG MCA", href: "/admission/pg-mca" },
+      { label: "UG B.Tech (WBJEE / JELET)", href: "/admission/ug-btech" },
+      { label: "PG M.Tech (GATE / PGET)", href: "/admission/pg-mtech" },
+      { label: "PG MCA (WBJECA)", href: "/admission/pg-mca" },
       { label: "Admission Notices", href: "/notices" },
     ],
   },
@@ -93,9 +95,10 @@ const MAIN_NAV_LINKS: HeaderNavItem[] = [
   },
   {
     label: "Campus Life",
-    href: "/gallery",
+    href: "/campus-life",
     children: [
-      { label: "Gallery", href: "/gallery" },
+      { label: "Cells, Clubs & Events", href: "/campus-life" },
+      { label: "Campus Gallery", href: "/gallery" },
       { label: "IIC", href: "/iic" },
       { label: "E-Cell", href: "/iic/e-cell" },
       { label: "IIPC", href: "/iic/iipc" },
@@ -106,9 +109,20 @@ const MAIN_NAV_LINKS: HeaderNavItem[] = [
     label: "Placements",
     href: "/training-and-placement",
     children: [
-      { label: "TPO's Desk", href: "/training-and-placement/tpo-desk" },
+      { label: "T&P Cell Portal", href: "/training-and-placement" },
       { label: "Placement Statistics", href: "/training-and-placement/statistics" },
+      { label: "Recruiter Procedure", href: "/training-and-placement#procedure" },
+      { label: "Coordinators Directory", href: "/training-and-placement#contact-tpo" },
       { label: "Placement Notices", href: "/training-and-placement/notices" },
+    ],
+  },
+  {
+    label: "Alumni",
+    href: "/alumni",
+    children: [
+      { label: "Alumni Diaries", href: "/alumni" },
+      { label: "ISRO Lunar Mission Alumni", href: "/alumni" },
+      { label: "Connect with Alumni Cell", href: "/contact" },
     ],
   },
   {
@@ -151,7 +165,7 @@ function HeaderDropdown({
       <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-linear-to-r from-transparent via-blue-500/40 to-transparent" />
       {links.map((link) => (
         <Link
-          key={link.href}
+          key={`${link.label}-${link.href}`}
           href={link.href}
           className="group/link flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 text-sm font-semibold text-[#0a1730] transition hover:bg-white/80 hover:text-blue-700 hover:shadow-sm focus:outline-none focus-visible:bg-white/90"
         >
@@ -267,7 +281,7 @@ export default function Header() {
               </div>
 
               <Link
-                href="/admin"
+                href="/admin/login"
                 prefetch={false}
                 className="flex items-center gap-2 rounded-full bg-[#0a1730] px-6 py-2 text-[13px] font-bold text-white transition-colors hover:bg-[#12274d]"
               >
@@ -356,7 +370,7 @@ export default function Header() {
               />
             </button>
             <Link
-              href="/admin"
+              href="/admin/login"
               prefetch={false}
               onClick={closeMobileMenu}
               className="flex items-center justify-center gap-2 rounded-2xl bg-[#0a1730] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#12274d]"
@@ -376,7 +390,7 @@ export default function Header() {
           >
             {CURRENT_STUDENT_LINKS.map((link) => (
               <Link
-                key={link.href}
+                key={`${link.label}-${link.href}`}
                 href={link.href}
                 onClick={closeMobileMenu}
                 className="rounded-2xl bg-slate-50 px-3 py-2.5 text-center text-xs font-semibold text-[#0a1730] transition hover:bg-slate-100"
@@ -448,7 +462,7 @@ export default function Header() {
                     >
                       {item.children?.map((link) => (
                         <Link
-                          key={link.href}
+                          key={`${link.label}-${link.href}`}
                           href={link.href}
                           onClick={closeMobileMenu}
                           className="rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-blue-700"

@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/middlewares/auth";
 import { gallerySchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
+import { handleApiError } from "@/lib/errors";
 
 export async function GET(req: NextRequest) {
   try {
@@ -25,8 +26,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ data: items });
   } catch (error) {
-    console.error("GET /api/v1/gallery error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "GET /api/v1/gallery");
   }
 }
 
@@ -61,7 +61,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ data: newImage }, { status: 201 });
   } catch (error) {
-    console.error("POST /api/v1/gallery error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "POST /api/v1/gallery");
   }
 }

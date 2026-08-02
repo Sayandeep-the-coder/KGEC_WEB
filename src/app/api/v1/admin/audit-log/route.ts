@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { auditLog } from "@/lib/db/schema";
 import { desc, count } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
+import { handleApiError } from "@/lib/errors";
 
 export async function GET(req: NextRequest) {
   try {
@@ -28,7 +29,6 @@ export async function GET(req: NextRequest) {
       count: Number(totalResult[0]?.count || 0),
     });
   } catch (error) {
-    console.error("GET /api/v1/admin/audit-log error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "GET /api/v1/admin/audit-log");
   }
 }

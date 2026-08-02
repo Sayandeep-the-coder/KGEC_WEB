@@ -1,3 +1,10 @@
+import AdministrationRolePage from "../[role]/page";
+
+export const metadata = {
+  title: "Hostel Administration & Superintendence | Kalyani Government Engineering College",
+  description: "Student residential welfare, campus dining facilities, hall superintendence, and student life discipline at KGEC.",
+};
+
 export default function Page() {
-  return <div>Placeholder for src/app/(public)/administration/hostel-super/page.tsx</div>;
+  return <AdministrationRolePage params={Promise.resolve({ role: "hostel-super" })} />;
 }

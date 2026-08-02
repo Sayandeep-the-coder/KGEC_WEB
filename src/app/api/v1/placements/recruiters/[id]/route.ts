@@ -6,6 +6,8 @@ import { requireAdmin } from "@/lib/middlewares/auth";
 import { recruiterLogoPatchSchema } from "@/lib/validators";
 import { revalidatePath } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
+import { handleApiError } from "@/lib/errors";
+import { validateUuid } from "@/lib/utils";
 
 export async function PATCH(
   req: NextRequest,
@@ -16,6 +18,8 @@ export async function PATCH(
     if (auth.error) return auth.error;
 
     const { id } = await params;
+    const invalid = validateUuid(id);
+    if (invalid) return invalid;
     const body = await req.json();
     const result = recruiterLogoPatchSchema.safeParse(body);
 
@@ -53,7 +57,6 @@ export async function PATCH(
 
     return NextResponse.json({ data: updated });
   } catch (error) {
-    console.error("PATCH /api/v1/placements/recruiters/[id] error:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return handleApiError(error, "PATCH /api/v1/placements/recruiters/[id]");
   }
 }

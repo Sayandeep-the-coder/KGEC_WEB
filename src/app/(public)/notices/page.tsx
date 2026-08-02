@@ -1,12 +1,23 @@
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import NoticeBoard from "@/components/NoticeBoard";
 import { Metadata } from "next";
+import Link from "next/link";
 import { db } from "@/lib/db";
 import { notices } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
+import {
+  Bell,
+  Sparkles,
+  DownloadCloud,
+  ArrowRight,
+  ShieldCheck
+} from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Notice Board | Kalyani Government Engineering College",
-  description: "Official notices, academic circulars, examination schedules, and general announcements from KGEC.",
+  title: "Official Notice Board | Kalyani Government Engineering College",
+  description:
+    "Live official notices, academic circulars, examination schedules, admission updates, and administrative notifications from KGEC.",
 };
 
 export const dynamic = "force-dynamic";
@@ -30,27 +41,70 @@ export default async function PublicNoticesPage() {
   }));
 
   return (
-    <main className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* Header Banner */}
-        <div className="bg-[#0f2552] text-white rounded-3xl p-8 md:p-10 shadow-lg relative overflow-hidden">
-          <div className="relative z-10 space-y-2">
-            <span className="text-xs font-bold uppercase tracking-widest text-amber-400">
-              Campus Communication Portal
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold font-serif">
-              Official KGEC Notice Board
-            </h1>
-            <p className="text-xs md:text-sm text-slate-300 max-w-2xl">
-              Stay updated with academic circulars, exam notifications, admission announcements, tenders, and general information released by KGEC administration.
-            </p>
-          </div>
-          <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl" />
-        </div>
+    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
+      <Header />
 
-        {/* Public Notice Board Component */}
-        <NoticeBoard initialNotices={initialNotices} limit={100} showTitle={true} />
-      </div>
-    </main>
+      {/* Hero Banner */}
+      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-16 px-6 relative overflow-hidden border-b border-blue-900/40">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-md">
+            <Sparkles size={14} className="text-blue-300" />
+            <span>Official Communications</span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-8">
+              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight font-serif leading-tight">
+                Official Notice Board
+              </h1>
+              <p className="text-blue-100/90 text-sm sm:text-base md:text-lg mt-4 max-w-2xl leading-relaxed">
+                Stay updated with academic circulars, semester exam schedules, admission counseling announcements, tenders, and administrative notifications.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-4 mt-8">
+                <Link
+                  href="/downloads"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2E5C9E] hover:bg-blue-600 text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
+                >
+                  <span>Document Downloads</span>
+                  <ArrowRight size={16} />
+                </Link>
+                <Link
+                  href="/news"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider transition-colors backdrop-blur-md"
+                >
+                  <Bell size={16} />
+                  <span>Campus News</span>
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-4">
+              <div className="bg-white/10 border border-white/20 rounded-3xl p-6 backdrop-blur-md text-white">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300">
+                    <Bell size={24} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-blue-200 uppercase tracking-wider">Live Broadcast</p>
+                    <p className="text-xl font-bold font-serif">Verified Circulars</p>
+                  </div>
+                </div>
+                <p className="text-xs text-blue-100/80 leading-relaxed">
+                  Real-time synchronization with administrative orders, university exam guidelines, and campus notices.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-12">
+        <NoticeBoard initialNotices={initialNotices} limit={100} showTitle={false} />
+      </main>
+
+      <Footer />
+    </div>
   );
 }
