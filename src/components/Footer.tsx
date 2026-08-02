@@ -113,7 +113,7 @@ export default function Footer() {
           </div>
 
           {/* Nav Columns */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 w-full xl:w-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 w-full xl:w-auto">
             {linkColumns.map((col) => (
               <nav key={col.title} className="flex flex-col gap-4">
                 <h3 className="text-[10px] font-bold tracking-widest text-white/40 uppercase">{col.title}</h3>

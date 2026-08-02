@@ -107,7 +107,7 @@ export default function Hero() {
     <div className="w-full px-4 sm:px-6 lg:px-8 mx-auto max-w-[100rem] pt-2 pb-8">
       <section
         aria-label="KGEC campus image carousel"
-        className="relative w-full aspect-21/10 min-h-125 max-h-[85vh] overflow-hidden rounded-2xl bg-slate-950 shadow-md"
+        className="relative w-full aspect-21/10 min-h-[400px] md:min-h-125 max-h-[85vh] overflow-hidden rounded-2xl bg-slate-950 shadow-md"
       >
         <div
           className={`flex h-full${isTransitioning ? " transition-transform duration-700 ease-in-out" : ""}`}
@@ -137,14 +137,14 @@ export default function Hero() {
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-linear-to-t from-black/60 to-transparent z-10" />
 
         {/* Bottom Left controls: 01 / 06 and Progress line */}
-        <div className="absolute bottom-10 left-10 z-20 flex flex-col">
+        <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 z-20 flex flex-col hidden sm:flex">
           <div className="flex items-baseline text-white font-bold tracking-wide">
-            <span className="text-4xl">{(activeIndex + 1).toString().padStart(2, "0")}</span>
-            <span className="text-white/60 text-xl mx-2">/</span>
-            <span className="text-white/60 text-xl">{heroImages.length.toString().padStart(2, "0")}</span>
+            <span className="text-2xl md:text-4xl">{(activeIndex + 1).toString().padStart(2, "0")}</span>
+            <span className="text-white/60 text-lg md:text-xl mx-2">/</span>
+            <span className="text-white/60 text-lg md:text-xl">{heroImages.length.toString().padStart(2, "0")}</span>
           </div>
           
-          <div className="flex items-center w-72 h-1.5 bg-white/30 rounded-full mt-3 relative overflow-hidden">
+          <div className="flex items-center w-40 md:w-72 h-1.5 bg-white/30 rounded-full mt-2 md:mt-3 relative overflow-hidden">
             <div 
               className="absolute left-0 top-0 h-full bg-[#1e40af] rounded-full transition-all duration-500 ease-out"
               style={{ width: `${((activeIndex + 1) / heroImages.length) * 100}%` }}
@@ -153,22 +153,22 @@ export default function Hero() {
         </div>
 
         {/* Right Arrow Controls */}
-        <div className="absolute right-10 bottom-10 z-20 flex items-center gap-4">
+        <div className="absolute right-4 bottom-4 sm:right-6 sm:bottom-6 md:right-10 md:bottom-10 z-20 flex items-center gap-2 md:gap-4">
           <button
             type="button"
             aria-label="Previous hero image"
             onClick={showPrevious}
-            className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md transition hover:bg-black/60 hover:border-white/40 focus:outline-none cursor-pointer"
+            className="flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md transition hover:bg-black/60 hover:border-white/40 focus:outline-none cursor-pointer"
           >
-            <ChevronLeft size={24} strokeWidth={1.5} />
+            <ChevronLeft className="size-5 md:size-6" strokeWidth={1.5} />
           </button>
           <button
             type="button"
             aria-label="Next hero image"
             onClick={showNext}
-            className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md transition hover:bg-black/60 hover:border-white/40 focus:outline-none cursor-pointer"
+            className="flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md transition hover:bg-black/60 hover:border-white/40 focus:outline-none cursor-pointer"
           >
-            <ChevronRight size={24} strokeWidth={1.5} />
+            <ChevronRight className="size-5 md:size-6" strokeWidth={1.5} />
           </button>
         </div>
       </section>

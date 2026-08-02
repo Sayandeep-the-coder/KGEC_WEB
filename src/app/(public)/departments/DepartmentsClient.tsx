@@ -78,7 +78,7 @@ export default function DepartmentsClient() {
       <Header />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12">
-        <div className="bg-kgec-navy text-white rounded-3xl p-8 md:p-12 mb-12 shadow-xl relative overflow-hidden transition-all duration-500">
+        <div className="bg-kgec-navy text-white rounded-3xl p-6 md:p-12 mb-8 md:mb-12 shadow-xl relative overflow-hidden transition-all duration-500">
           <div 
             className="absolute inset-0 bg-cover bg-center transition-all duration-700 opacity-40 mix-blend-overlay"
             style={{ backgroundImage: `url(${bgImage})` }}
@@ -89,7 +89,7 @@ export default function DepartmentsClient() {
             <span className="text-xs font-bold uppercase tracking-widest text-blue-300 block mb-2">
               ACADEMIC EXCELLENCE
             </span>
-            <h1 className="text-3xl md:text-5xl font-bold font-serif leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-serif leading-tight">
               Engineering Departments
             </h1>
             <p className="text-slate-300 text-sm md:text-base mt-3 max-w-2xl">
@@ -104,7 +104,7 @@ export default function DepartmentsClient() {
             return (
               <div
                 key={dept.slug}
-                className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col justify-between shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden min-h-[280px]"
+                className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 flex flex-col justify-between shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden min-h-[260px] sm:min-h-[280px]"
                 onMouseEnter={() => setHoveredDept(dept.slug)}
                 onMouseLeave={() => setHoveredDept(null)}
               >

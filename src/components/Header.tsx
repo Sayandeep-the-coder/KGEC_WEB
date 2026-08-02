@@ -198,12 +198,13 @@ export default function Header() {
             className="h-12 w-auto shrink-0 object-contain sm:h-14"
           />
           <div className="min-w-0">
-            <h1 className="font-serif text-[12px] font-bold uppercase leading-tight tracking-wide text-[#0a1730] sm:text-[16px]">
+            <h1 className="font-serif text-[11px] sm:text-[13px] md:text-[16px] font-bold uppercase leading-tight tracking-wide text-[#0a1730]">
               {COLLEGE_NAME_LINE_1}
-              <br />
+              <br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>
               {COLLEGE_NAME_LINE_2}
             </h1>
-            <p className="mt-0.5 text-[9px] font-bold tracking-wider text-slate-500 sm:text-[10px]">
+            <p className="mt-0.5 text-[8px] sm:text-[9px] md:text-[10px] font-bold tracking-wider text-slate-500">
               {ESTABLISHED_YEAR}
             </p>
           </div>

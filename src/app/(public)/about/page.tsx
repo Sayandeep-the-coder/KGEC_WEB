@@ -24,7 +24,7 @@ export default function AboutPage() {
             <div className="absolute inset-0 bg-gradient-to-r from-[#022448] via-[#022448]/80 to-transparent" />
             
             {/* Giant Watermark Text */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] md:text-[25rem] font-bold text-white/5 select-none pointer-events-none whitespace-nowrap">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[8rem] sm:text-[15rem] lg:text-[25rem] font-bold text-white/5 select-none pointer-events-none whitespace-nowrap">
               KGEC
             </div>
 
@@ -32,7 +32,7 @@ export default function AboutPage() {
               <span className="text-sm font-semibold tracking-widest text-[#adc8f5] uppercase mb-4 block">
                 About KGEC
               </span>
-              <h1 className="text-4xl md:text-[56px] font-bold text-white leading-[1.1] tracking-tight mb-8">
+              <h1 className="text-3xl sm:text-4xl md:text-[56px] font-bold text-white leading-[1.1] tracking-tight mb-8">
                 Empowering Minds.<br/>Engineering Futures.
               </h1>
               
@@ -95,7 +95,7 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Mission Card */}
-            <div className="bg-[#eff3ff] rounded-[24px] p-10 relative overflow-hidden group">
+            <div className="bg-[#eff3ff] rounded-[24px] p-6 md:p-10 relative overflow-hidden group">
               <div className="absolute right-0 bottom-0 w-64 h-64 opacity-5 pointer-events-none transition-opacity group-hover:opacity-10" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/blueprint.png')" }} />
               
               <div className="relative z-10">
@@ -113,7 +113,7 @@ export default function AboutPage() {
             </div>
 
             {/* Vision Card */}
-            <div className="bg-[#fffdf7] rounded-[24px] p-10 relative overflow-hidden group border border-[#f5f0e6]">
+            <div className="bg-[#fffdf7] rounded-[24px] p-6 md:p-10 relative overflow-hidden group border border-[#f5f0e6]">
               <div className="absolute right-0 bottom-0 w-64 h-64 opacity-5 pointer-events-none transition-opacity group-hover:opacity-10" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/blueprint.png')" }} />
               
               <div className="relative z-10">
@@ -168,7 +168,7 @@ export default function AboutPage() {
             </div>
 
             {/* Right Quote Card */}
-            <div className="lg:col-span-4 bg-[#022448] rounded-2xl p-10 text-white flex flex-col justify-center relative overflow-hidden shadow-xl">
+            <div className="lg:col-span-4 bg-[#022448] rounded-2xl p-6 sm:p-10 text-white flex flex-col justify-center relative overflow-hidden shadow-xl">
               <div className="absolute right-0 bottom-0 w-64 h-64 opacity-5 pointer-events-none" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/blueprint.png')" }} />
               <div className="text-6xl text-[#225eaa] mb-4 opacity-50 font-serif leading-none">"</div>
               <p className="text-2xl md:text-3xl font-serif leading-tight mb-8 relative z-10">
