@@ -7,12 +7,8 @@ import {
   Sparkles,
   ShieldCheck,
   CheckCircle2,
-  FileText,
-  Lightbulb,
   ArrowRight,
-  ArrowLeft,
-  Coins,
-  Cpu
+  ArrowLeft
 } from "lucide-react";
 
 export const metadata = {
@@ -100,7 +96,7 @@ export default function NationalStartupPolicyPage() {
                   </div>
                 </div>
                 <p className="text-xs text-blue-100/80 leading-relaxed">
-                  KGEC operates under the national startup guidelines formulated by the Ministry of Education's Innovation Cell (MIC).
+                  KGEC operates under the national startup guidelines formulated by the Ministry of Education&apos;s Innovation Cell (MIC).
                 </p>
               </div>
             </div>

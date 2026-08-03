@@ -68,7 +68,7 @@ export default function Footer() {
   return (
     <footer
       ref={containerRef}
-      className="w-full max-w-[1920px] mx-auto bg-[#0a1730] text-white font-sans px-8 md:px-12 lg:px-16 pt-16 pb-8 relative overflow-hidden rounded-t-2xl md:rounded-t-3xl border-t border-white/10"
+      className="w-full max-w-[1920px] mx-auto bg-[#0a1730] text-white font-sans px-6 md:px-12 lg:px-16 pt-12 md:pt-16 pb-6 md:pb-8 relative overflow-hidden rounded-t-2xl md:rounded-t-3xl border-t border-white/10"
     >
       {/* Edge-to-Edge Akira Expanded Watermark */}
       <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center pointer-events-none overflow-hidden z-0 select-none pb-0">
@@ -84,45 +84,45 @@ export default function Footer() {
 
       <div className="relative z-10 flex flex-col justify-between max-w-[100rem] mx-auto">
         {/* Top: Brand + Nav Grid */}
-        <div className="flex flex-col xl:flex-row gap-16 xl:gap-24 justify-between">
+        <div className="flex flex-col xl:flex-row gap-12 md:gap-16 xl:gap-24 justify-between">
           {/* Brand Identity */}
-          <div className="max-w-sm shrink-0">
-            <div className="relative h-20 w-20 mb-6">
-              <Image src="/logo.png" alt="KGEC Logo" fill sizes="80px" className="object-contain" />
+          <div className="flex flex-col items-center xl:items-start text-center xl:text-left max-w-sm shrink-0 mx-auto xl:mx-0">
+            <div className="relative h-16 w-16 md:h-20 md:w-20 mb-4 md:mb-6">
+              <Image src="/logo.png" alt="KGEC Logo" fill sizes="(max-width: 768px) 64px, 80px" className="object-contain" />
             </div>
-            <h2 className="text-3xl md:text-4xl font-serif font-bold leading-tight mb-2">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif font-bold leading-tight mb-2">
               Kalyani Government
-              <br />
-              Engineering College
+              <br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>Engineering College
             </h2>
-            <p className="text-blue-300 font-medium text-sm mb-1">(Affiliated to MAKAUT, AICTE Approved)</p>
-            <p className="text-white/40 text-xs font-bold tracking-widest uppercase mb-8">Established 1995</p>
+            <p className="text-blue-300 font-medium text-[10px] md:text-sm mb-1">(Affiliated to MAKAUT, AICTE Approved)</p>
+            <p className="text-white/40 text-[9px] md:text-xs font-bold tracking-widest uppercase mb-6 md:mb-8">Established 1995</p>
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 justify-center xl:justify-start">
               {socials.map(({ icon: Icon, label, href }) => (
                 <a
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-blue-600 hover:scale-110 transition-all duration-300"
+                  className="h-9 w-9 md:h-10 md:w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-blue-600 hover:scale-110 transition-all duration-300"
                 >
-                  <Icon size={17} />
+                  <Icon size={16} />
                 </a>
               ))}
             </div>
           </div>
 
           {/* Nav Columns */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 w-full xl:w-auto">
-            {linkColumns.map((col) => (
-              <nav key={col.title} className="flex flex-col gap-4">
-                <h3 className="text-[10px] font-bold tracking-widest text-white/40 uppercase">{col.title}</h3>
-                <ul className="flex flex-col gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-10 gap-x-6 md:gap-10 w-full xl:w-auto">
+            {linkColumns.map((col, idx) => (
+              <nav key={col.title} className={`flex flex-col gap-3 md:gap-4 ${idx === 4 ? 'col-span-2 md:col-span-1' : ''}`}>
+                <h3 className="text-[10px] md:text-[11px] font-bold tracking-widest text-white/40 uppercase">{col.title}</h3>
+                <ul className="flex flex-col gap-2.5 md:gap-3">
                   {col.links.map((link) => (
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-sm font-medium text-white/70 hover:text-blue-400 hover:translate-x-1 transition-all inline-block"
+                        className="text-xs md:text-sm font-medium text-white/70 hover:text-blue-400 hover:translate-x-1 transition-transform inline-block"
                       >
                         {link.label}
                       </Link>
@@ -135,9 +135,9 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-white/30">
-          <p>© {new Date().getFullYear()} Kalyani Government Engineering College. Placement Cell & Institute Administration.</p>
-          <div className="flex gap-5 items-center">
+        <div className="mt-10 md:mt-16 pt-6 md:pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] md:text-xs font-medium text-white/30 text-center md:text-left">
+          <p className="order-2 md:order-1">© {new Date().getFullYear()} Kalyani Government Engineering College. Placement Cell & Institute Administration.</p>
+          <div className="flex flex-wrap justify-center gap-3 md:gap-5 items-center order-1 md:order-2">
             <Link href="/contact" className="hover:text-white transition-colors">
               How to Reach Us
             </Link>

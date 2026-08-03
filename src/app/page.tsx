@@ -6,6 +6,7 @@ import Announcements from "@/components/Announcements";
 import Facilities from "@/components/Facilities";
 import Achievements from "@/components/Achievements";
 import Gallery from "@/components/Gallery";
+import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -50,6 +51,11 @@ export default function Home() {
       {/* Section 6: Gallery */}
       <section className="lg:snap-start lg:min-h-screen w-full flex flex-col justify-center bg-white">
         <Gallery />
+      </section>
+
+      {/* Section 7: Contact */}
+      <section className="lg:snap-start lg:min-h-screen w-full flex flex-col justify-center bg-white">
+        <Contact />
       </section>
 
       {/*

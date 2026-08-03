@@ -217,9 +217,11 @@ export default function Gallery() {
         </div>
 
         {/* Mobile View */}
-        <div className="sm:hidden flex flex-col gap-4 px-5 mx-auto w-full z-10">
+        <div className="sm:hidden flex overflow-x-auto snap-x snap-mandatory gap-4 px-5 pb-6 mx-auto w-full z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {galleryData.map((item, i) => (
-            <GalleryCard key={item.id} item={item} index={i} />
+            <div key={item.id} className="w-[85vw] shrink-0 snap-center">
+              <GalleryCard item={item} index={i} />
+            </div>
           ))}
         </div>
 
