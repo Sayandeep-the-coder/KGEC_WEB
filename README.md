@@ -30,6 +30,9 @@
 | **Email Service** | Gmail API (GCP OAuth2) | Direct notification emails on contact form submission |
 | **Validation** | Zod | Request body & query parameter schema validation across all endpoints |
 | **CSV Engine** | PapaParse | Stream/memory CSV parsing for placements & enrollment batch uploads |
+| **Animation & UI** | GSAP, Framer Motion | Advanced scroll-linked animations, drag carousels, and page transitions |
+| **Smooth Scroll** | Lenis | Hardware-accelerated smooth scrolling experience |
+| **Data Visualization** | Recharts | Responsive data visualization for placement & enrollment stats |
 
 ---
 
@@ -39,6 +42,22 @@
 src/
 ├── app/
 │   ├── (public)/          # Public website pages
+│   │   ├── about/         # Institutional overview, vision & mission
+│   │   ├── administration/# Principal's desk, administrative bodies
+│   │   ├── admission/     # UG, PG & MCA admission info
+│   │   ├── alumni/        # Alumni network and registration
+│   │   ├── campus-life/   # Facilities, hostels, library, student clubs
+│   │   ├── departments/   # Academic departments (CSE, IT, ECE, ME, EE, etc.)
+│   │   ├── downloads/     # Public document repository
+│   │   ├── gallery/       # Dynamic photo gallery
+│   │   ├── iic/           # Institution's Innovation Council
+│   │   ├── iqac/          # Internal Quality Assurance Cell
+│   │   ├── naac/          # NAAC accreditation details
+│   │   ├── nirf/          # NIRF ranking data
+│   │   ├── notices/       # Public notice board
+│   │   ├── research/      # Research initiatives and publications
+│   │   ├── rti/           # Right to Information
+│   │   └── training-and-placement/ # T&P cell, stats & recruiter info
 │   ├── admin/             # Secure admin dashboard pages
 │   └── api/
 │       └── v1/            # Versioned API Route Handlers (32 total)
