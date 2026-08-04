@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 import {
   Calendar,
@@ -12,6 +10,7 @@ import { eq } from "drizzle-orm";
 import UnifiedPageLayout from "@/components/UnifiedPageLayout";
 import PageHero from "@/components/ui/PageHero";
 import SectionHeader from "@/components/ui/SectionHeader";
+import ContentCard from "@/components/ui/ContentCard";
 
 export const metadata = {
   title: "Postgraduate M.Tech Admissions | Kalyani Government Engineering College",
@@ -59,116 +58,115 @@ export default async function PgMtechAdmissionPage() {
         title="Master of Technology (M.Tech)"
         subtitle="Advanced specialized degree programs fostering research, domain expertise, and high-impact industrial innovation across cutting-edge engineering disciplines."
       >
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4 mt-4">
           <Link
             href="/admission"
-            className="inline-flex items-center gap-2 border border-white/30 rounded-full px-6 py-3 text-white font-medium hover:bg-white/10 transition-colors"
+            className="inline-flex items-center gap-2 bg-white text-[#022448] rounded-full px-6 py-3 font-bold text-xs uppercase tracking-wider hover:bg-slate-100 transition-colors shadow-lg"
           >
-            All Admission Routes <ArrowRight size={16} />
+            <span>All Admission Routes</span> <ArrowRight size={16} />
           </Link>
         </div>
       </PageHero>
 
       {/* Main Content */}
       <main className="flex-1 w-full flex flex-col items-center">
+        
         {/* Specializations & Seats */}
-        <section>
-          <div className="mb-8">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#2E5C9E] block mb-1">
-              SPECIALIZATIONS OFFERED
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold font-serif text-[#1B2A4A]">
-              M.Tech Programs & Intake
-            </h2>
-            <p className="text-xs sm:text-sm text-[#6B7280] mt-1">
-              Curricula tailored for high-end industrial R&D, doctoral research, and core technological leadership.
-            </p>
-          </div>
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+          <div className="max-w-[1200px] mx-auto">
+            <SectionHeader
+              badge="SPECIALIZATIONS OFFERED"
+              title="M.Tech Programs & Intake"
+              subtitle="Curricula tailored for high-end industrial R&D, doctoral research, and core technological leadership."
+              align="left"
+            />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {seatMatrix.map((spec) => (
-              <div
-                key={spec.code || spec.department}
-                className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between hover:border-[#2E5C9E] transition-colors"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="px-3 py-1 rounded-full bg-blue-50 text-[#2E5C9E] font-black text-xs">
-                      {spec.code}
-                    </span>
-                    <span className="text-xs font-bold text-slate-500">{spec.duration || "2 Years"}</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+              {seatMatrix.map((spec, idx) => (
+                <ContentCard key={spec.code || spec.department} variant="white" delay={idx * 0.1} className="flex flex-col justify-between h-full group hover:border-[#225eaa]">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="px-4 py-1.5 rounded-full bg-blue-50 text-[#225eaa] font-black text-xs border border-blue-100">
+                        {spec.code}
+                      </span>
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{spec.duration || "2 Years"}</span>
+                    </div>
+                    <h3 className="text-lg font-bold text-[#022448] mb-3 group-hover:text-[#225eaa] transition-colors">{spec.department}</h3>
+                    <div className="text-3xl font-black text-[#022448] mb-3 flex items-baseline gap-1">
+                      {spec.seats} <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Approved Seats</span>
+                    </div>
+                    <p className="text-sm text-[#43474e] leading-relaxed font-medium">{spec.eligibility}</p>
                   </div>
-                  <h3 className="text-base font-bold text-[#1A1A1A] mb-2">{spec.department}</h3>
-                  <div className="text-2xl font-black text-[#1B2A4A] mb-2">
-                    {spec.seats} <span className="text-xs font-normal text-slate-500">Approved Seats</span>
-                  </div>
-                  <p className="text-xs text-[#6B7280] leading-relaxed">{spec.eligibility}</p>
-                </div>
-              </div>
-            ))}
+                </ContentCard>
+              ))}
+            </div>
           </div>
-        </section>
+        </div>
 
         {/* Important Dates */}
         {importantDates.length > 0 && (
-          <section className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
-            <div className="flex items-center gap-3 mb-6">
-              <Calendar size={24} className="text-[#2E5C9E]" />
-              <div>
-                <h3 className="text-xl font-bold font-serif text-[#1B2A4A]">
-                  Key Dates & Timeline
-                </h3>
-                <p className="text-xs text-[#6B7280]">
-                  Scheduled admission dates for the upcoming academic session.
-                </p>
+          <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10 pb-16 bg-slate-50 border-y border-slate-200">
+            <div className="max-w-[1200px] mx-auto">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 md:p-12">
+                <div className="flex items-center gap-4 mb-8 pb-6 border-b border-slate-100">
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#225eaa] flex items-center justify-center shrink-0">
+                    <Calendar size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold font-serif text-[#022448]">
+                      Key Dates & Timeline
+                    </h3>
+                    <p className="text-sm text-slate-500 font-medium mt-1">
+                      Scheduled admission dates for the upcoming academic session.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  {importantDates.map((d, i) => (
+                    <div key={i} className="p-5 rounded-xl bg-slate-50 border border-slate-200 hover:bg-white hover:shadow-sm transition-all">
+                      <p className="text-sm font-bold text-slate-800">{d.event}</p>
+                      <p className="text-sm text-[#225eaa] font-bold mt-2 flex items-center gap-1.5">
+                        <Clock size={16} />
+                        <span>{d.date}</span>
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {importantDates.map((d, i) => (
-                <div key={i} className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                  <p className="text-xs font-bold text-slate-800">{d.event}</p>
-                  <p className="text-xs text-[#2E5C9E] font-semibold mt-1 flex items-center gap-1.5">
-                    <Clock size={12} />
-                    <span>{d.date}</span>
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
+          </div>
         )}
 
         {/* Admission Routes */}
-        <section className="space-y-8">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#2E5C9E] block mb-1">
-              SELECTION PROCESS
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold font-serif text-[#1B2A4A]">
-              M.Tech Admission Guidelines
-            </h2>
-          </div>
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10 pb-16">
+          <div className="max-w-[1200px] mx-auto">
+            <SectionHeader
+              badge="SELECTION PROCESS"
+              title="M.Tech Admission Guidelines"
+              align="left"
+            />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {ADMISSION_ROUTES.map((route) => (
-              <div
-                key={route.title}
-                className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm"
-              >
-                <div className="inline-block text-xs font-bold text-[#2E5C9E] bg-blue-50 px-3 py-1 rounded-md uppercase tracking-wider mb-3">
-                  {route.exam}
-                </div>
-                <h3 className="text-xl font-bold font-serif text-[#1B2A4A] mb-2">{route.title}</h3>
-                <p className="text-xs text-[#6B7280] leading-relaxed mb-4">{route.desc}</p>
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">
-                  <strong>Eligibility:</strong> Minimum 60% marks (55% for SC/ST) or equivalent CGPA in B.Tech/B.E. in relevant engineering branches from an AICTE-approved institution.
-                </div>
-              </div>
-            ))}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+              {ADMISSION_ROUTES.map((route, idx) => (
+                <ContentCard key={route.title} variant="white" delay={idx * 0.1}>
+                  <div className="inline-block text-[10px] font-bold text-[#225eaa] bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full uppercase tracking-wider mb-4">
+                    {route.exam}
+                  </div>
+                  <h3 className="text-2xl font-bold font-serif text-[#022448] mb-3">{route.title}</h3>
+                  <p className="text-sm text-[#43474e] leading-relaxed font-medium mb-6">{route.desc}</p>
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-700">
+                    <span className="text-[#225eaa] font-bold uppercase tracking-wider text-[11px] block mb-1">Eligibility Requirement</span>
+                    Minimum 60% marks (55% for SC/ST) or equivalent CGPA in B.Tech/B.E. in relevant engineering branches from an AICTE-approved institution.
+                  </div>
+                </ContentCard>
+              ))}
+            </div>
           </div>
-        </section>
+        </div>
+
       </main>
 
-      </UnifiedPageLayout>
+    </UnifiedPageLayout>
   );
 }

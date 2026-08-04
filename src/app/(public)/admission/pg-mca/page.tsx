@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 import {
   Code,
@@ -15,22 +13,13 @@ import { eq } from "drizzle-orm";
 import UnifiedPageLayout from "@/components/UnifiedPageLayout";
 import PageHero from "@/components/ui/PageHero";
 import SectionHeader from "@/components/ui/SectionHeader";
+import ContentCard from "@/components/ui/ContentCard";
 
 export const metadata = {
   title: "Master of Computer Applications (MCA) Admissions | Kalyani Government Engineering College",
   description:
     "Admission procedure, WBJECA exam guidelines, eligibility, computing facilities, and counseling process for the MCA program at KGEC.",
 };
-
-const HIGHLIGHTS = [
-  { label: "Degree Awarded", value: "Master of Computer Applications" },
-  { label: "Program Duration", value: "2 Years (4 Semesters)" },
-  { label: "Admission Route", value: "WBJECA (WBJEEB)" },
-  { label: "Approved Intake", value: "40 Seats" },
-  { label: "Recent Placement Rate", value: "76.0%" },
-  { label: "Highest Package", value: "INR 11.0 LPA" },
-  { label: "Approved Body", value: "AICTE & MAKAUT" },
-];
 
 const ELIGIBILITY_POINTS = [
   "Passed BCA / Bachelor Degree in Computer Science Engineering or equivalent degree.",
@@ -68,85 +57,105 @@ export default async function PgMcaAdmissionPage() {
 
       {/* Main Content */}
       <main className="flex-1 w-full flex flex-col items-center">
+        
         {/* Eligibility & Selection */}
-        <section className="bg-white rounded-3xl border border-slate-200 p-8 md:p-12 shadow-sm">
-          <div className="inline-block text-xs font-bold text-[#2E5C9E] bg-blue-50 px-3 py-1 rounded-md uppercase tracking-wider mb-3">
-            WBJECA Selection Route
-          </div>
-          <h2 className="text-2xl md:text-3xl font-bold font-serif text-[#1B2A4A] mb-4">
-            Eligibility Criteria & Admission Procedure
-          </h2>
-          <p className="text-xs sm:text-sm text-[#6B7280] leading-relaxed mb-6">
-            Admissions to the 2-year MCA program at KGEC are made through centralized web-based counseling conducted by the West Bengal Joint Entrance Examinations Board (WBJEEB) based on WBJECA rank.
-          </p>
-
-          <div className="space-y-3">
-            {ELIGIBILITY_POINTS.map((pt, i) => (
-              <div key={i} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex items-start gap-3 text-xs text-slate-800">
-                <CheckCircle2 size={18} className="text-emerald-500 shrink-0 mt-0.5" />
-                <span className="leading-relaxed">{pt}</span>
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+          <div className="max-w-[1200px] mx-auto">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 md:p-14">
+              <div className="inline-block text-[10px] font-bold text-[#225eaa] bg-blue-50 border border-blue-100 px-4 py-2 rounded-full uppercase tracking-widest mb-4">
+                WBJECA Selection Route
               </div>
-            ))}
+              <h2 className="text-3xl md:text-4xl font-bold font-serif text-[#022448] mb-5">
+                Eligibility Criteria & Admission Procedure
+              </h2>
+              <p className="text-sm text-[#43474e] leading-relaxed mb-8 font-medium max-w-3xl">
+                Admissions to the 2-year MCA program at KGEC are made through centralized web-based counseling conducted by the West Bengal Joint Entrance Examinations Board (WBJEEB) based on WBJECA rank.
+              </p>
+
+              <div className="space-y-4">
+                {ELIGIBILITY_POINTS.map((pt, i) => (
+                  <div key={i} className="p-5 rounded-xl border border-slate-200 bg-slate-50 flex items-start gap-4 text-sm text-[#022448] font-medium hover:bg-white hover:shadow-sm transition-all">
+                    <CheckCircle2 size={22} className="text-[#225eaa] shrink-0 mt-0.5" />
+                    <span className="leading-relaxed">{pt}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </section>
+        </div>
 
         {/* Important Dates */}
         {importantDates.length > 0 && (
-          <section className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
-            <div className="flex items-center gap-3 mb-6">
-              <Calendar size={24} className="text-[#2E5C9E]" />
-              <div>
-                <h3 className="text-xl font-bold font-serif text-[#1B2A4A]">
-                  WBJECA Key Dates & Schedule
-                </h3>
-                <p className="text-xs text-[#6B7280]">
-                  Official dates for entrance examination and centralized seat counseling.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {importantDates.map((d, i) => (
-                <div key={i} className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                  <p className="text-xs font-bold text-slate-800">{d.event}</p>
-                  <p className="text-xs text-[#2E5C9E] font-semibold mt-1 flex items-center gap-1.5">
-                    <Clock size={12} />
-                    <span>{d.date}</span>
+          <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10 bg-slate-50 border-y border-slate-200">
+            <div className="max-w-[1200px] mx-auto">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#225eaa] flex items-center justify-center shrink-0">
+                  <Calendar size={24} />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold font-serif text-[#022448]">
+                    WBJECA Key Dates & Schedule
+                  </h3>
+                  <p className="text-sm text-slate-500 font-medium mt-1">
+                    Official dates for entrance examination and centralized seat counseling.
                   </p>
                 </div>
-              ))}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {importantDates.map((d, i) => (
+                  <ContentCard key={i} variant="white" hover={false} delay={i * 0.1}>
+                    <p className="text-sm font-bold text-slate-800">{d.event}</p>
+                    <p className="text-sm text-[#225eaa] font-bold mt-2 flex items-center gap-1.5">
+                      <Clock size={16} />
+                      <span>{d.date}</span>
+                    </p>
+                  </ContentCard>
+                ))}
+              </div>
             </div>
-          </section>
+          </div>
         )}
 
         {/* Curriculum Focus & Labs */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#2E5C9E] flex items-center justify-center mb-4">
-              <Code size={24} />
-            </div>
-            <h3 className="text-xl font-bold font-serif text-[#1B2A4A] mb-2">
-              Advanced Software Focus
-            </h3>
-            <p className="text-xs text-[#6B7280] leading-relaxed">
-              The MCA curriculum emphasizes modern object-oriented programming, data structures, cloud architectures, artificial intelligence, enterprise web application design, and distributed database management.
-            </p>
-          </div>
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10 pb-16">
+          <div className="max-w-[1200px] mx-auto">
+            <SectionHeader
+              badge="ACADEMIC INFRASTRUCTURE"
+              title="Curriculum Focus & Labs"
+              align="left"
+            />
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+              <ContentCard variant="white" delay={0.1} className="h-full">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#225eaa] flex items-center justify-center mb-5">
+                  <Code size={28} />
+                </div>
+                <h3 className="text-2xl font-bold font-serif text-[#022448] mb-3">
+                  Advanced Software Focus
+                </h3>
+                <p className="text-sm text-[#43474e] leading-relaxed font-medium">
+                  The MCA curriculum emphasizes modern object-oriented programming, data structures, cloud architectures, artificial intelligence, enterprise web application design, and distributed database management.
+                </p>
+              </ContentCard>
 
-          <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#2E5C9E] flex items-center justify-center mb-4">
-              <Laptop size={24} />
+              <ContentCard variant="white" delay={0.2} className="h-full">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#225eaa] flex items-center justify-center mb-5">
+                  <Laptop size={28} />
+                </div>
+                <h3 className="text-2xl font-bold font-serif text-[#022448] mb-3">
+                  Dedicated Computing Labs
+                </h3>
+                <p className="text-sm text-[#43474e] leading-relaxed font-medium">
+                  Equipped with high-speed internet, dedicated software servers, modern development IDEs, and round-the-clock computational infrastructure to support coursework and industry projects.
+                </p>
+              </ContentCard>
             </div>
-            <h3 className="text-xl font-bold font-serif text-[#1B2A4A] mb-2">
-              Dedicated Computing Labs
-            </h3>
-            <p className="text-xs text-[#6B7280] leading-relaxed">
-              Equipped with high-speed internet, dedicated software servers, modern development IDEs, and round-the-clock computational infrastructure to support coursework and industry projects.
-            </p>
           </div>
-        </section>
+        </div>
+
       </main>
 
-      </UnifiedPageLayout>
+    </UnifiedPageLayout>
   );
 }
