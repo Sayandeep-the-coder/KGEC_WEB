@@ -1,5 +1,3 @@
-
-
 import NoticeBoard from "@/components/NoticeBoard";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -8,13 +6,7 @@ import { notices } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
 import UnifiedPageLayout from "@/components/UnifiedPageLayout";
 import PageHero from "@/components/ui/PageHero";
-import SectionHeader from "@/components/ui/SectionHeader";
-import {
-  Bell,
-  DownloadCloud,
-  ArrowRight,
-  ShieldCheck
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Official Notice Board | Kalyani Government Engineering College",
@@ -51,16 +43,16 @@ export default async function PublicNoticesPage() {
         title="Official Notice Board"
         subtitle="Stay updated with academic circulars, semester exam schedules, admission counseling announcements, tenders, and administrative notifications."
       >
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4 mt-4">
           <Link
             href="/downloads"
-            className="inline-flex items-center gap-2 border border-white/30 rounded-full px-6 py-3 text-white font-medium hover:bg-white/10 transition-colors"
+            className="inline-flex items-center gap-2 bg-white text-[#022448] rounded-full px-6 py-3 font-bold text-xs uppercase tracking-wider hover:bg-slate-100 transition-colors shadow-lg"
           >
-            Document Downloads <ArrowRight size={16} />
+            <span>Document Downloads</span> <ArrowRight size={16} />
           </Link>
           <Link
             href="/news"
-            className="inline-flex items-center gap-2 border border-white/20 rounded-full px-6 py-3 text-white/80 font-medium hover:bg-white/10 transition-colors"
+            className="inline-flex items-center gap-2 border border-white/20 rounded-full px-6 py-3 text-white/90 font-bold text-xs uppercase tracking-wider hover:bg-white/10 transition-colors"
           >
             Campus News
           </Link>
@@ -69,9 +61,13 @@ export default async function PublicNoticesPage() {
 
       {/* Main Content */}
       <main className="flex-1 w-full flex flex-col items-center">
-        <NoticeBoard initialNotices={initialNotices} limit={100} showTitle={false} />
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10 pb-16">
+          <div className="max-w-[1200px] mx-auto">
+            <NoticeBoard initialNotices={initialNotices} limit={100} showTitle={false} className="border-none shadow-sm md:p-8" />
+          </div>
+        </div>
       </main>
 
-      </UnifiedPageLayout>
+    </UnifiedPageLayout>
   );
 }
