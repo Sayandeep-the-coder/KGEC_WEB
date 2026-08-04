@@ -1,4 +1,5 @@
 import AdministrationRolePage from "../[role]/page";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
 
 export const metadata = {
   title: "Heads of Academic Departments (HODs) | Kalyani Government Engineering College",

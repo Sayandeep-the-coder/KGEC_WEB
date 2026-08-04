@@ -1,8 +1,11 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+
+
 import { notFound } from "next/navigation";
-import { FileText, Calendar, Download, ArrowLeft, Sparkles } from "lucide-react";
+import { FileText, Calendar, Download, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -31,37 +34,14 @@ export default async function NoticeDetailPage({ params }: PageProps) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
-      <Header />
+    <UnifiedPageLayout>
 
-      {/* Hero Banner */}
-      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-14 px-6 relative overflow-hidden border-b border-blue-900/40">
-        <div className="max-w-4xl mx-auto relative z-10">
-          <Link
-            href="/notices"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-200 hover:text-white transition-colors mb-6"
-          >
-            <ArrowLeft size={14} />
-            <span>Back to All Notices</span>
-          </Link>
-
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-4 backdrop-blur-md">
-            <Sparkles size={12} className="text-blue-300" />
-            <span>{notice.type || "Official"} Notice</span>
-          </div>
-
-          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight font-serif leading-tight">
-            {notice.title}
-          </h1>
-
-          <div className="flex items-center gap-2 text-xs text-blue-200/80 mt-4">
-            <Calendar size={14} />
-            <span>
-              Published on {new Date(notice.publishedAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
-            </span>
-          </div>
-        </div>
-      </section>
+      {/* Hero */}
+      <PageHero
+        badge={`${notice.type || "Official"} Notice`}
+        title={notice.title}
+        subtitle=""
+      />
 
       {/* Main Content */}
       <main className="flex-1 w-full max-w-4xl mx-auto px-6 py-12">
@@ -89,7 +69,7 @@ export default async function NoticeDetailPage({ params }: PageProps) {
                 href={notice.fileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1B2A4A] text-white text-xs font-bold hover:bg-[#2E5C9E] transition-colors shadow-sm cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/50 border border-slate-200/60 shadow-sm text-white text-xs font-bold hover:bg-[#2E5C9E] transition-colors shadow-sm cursor-pointer"
               >
                 <Download size={15} />
                 <span>Open / Download Verified PDF</span>
@@ -103,7 +83,6 @@ export default async function NoticeDetailPage({ params }: PageProps) {
         </div>
       </main>
 
-      <Footer />
-    </div>
+      </UnifiedPageLayout>
   );
 }

@@ -1,17 +1,12 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import DownloadsTable from "@/components/DownloadsTable";
 import Link from "next/link";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeader from "@/components/ui/SectionHeader";
+import ContentCard from "@/components/ui/ContentCard";
 import {
-  Lightbulb,
-  Sparkles,
-  Award,
   Calendar,
-  CheckCircle2,
   ArrowRight,
-  ArrowLeft,
-  Users,
-  Compass
 } from "lucide-react";
 
 export const metadata = {
@@ -45,122 +40,76 @@ const IIC_CALENDAR_ACTIVITIES = [
 
 export default function InstituteInnovationCouncilPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
-      <Header />
+    <UnifiedPageLayout>
 
-      {/* Hero Banner */}
-      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-16 px-6 relative overflow-hidden border-b border-blue-900/40">
-        <div className="max-w-7xl mx-auto relative z-10">
+      {/* Hero */}
+      <PageHero
+        badge="MHRD Innovation Cell"
+        title="Institute Innovation Council (IIC)"
+        subtitle="Driving systematic annual innovation calendars, hackathons, patent filing workshops, and technology incubation drives established under MoE's Innovation Cell."
+      >
+        <div className="flex flex-wrap items-center gap-4 mt-4">
           <Link
-            href="/iic"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-200 hover:text-white transition-colors mb-6"
+            href="/iic/e-cell"
+            className="inline-flex items-center gap-2 bg-white text-[#022448] rounded-full px-6 py-3 font-bold text-xs uppercase tracking-wider hover:bg-slate-100 transition-colors shadow-lg"
           >
-            <ArrowLeft size={14} />
-            <span>Back to IIC Overview</span>
+            <span>Entrepreneurship Cell</span> <ArrowRight size={16} />
           </Link>
+          <Link
+            href="/iic/national-startup-policy"
+            className="inline-flex items-center gap-2 border border-white/20 rounded-full px-6 py-3 text-white font-bold text-xs uppercase tracking-wider hover:bg-white/10 transition-colors backdrop-blur-sm"
+          >
+            NISP Policy
+          </Link>
+        </div>
+      </PageHero>
 
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-md">
-            <Sparkles size={14} className="text-blue-300" />
-            <span>MHRD Innovation Cell</span>
-          </div>
+      {/* Main Content */}
+      <main className="flex-1 w-full flex flex-col items-center">
+        {/* Annual Activity Calendar */}
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+          <div className="w-full rounded-2xl bg-white shadow-md border border-slate-100 p-6 md:p-10 lg:p-14">
+            <div className="max-w-[1200px] mx-auto">
+              <SectionHeader
+                badge="Yearly Schedule"
+                title="Prescribed Activity Framework (Q1 to Q4)"
+                subtitle="The structured annual calendar guided by the Ministry of Education to drive continuous innovation on campus."
+                align="left"
+              />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight font-serif leading-tight">
-                Institute Innovation Council (IIC)
-              </h1>
-              <p className="text-blue-100/90 text-sm sm:text-base md:text-lg mt-4 max-w-2xl leading-relaxed">
-                Driving systematic annual innovation calendars, hackathons, patent filing workshops, and technology incubation drives established under MoE's Innovation Cell.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4 mt-8">
-                <Link
-                  href="/iic/e-cell"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2E5C9E] hover:bg-blue-600 text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
-                >
-                  <span>Entrepreneurship Cell</span>
-                  <ArrowRight size={16} />
-                </Link>
-                <Link
-                  href="/iic/national-startup-policy"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider transition-colors backdrop-blur-md"
-                >
-                  <Award size={16} />
-                  <span>NISP Policy</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-4">
-              <div className="bg-white/10 border border-white/20 rounded-3xl p-6 backdrop-blur-md text-white">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300">
-                    <Lightbulb size={24} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-blue-200 uppercase tracking-wider">MoE Innovation</p>
-                    <p className="text-xl font-bold font-serif">4-Star Rated</p>
-                  </div>
-                </div>
-                <p className="text-xs text-blue-100/80 leading-relaxed">
-                  Consistently meeting quarterly milestones for Smart India Hackathon participation and student ideation challenges.
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                {IIC_CALENDAR_ACTIVITIES.map((act, idx) => (
+                  <ContentCard key={idx} variant="white" delay={idx * 0.1}>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-[#225eaa] font-bold text-xs">
+                        {act.quarter}
+                      </span>
+                      <Calendar size={20} className="text-[#225eaa]" />
+                    </div>
+                    <h3 className="text-xl font-bold text-[#022448] mb-3">{act.title}</h3>
+                    <p className="text-sm text-[#43474e] leading-relaxed">{act.desc}</p>
+                  </ContentCard>
+                ))}
               </div>
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Main Content */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-12">
-        {/* Annual Activity Calendar */}
-        <section className="space-y-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-blue-50 text-[#2E5C9E] text-xs font-bold uppercase tracking-wider">
-              Yearly Schedule
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#1B2A4A]">
-              Prescribed Activity Framework (Quarter 1 to Quarter 4)
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {IIC_CALENDAR_ACTIVITIES.map((act, idx) => (
-              <div
-                key={idx}
-                className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between space-y-4"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#2E5C9E] font-bold text-xs">
-                      {act.quarter}
-                    </span>
-                    <Calendar size={18} className="text-[#2E5C9E]" />
-                  </div>
-                  <h3 className="text-lg font-bold text-[#1B2A4A] mb-2">{act.title}</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">{act.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Dynamic Downloads Section */}
-        <section className="space-y-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-blue-50 text-[#2E5C9E] text-xs font-bold uppercase tracking-wider">
-              Reports & Evidence
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 pb-12">
+          <div className="max-w-[1200px] mx-auto">
+            <SectionHeader
+              badge="Reports & Evidence"
+              title="IIC Annual Reports & Meeting Minutes"
+              align="left"
+            />
+            <div className="mt-6 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+              <DownloadsTable category="iic" title="IIC Activity Reports & Documentation" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#1B2A4A]">
-              IIC Annual Reports & Meeting Minutes
-            </h2>
           </div>
-
-          <DownloadsTable category="iic" title="IIC Activity Reports & Documentation" />
-        </section>
+        </div>
       </main>
 
-      <Footer />
-    </div>
+    </UnifiedPageLayout>
   );
 }

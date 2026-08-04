@@ -1,9 +1,12 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { Sparkles, Mail } from "lucide-react";
+
+
+import { Mail } from "lucide-react";
 import { db } from "@/lib/db";
 import { staff } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 export const metadata = {
   title: "Principal's Desk | Kalyani Government Engineering College",
@@ -32,37 +35,22 @@ export default async function PrincipalPage() {
 
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
-      <Header />
+    <UnifiedPageLayout>
 
-      {/* Hero Banner */}
-      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-16 px-6 relative overflow-hidden border-b border-blue-900/40">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-md">
-            <Sparkles size={14} className="text-blue-300" />
-            <span>Institutional Leadership</span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight font-serif">
-                From the Desk of the Principal
-              </h1>
-              <p className="text-blue-100/90 text-sm sm:text-base md:text-lg mt-4 max-w-2xl leading-relaxed">
-                Welcome to Kalyani Government Engineering College — inspiring innovation, engineering excellence, and ethical leadership since 1995.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero */}
+      <PageHero
+        badge="Institutional Leadership"
+        title="From the Desk of the Principal"
+        subtitle="Welcome to Kalyani Government Engineering College — inspiring innovation, engineering excellence, and ethical leadership since 1995."
+      />
 
       {/* Main Container */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-12">
+      <main className="flex-1 w-full flex flex-col items-center">
         <section className="bg-white rounded-3xl border border-slate-200 p-8 md:p-12 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Principal Profile Card */}
             <div className="lg:col-span-4 flex flex-col items-center text-center p-6 rounded-2xl bg-slate-50 border border-slate-200">
-              <div className="w-28 h-28 rounded-full bg-[#1B2A4A] text-white flex items-center justify-center text-3xl font-serif font-bold shadow-md mb-4 border-4 border-blue-100">
+              <div className="w-28 h-28 rounded-full bg-white/50 border border-slate-200/60 shadow-sm text-white flex items-center justify-center text-3xl font-serif font-bold shadow-md mb-4 border-4 border-blue-100">
                 {name.split(" ").map(n => n[0]).filter(Boolean).slice(0, 2).join("")}
               </div>
               <h2 className="text-xl font-bold text-[#1A1A1A]">{name}</h2>
@@ -113,7 +101,6 @@ export default async function PrincipalPage() {
         </section>
       </main>
 
-      <Footer />
-    </div>
+      </UnifiedPageLayout>
   );
 }

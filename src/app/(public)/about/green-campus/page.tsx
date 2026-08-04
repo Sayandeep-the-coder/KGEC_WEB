@@ -1,15 +1,17 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+
+
 import Link from "next/link";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeader from "@/components/ui/SectionHeader";
+import ContentCard from "@/components/ui/ContentCard";
 import {
   Leaf,
   Sun,
   Recycle,
   Droplets,
-  Sparkles,
   TreePine,
   ShieldCheck,
-  Zap,
   ArrowRight,
   Compass
 } from "lucide-react";
@@ -68,132 +70,93 @@ const GREEN_PRACTICES = [
 
 export default function GreenCampusPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
-      <Header />
+    <UnifiedPageLayout>
 
-      {/* Hero Banner */}
-      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-16 px-6 relative overflow-hidden border-b border-blue-900/40">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-md">
-            <Sparkles size={14} className="text-blue-300" />
-            <span>Environmental Sustainability</span>
-          </div>
+      {/* Hero */}
+      <PageHero
+        badge="Environmental Sustainability"
+        title="Green Campus & Eco-Initiatives"
+        subtitle="Fostering an ecologically sustainable, biodiversity-rich 75-acre academic sanctuary in Kalyani through clean energy generation, water stewardship, and environmental ethics."
+        backgroundImage="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+      >
+        <div className="flex flex-wrap items-center gap-4">
+          <Link
+            href="/about"
+            className="inline-flex items-center gap-2 border border-white/30 rounded-full px-6 py-3 text-white font-medium hover:bg-white/10 transition-colors"
+          >
+            About KGEC <ArrowRight size={16} />
+          </Link>
+          <Link
+            href="/campus-life"
+            className="inline-flex items-center gap-2 border border-white/20 rounded-full px-6 py-3 text-white/80 font-medium hover:bg-white/10 transition-colors"
+          >
+            <Compass size={16} /> Campus Life
+          </Link>
+        </div>
+      </PageHero>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight font-serif leading-tight">
-                Green Campus & Eco-Initiatives
-              </h1>
-              <p className="text-blue-100/90 text-sm sm:text-base md:text-lg mt-4 max-w-2xl leading-relaxed">
-                Fostering an ecologically sustainable, biodiversity-rich 75-acre academic sanctuary in Kalyani through clean energy generation, water stewardship, and environmental ethics.
-              </p>
+      {/* Main Content */}
+      <main className="flex-1 w-full flex flex-col items-center">
 
-              <div className="flex flex-wrap items-center gap-4 mt-8">
-                <Link
-                  href="/about"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2E5C9E] hover:bg-blue-600 text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
-                >
-                  <span>About KGEC</span>
-                  <ArrowRight size={16} />
-                </Link>
-                <Link
-                  href="/campus-life"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider transition-colors backdrop-blur-md"
-                >
-                  <Compass size={16} />
-                  <span>Campus Life</span>
-                </Link>
-              </div>
-            </div>
+        {/* Core Pillars Grid */}
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+          <div className="w-full rounded-2xl bg-white shadow-md border border-slate-100 p-6 md:p-10 lg:p-14">
+            <div className="max-w-[1200px] mx-auto">
+              <SectionHeader
+                badge="Sustainability Framework"
+                title="Key Green Initiatives"
+                align="left"
+              />
 
-            <div className="lg:col-span-4">
-              <div className="bg-white/10 border border-white/20 rounded-3xl p-6 backdrop-blur-md text-white">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-300">
-                    <Leaf size={24} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-blue-200 uppercase tracking-wider">Campus Ecosystem</p>
-                    <p className="text-xl font-bold font-serif">75-Acre Sanctuary</p>
-                  </div>
-                </div>
-                <p className="text-xs text-blue-100/80 leading-relaxed">
-                  KGEC balances engineering innovation with environmental conservation, featuring zero-discharge zones and high green canopy coverage.
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+                {SUSTAINABILITY_PILLARS.map((item, idx) => {
+                  const Icon = item.icon;
+                  return (
+                    <ContentCard key={item.title} variant="white" delay={idx * 0.1} className="border-[#e6eeff]">
+                      <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
+                        <Icon size={22} />
+                      </div>
+                      <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 inline-block mb-2">
+                        {item.highlight}
+                      </span>
+                      <h3 className="text-lg font-bold text-[#022448] mb-2">{item.title}</h3>
+                      <p className="text-xs text-[#43474e] leading-relaxed">{item.text}</p>
+                    </ContentCard>
+                  );
+                })}
               </div>
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Main Content */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-12">
-        {/* Core Pillars Grid */}
-        <section className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-blue-50 text-[#2E5C9E] text-xs font-bold uppercase tracking-wider mb-2">
-                Sustainability Framework
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#1B2A4A]">
-                Key Green Initiatives
-              </h2>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {SUSTAINABILITY_PILLARS.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={item.title}
-                  className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#2E5C9E] flex items-center justify-center mb-4">
-                      <Icon size={22} />
-                    </div>
-                    <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 inline-block mb-2">
-                      {item.highlight}
-                    </span>
-                    <h3 className="text-lg font-bold text-[#1B2A4A] mb-2">{item.title}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed">{item.text}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
 
         {/* Environmental Policy Narrative */}
-        <section className="bg-white rounded-3xl border border-slate-200 p-8 md:p-12 shadow-sm space-y-8">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-blue-50 text-[#2E5C9E] text-xs font-bold uppercase tracking-wider">
-              Institutional Policy
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#1B2A4A]">
-              Comprehensive Environmental & Clean Energy Policy
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-4xl">
-              KGEC has adopted a comprehensive sustainable development protocol aligned with national green campus standards. The institution actively measures, manages, and mitigates its carbon footprint through clean technology deployments and community participation.
-            </p>
-          </div>
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+          <div className="w-full rounded-2xl bg-white shadow-md border border-slate-100 p-6 md:p-10 lg:p-14">
+            <div className="max-w-[1200px] mx-auto">
+              <SectionHeader
+                badge="Institutional Policy"
+                title="Comprehensive Environmental & Clean Energy Policy"
+                subtitle="KGEC has adopted a comprehensive sustainable development protocol aligned with national green campus standards. The institution actively measures, manages, and mitigates its carbon footprint through clean technology deployments and community participation."
+                align="left"
+              />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-            {GREEN_PRACTICES.map((p, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck size={18} className="text-[#2E5C9E]" />
-                  <h3 className="font-bold text-sm text-[#1B2A4A]">{p.title}</h3>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed">{p.desc}</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                {GREEN_PRACTICES.map((p, idx) => (
+                  <ContentCard key={idx} variant="white" hover={false} delay={idx * 0.05} className="bg-slate-50/50 border-slate-200/80">
+                    <div className="flex items-center gap-2 mb-2">
+                      <ShieldCheck size={18} className="text-[#225eaa]" />
+                      <h3 className="font-bold text-sm text-[#022448]">{p.title}</h3>
+                    </div>
+                    <p className="text-xs text-[#43474e] leading-relaxed">{p.desc}</p>
+                  </ContentCard>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </section>
+        </div>
+
       </main>
 
-      <Footer />
-    </div>
+    </UnifiedPageLayout>
   );
 }

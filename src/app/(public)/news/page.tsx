@@ -1,12 +1,15 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+
+
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { Calendar, ArrowRight, Newspaper, Sparkles, Bell } from "lucide-react";
+import { Calendar, ArrowRight, Newspaper, Bell } from "lucide-react";
 import { db } from "@/lib/db";
 import { news } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 export const metadata: Metadata = {
   title: "Campus News & Highlights | Kalyani Government Engineering College",
@@ -23,66 +26,32 @@ export default async function PublicNewsPage() {
     .orderBy(desc(news.publishedAt));
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
-      <Header />
+    <UnifiedPageLayout>
 
-      {/* Hero Banner */}
-      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-16 px-6 relative overflow-hidden border-b border-blue-900/40">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-md">
-            <Sparkles size={14} className="text-blue-300" />
-            <span>Campus Media & Press</span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight font-serif leading-tight">
-                News & Institutional Highlights
-              </h1>
-              <p className="text-blue-100/90 text-sm sm:text-base md:text-lg mt-4 max-w-2xl leading-relaxed">
-                Celebrating student triumphs in national hackathons, faculty research breakthroughs, sports championships, and campus milestones.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4 mt-8">
-                <Link
-                  href="/notices"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2E5C9E] hover:bg-blue-600 text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
-                >
-                  <span>Official Notice Board</span>
-                  <ArrowRight size={16} />
-                </Link>
-                <Link
-                  href="/gallery"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider transition-colors backdrop-blur-md"
-                >
-                  <Newspaper size={16} />
-                  <span>Photo Gallery</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-4">
-              <div className="bg-white/10 border border-white/20 rounded-3xl p-6 backdrop-blur-md text-white">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300">
-                    <Newspaper size={24} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-blue-200 uppercase tracking-wider">Campus Media</p>
-                    <p className="text-xl font-bold font-serif">Stories of Impact</p>
-                  </div>
-                </div>
-                <p className="text-xs text-blue-100/80 leading-relaxed">
-                  Documenting the spirit, creativity, and intellectual accomplishments of the KGEC collegiate community.
-                </p>
-              </div>
-            </div>
-          </div>
+      {/* Hero */}
+      <PageHero
+        badge="Campus Media & Press"
+        title="News & Institutional Highlights"
+        subtitle="Celebrating student triumphs in national hackathons, faculty research breakthroughs, sports championships, and campus milestones."
+      >
+        <div className="flex flex-wrap items-center gap-4">
+          <Link
+            href="/notices"
+            className="inline-flex items-center gap-2 border border-white/30 rounded-full px-6 py-3 text-white font-medium hover:bg-white/10 transition-colors"
+          >
+            Official Notice Board <ArrowRight size={16} />
+          </Link>
+          <Link
+            href="/gallery"
+            className="inline-flex items-center gap-2 border border-white/20 rounded-full px-6 py-3 text-white/80 font-medium hover:bg-white/10 transition-colors"
+          >
+            Photo Gallery
+          </Link>
         </div>
-      </section>
+      </PageHero>
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-12">
+      <main className="flex-1 w-full flex flex-col items-center">
         {articles.length === 0 ? (
           <div className="bg-white rounded-3xl border border-slate-200 p-16 text-center text-slate-500 text-sm">
             No news articles published yet. Check back soon for the latest campus updates!
@@ -140,7 +109,6 @@ export default async function PublicNewsPage() {
         )}
       </main>
 
-      <Footer />
-    </div>
+      </UnifiedPageLayout>
   );
 }

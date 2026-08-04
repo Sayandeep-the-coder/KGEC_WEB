@@ -1,4 +1,5 @@
 import AdministrationRolePage from "../[role]/page";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
 
 export const metadata = {
   title: "Office of the Accounts Officer | Kalyani Government Engineering College",

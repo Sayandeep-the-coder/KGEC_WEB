@@ -1,4 +1,5 @@
 import DepartmentsClient from "./DepartmentsClient";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
 
 export const metadata = {
   title: "Academic Departments | Kalyani Government Engineering College",

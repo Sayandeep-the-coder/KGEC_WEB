@@ -1,4 +1,5 @@
 import AdministrationRolePage from "../[role]/page";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
 
 export const metadata = {
   title: "Hostel Administration & Superintendence | Kalyani Government Engineering College",

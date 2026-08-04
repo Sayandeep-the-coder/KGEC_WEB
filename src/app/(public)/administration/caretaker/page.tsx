@@ -1,4 +1,5 @@
 import AdministrationRolePage from "../[role]/page";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
 
 export const metadata = {
   title: "Campus Caretaker & Estate Management | Kalyani Government Engineering College",

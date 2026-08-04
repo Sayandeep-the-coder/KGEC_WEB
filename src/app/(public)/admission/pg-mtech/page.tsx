@@ -1,15 +1,17 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+
+
 import Link from "next/link";
 import {
   Calendar,
   ArrowRight,
-  Sparkles,
   Clock,
 } from "lucide-react";
 import { db } from "@/lib/db";
 import { admissions } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 export const metadata = {
   title: "Postgraduate M.Tech Admissions | Kalyani Government Engineering College",
@@ -49,71 +51,26 @@ export default async function PgMtechAdmissionPage() {
   const importantDates = (data?.importantDates as Array<{ event: string; date: string }>) || [];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
-      <Header />
+    <UnifiedPageLayout>
 
-      {/* Hero Banner */}
-      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-16 px-6 relative overflow-hidden border-b border-blue-900/40">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-md">
-            <Sparkles size={14} className="text-blue-300" />
-            <span>Postgraduate Engineering Admissions</span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight font-serif">
-                Master of Technology (M.Tech)
-              </h1>
-              <p className="text-blue-100/90 text-sm sm:text-base md:text-lg mt-4 max-w-2xl leading-relaxed">
-                Advanced specialized degree programs fostering research, domain expertise, and high-impact industrial innovation across cutting-edge engineering disciplines.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4 mt-8">
-                <a
-                  href="https://makautwb.ac.in"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2E5C9E] hover:bg-blue-600 text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
-                >
-                  <span>MAKAUT PGET Portal</span>
-                  <ArrowRight size={16} />
-                </a>
-                <Link
-                  href="/admission"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider transition-colors backdrop-blur-md"
-                >
-                  <span>All Admission Routes</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-4">
-              <div className="bg-white/10 border border-white/20 rounded-3xl p-6 backdrop-blur-md text-xs space-y-3">
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                  <span>Program Duration</span>
-                  <span className="font-bold text-white">2 Years (4 Semesters)</span>
-                </div>
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                  <span>Admissions Mode</span>
-                  <span className="font-bold text-white">GATE / MAKAUT PGET</span>
-                </div>
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                  <span>Total PG Intake</span>
-                  <span className="font-bold text-amber-400">~90 Seats</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Degree Awarding Body</span>
-                  <span className="font-bold text-white">MAKAUT</span>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* Hero */}
+      <PageHero
+        badge="Postgraduate Engineering Admissions"
+        title="Master of Technology (M.Tech)"
+        subtitle="Advanced specialized degree programs fostering research, domain expertise, and high-impact industrial innovation across cutting-edge engineering disciplines."
+      >
+        <div className="flex flex-wrap items-center gap-4">
+          <Link
+            href="/admission"
+            className="inline-flex items-center gap-2 border border-white/30 rounded-full px-6 py-3 text-white font-medium hover:bg-white/10 transition-colors"
+          >
+            All Admission Routes <ArrowRight size={16} />
+          </Link>
         </div>
-      </section>
+      </PageHero>
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-16">
+      <main className="flex-1 w-full flex flex-col items-center">
         {/* Specializations & Seats */}
         <section>
           <div className="mb-8">
@@ -212,7 +169,6 @@ export default async function PgMtechAdmissionPage() {
         </section>
       </main>
 
-      <Footer />
-    </div>
+      </UnifiedPageLayout>
   );
 }

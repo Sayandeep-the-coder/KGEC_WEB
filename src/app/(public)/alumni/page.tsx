@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+
+
 import Link from "next/link";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeader from "@/components/ui/SectionHeader";
 import {
-  Sparkles,
   Rocket,
   Code,
   GraduationCap,
@@ -68,44 +70,17 @@ export default function AlumniPage() {
   }, [selectedCat, searchQuery]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
-      <Header />
+    <UnifiedPageLayout>
 
-      {/* Hero Banner */}
-      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-16 px-6 relative overflow-hidden border-b border-blue-900/40">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-md">
-            <Sparkles size={14} className="text-blue-300" />
-            <span>Alumni Network & Global Heritage</span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight font-serif">
-                KGEC Alumni Diaries
-              </h1>
-              <p className="text-blue-100/90 text-sm sm:text-base md:text-lg mt-3 max-w-2xl leading-relaxed">
-                From Chandrayaan-3 mission scientists at ISRO to global Silicon Valley leaders, professors, and tech founders — celebrating the global legacy of KGEC graduates.
-              </p>
-            </div>
-
-            {/* Spotlight Banner: Chandrayaan 3 */}
-            <div className="lg:col-span-4 bg-linear-to-br from-blue-900/60 to-[#2E5C9E]/50 border border-blue-400/30 rounded-3xl p-6 backdrop-blur-md text-white">
-              <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-2">
-                <Rocket size={16} />
-                <span>ISRO Chandrayaan-3 Pride</span>
-              </div>
-              <h3 className="text-base font-bold">KGECians in Lunar Mission</h3>
-              <p className="text-xs text-blue-100 mt-1 leading-relaxed">
-                Proud alumni <strong>Bijoy Kumar Dai</strong>, <strong>Pijush Kanti Pattanayak</strong>, and <strong>Kunal Soam</strong> contributed directly to India&apos;s historic Chandrayaan-3 lunar landing.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero */}
+      <PageHero
+        badge="Alumni Network & Global Heritage"
+        title="KGEC Alumni Diaries"
+        subtitle="From Chandrayaan-3 mission scientists at ISRO to global Silicon Valley leaders, professors, and tech founders — celebrating the global legacy of KGEC graduates."
+      />
 
       {/* Main Container */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-12">
+      <main className="flex-1 w-full flex flex-col items-center">
         {/* Controls: Category Filter + Search Bar */}
         <section className="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
@@ -115,7 +90,7 @@ export default function AlumniPage() {
                 onClick={() => setSelectedCat(cat.id)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   selectedCat === cat.id
-                    ? "bg-[#1B2A4A] text-white shadow-sm"
+                    ? "bg-white/50 border border-slate-200/60 shadow-sm text-white shadow-sm"
                     : "bg-slate-100 text-[#6B7280] hover:bg-slate-200 hover:text-[#1A1A1A]"
                 }`}
               >
@@ -183,7 +158,7 @@ export default function AlumniPage() {
         )}
 
         {/* Bottom Banner Bar */}
-        <div className="bg-[#1B2A4A] text-white rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-white/50 border border-slate-200/60 shadow-sm text-white rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <h4 className="text-base font-bold">Are you a KGEC Alumnus?</h4>
             <p className="text-xs text-slate-300">
@@ -199,7 +174,6 @@ export default function AlumniPage() {
         </div>
       </main>
 
-      <Footer />
-    </div>
+      </UnifiedPageLayout>
   );
 }

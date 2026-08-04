@@ -1,18 +1,20 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+
+
 import Link from "next/link";
 import {
   Code,
   CheckCircle2,
   Calendar,
   ArrowRight,
-  Sparkles,
   Laptop,
   Clock,
 } from "lucide-react";
 import { db } from "@/lib/db";
 import { admissions } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 export const metadata = {
   title: "Master of Computer Applications (MCA) Admissions | Kalyani Government Engineering College",
@@ -55,64 +57,17 @@ export default async function PgMcaAdmissionPage() {
   const importantDates = (data?.importantDates as Array<{ event: string; date: string }>) || [];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
-      <Header />
+    <UnifiedPageLayout>
 
-      {/* Hero Banner */}
-      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-16 px-6 relative overflow-hidden border-b border-blue-900/40">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-md">
-            <Sparkles size={14} className="text-blue-300" />
-            <span>Computer Applications Admissions</span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight font-serif">
-                Master of Computer Applications (MCA)
-              </h1>
-              <p className="text-blue-100/90 text-sm sm:text-base md:text-lg mt-3 max-w-2xl leading-relaxed">
-                Empowering next-generation software engineers, systems analysts, and data architects with state-of-the-art programming labs and exceptional campus placements.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4 mt-6">
-                <a
-                  href="https://wbjeeb.nic.in"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 rounded-xl bg-[#2E5C9E] hover:bg-blue-600 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm flex items-center gap-2"
-                >
-                  <span>WBJECA Portal</span>
-                  <ArrowRight size={14} />
-                </a>
-                <Link
-                  href="/training-and-placement/statistics"
-                  className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs uppercase tracking-wider transition-all backdrop-blur-md"
-                >
-                  <span>MCA Placement Records</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-4 bg-white/10 border border-white/20 rounded-3xl p-6 backdrop-blur-md">
-              <div className="text-xs uppercase tracking-widest font-bold text-blue-200 mb-3">
-                Program Snapshot
-              </div>
-              <div className="space-y-3 text-xs text-slate-200">
-                {HIGHLIGHTS.map((h) => (
-                  <div key={h.label} className="flex items-center justify-between pb-2 border-b border-white/10 last:border-0 last:pb-0">
-                    <span>{h.label}</span>
-                    <span className="font-bold text-white text-right">{h.value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero */}
+      <PageHero
+        badge="Computer Applications Admissions"
+        title="Master of Computer Applications (MCA)"
+        subtitle="Empowering next-generation software engineers, systems analysts, and data architects with state-of-the-art programming labs and exceptional campus placements."
+      />
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-16">
+      <main className="flex-1 w-full flex flex-col items-center">
         {/* Eligibility & Selection */}
         <section className="bg-white rounded-3xl border border-slate-200 p-8 md:p-12 shadow-sm">
           <div className="inline-block text-xs font-bold text-[#2E5C9E] bg-blue-50 px-3 py-1 rounded-md uppercase tracking-wider mb-3">
@@ -192,7 +147,6 @@ export default async function PgMcaAdmissionPage() {
         </section>
       </main>
 
-      <Footer />
-    </div>
+      </UnifiedPageLayout>
   );
 }

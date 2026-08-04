@@ -1,15 +1,17 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+
+
 import Link from "next/link";
 import {
   CheckCircle2,
   ArrowRight,
-  Sparkles,
   FileText,
 } from "lucide-react";
 import { db } from "@/lib/db";
 import { admissions } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 export const metadata = {
   title: "Undergraduate B.Tech Admissions | Kalyani Government Engineering College",
@@ -69,74 +71,17 @@ export default async function UgBtechAdmissionPage() {
   const data = await getUgAdmissionsData();
   const seatMatrix = (data?.seatMatrix as Array<{ department?: string; code?: string; duration?: string; seats?: number; eligibility?: string }>) || [];
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
-      <Header />
+    <UnifiedPageLayout>
 
-      {/* Hero Banner */}
-      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-16 px-6 relative overflow-hidden border-b border-blue-900/40">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-md">
-            <Sparkles size={14} className="text-blue-300" />
-            <span>Undergraduate Admissions</span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight font-serif">
-                Bachelor of Technology (B.Tech)
-              </h1>
-              <p className="text-blue-100/90 text-sm sm:text-base md:text-lg mt-3 max-w-2xl leading-relaxed">
-                Join one of Eastern India&apos;s highest-ranked engineering colleges through WBJEE and JELET centralized counseling.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4 mt-6">
-                <a
-                  href="https://wbjeeb.nic.in"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 rounded-full bg-[#2E5C9E] hover:bg-blue-600 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2"
-                >
-                  <span>WBJEE Official Portal</span>
-                  <ArrowRight size={14} />
-                </a>
-                <Link
-                  href="/training-and-placement/statistics"
-                  className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs uppercase tracking-wider transition-all"
-                >
-                  Placement Records
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-4 bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
-              <div className="text-xs uppercase tracking-widest font-bold text-blue-300 mb-3">
-                Quick Highlights
-              </div>
-              <div className="space-y-3 text-xs text-slate-200">
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                  <span>Affiliation</span>
-                  <span className="font-bold text-white">MAKAUT</span>
-                </div>
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                  <span>Approval</span>
-                  <span className="font-bold text-white">AICTE</span>
-                </div>
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                  <span>Annual Intake</span>
-                  <span className="font-bold text-amber-400">~282 Seats</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Admissions Mode</span>
-                  <span className="font-bold text-white">WBJEE / JELET</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero */}
+      <PageHero
+        badge="Undergraduate Admissions"
+        title="Bachelor of Technology (B.Tech)"
+        subtitle="Join one of Eastern India&apos;s highest-ranked engineering colleges through WBJEE and JELET centralized counseling."
+      />
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-16">
+      <main className="flex-1 w-full flex flex-col items-center">
         {/* Department Seat Matrix */}
         <section>
           <div className="mb-8">
@@ -254,7 +199,6 @@ export default async function UgBtechAdmissionPage() {
         </section>
       </main>
 
-      <Footer />
-    </div>
+      </UnifiedPageLayout>
   );
 }

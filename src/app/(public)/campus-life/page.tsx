@@ -1,8 +1,8 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import Link from "next/link";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeader from "@/components/ui/SectionHeader";
 import {
-  Sparkles,
   Code,
   Zap,
   Cpu,
@@ -20,6 +20,7 @@ import {
   Layers,
   ArrowRight
 } from "lucide-react";
+import ContentCard from "@/components/ui/ContentCard";
 
 export const metadata = {
   title: "Campus Life, Cells & Clubs | Kalyani Government Engineering College",
@@ -29,32 +30,32 @@ export const metadata = {
 
 const CAMPUS_CELLS = [
   {
-    name: "Training and Placement Cell",
-    desc: "Prepares students for professional careers through training, skill-building workshops, industry exposure, placement drives, interview prep, and career counseling.",
+    name: "Training & Placement Cell",
+    desc: "Dedicated to campus recruitment, internships, and bridging the academia-industry gap through training programs.",
     icon: Briefcase,
-    color: "bg-blue-50 text-[#2E5C9E]",
+    color: "bg-blue-50 text-[#022448]",
   },
   {
-    name: "Sportix (Sports Cell)",
-    desc: "Supports fitness, sportsmanship, and teamwork. Organizes intra-college tournaments and hosts inter-college athletic meets.",
-    icon: Trophy,
+    name: "Institution's Innovation Council (IIC)",
+    desc: "Fosters entrepreneurship, startup ideation, and intellectual property (IPR) awareness under MoE innovation guidelines.",
+    icon: Compass,
     color: "bg-amber-50 text-amber-600",
   },
   {
-    name: "Industry Institute Partnership (IIP) Cell",
-    desc: "Bridges academics and corporate industry through seminars, industrial tours, live projects, and specialized training programs.",
-    icon: Globe,
-    color: "bg-indigo-50 text-indigo-600",
-  },
-  {
-    name: "Entrepreneurship Cell (E-Cell)",
-    desc: "Fosters innovation, venture ideation, startup incubation, business plan competitions (Pitchathon), and organizes the annual E-Summit.",
-    icon: Flame,
+    name: "Internal Quality Assurance Cell (IQAC)",
+    desc: "Ensures continuous quality improvement in teaching, research, and administrative performance post-accreditation.",
+    icon: Award,
     color: "bg-emerald-50 text-emerald-600",
   },
   {
-    name: "Alumni Interaction Cell",
-    desc: "Maintains an active network between current undergraduates and illustrious alumni across ISRO, Big Tech, academia, and global ventures.",
+    name: "E-Cell (Entrepreneurship Cell)",
+    desc: "A student-run body encouraging entrepreneurial mindsets, organizing business plan pitches and the annual E-Summit.",
+    icon: Zap,
+    color: "bg-orange-50 text-orange-600",
+  },
+  {
+    name: "Sports Council",
+    desc: "Manages all campus athletic infrastructure, intra-college sports tournaments, and university-level team participation.",
     icon: Users,
     color: "bg-purple-50 text-purple-600",
   },
@@ -89,7 +90,7 @@ const TECHNICAL_CLUBS = [
     name: "KGEC Developer Community",
     tagline: "Dev & Design Collaborative",
     desc: "Student-driven community for full-stack developers and open-source contributors; organizers of the 36-hour offline hackathon 'Binary'.",
-    icon: Sparkles,
+    icon: Code,
   },
   {
     name: "Students' Automobile Club (SAC-KGEC)",
@@ -101,7 +102,7 @@ const TECHNICAL_CLUBS = [
 
 const BEYOND_CLUBS = [
   { name: "NSS Unit", category: "Social Service", desc: "Blood donation drives, environmental campaigns, rural health awareness, and social initiatives.", icon: Users },
-  { name: "Elysium", category: "Dance Club", desc: "Contemporary, classical, and hip-hop dance performances at college and inter-college cultural events.", icon: Sparkles },
+  { name: "Elysium", category: "Dance Club", desc: "Contemporary, classical, and hip-hop dance performances at college and inter-college cultural events.", icon: Flame },
   { name: "Riyaz", category: "Music Club", desc: "Vocal and instrumental music society organizing acoustic jamming sessions and band performances.", icon: Music },
   { name: "Chitrank", category: "Art & Design", desc: "Fine arts, digital graphic designing, canvas paintings, fest posters, and visual decor.", icon: Palette },
   { name: "Shutterbug", category: "Photography & Film", desc: "Campus photojournalism, cinematic event coverage, short film-making, and annual photography exhibitions.", icon: Camera },
@@ -148,219 +149,164 @@ const ANNUAL_EVENTS = [
 
 export default function CampusLifePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
-      <Header />
+    <UnifiedPageLayout>
 
-      {/* Hero Banner */}
-      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-16 px-6 relative overflow-hidden border-b border-blue-900/40">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-md">
-            <Sparkles size={14} className="text-blue-300" />
-            <span>Campus Life & Student Societies</span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight font-serif">
-                Campus Cells, Clubs & Events
-              </h1>
-              <p className="text-blue-100/90 text-sm sm:text-base md:text-lg mt-3 max-w-2xl leading-relaxed">
-                A thriving ecosystem of 5 administrative cells, 6 technical societies, 11 creative clubs, and marquee annual festivals powering student leadership and holistic growth.
-              </p>
-            </div>
-
-            <div className="lg:col-span-4 bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
-              <div className="text-xs uppercase tracking-widest font-bold text-blue-300 mb-3">
-                Student Life Matrix
-              </div>
-              <div className="space-y-3 text-xs text-slate-200">
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                  <span>Campus Cells</span>
-                  <span className="font-bold text-white">5 Active Cells</span>
-                </div>
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                  <span>Technical Clubs</span>
-                  <span className="font-bold text-white">6 Societies</span>
-                </div>
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                  <span>Cultural & Beyond Clubs</span>
-                  <span className="font-bold text-white">11 Clubs</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Flagship Events</span>
-                  <span className="font-bold text-amber-400">5 Annual Fests</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero */}
+      <PageHero
+        badge="Campus Life & Student Societies"
+        title="Campus Cells, Clubs & Events"
+        subtitle="A thriving ecosystem of 5 administrative cells, 6 technical societies, 11 creative clubs, and marquee annual festivals powering student leadership and holistic growth."
+      />
 
       {/* Main Container */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-16">
+      <main className="flex-1 w-full flex flex-col items-center">
+        
         {/* Section 1: Campus Cells */}
-        <section>
-          <div className="mb-8">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#2E5C9E] block mb-1">
-              INSTITUTIONAL CELLS
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold font-serif text-[#1B2A4A]">
-              Campus Cells
-            </h2>
-            <p className="text-xs sm:text-sm text-[#6B7280] mt-1">
-              Dedicated student-faculty bodies managing career opportunities, sports, entrepreneurship, and industry-academia synergy.
-            </p>
-          </div>
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+          <div className="w-full rounded-2xl bg-white shadow-md border border-slate-100 p-6 md:p-10 lg:p-14">
+            <div className="max-w-[1200px] mx-auto">
+              <SectionHeader
+                badge="Institutional Cells"
+                title="Campus Cells"
+                subtitle="Dedicated student-faculty bodies managing career opportunities, sports, entrepreneurship, and industry-academia synergy."
+                align="left"
+              />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {CAMPUS_CELLS.map((cell) => {
-              const Icon = cell.icon;
-              return (
-                <div
-                  key={cell.name}
-                  className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow"
-                >
-                  <div>
-                    <div className={`w-12 h-12 rounded-xl ${cell.color} flex items-center justify-center mb-4`}>
-                      <Icon size={24} />
-                    </div>
-                    <h3 className="text-base font-bold text-[#1A1A1A] mb-2">{cell.name}</h3>
-                    <p className="text-xs text-[#6B7280] leading-relaxed">{cell.desc}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Section 2: Technical Societies */}
-        <section>
-          <div className="mb-8">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#2E5C9E] block mb-1">
-              ENGINEERING & INNOVATION
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold font-serif text-[#1B2A4A]">
-              Technical Activities & Clubs
-            </h2>
-            <p className="text-xs sm:text-sm text-[#6B7280] mt-1">
-              Competitive coding, AI/ML research, robotics design, vehicle prototyping, and hackathon organization.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {TECHNICAL_CLUBS.map((club) => {
-              const Icon = club.icon;
-              return (
-                <div
-                  key={club.name}
-                  className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between hover:border-[#2E5C9E] transition-colors"
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#2E5C9E] flex items-center justify-center">
-                        <Icon size={20} />
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                {CAMPUS_CELLS.map((cell, idx) => {
+                  const Icon = cell.icon;
+                  return (
+                    <ContentCard key={cell.name} variant="white" delay={idx * 0.1}>
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 ${cell.color}`}>
+                        <Icon size={24} />
                       </div>
-                      <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-[10px] font-bold text-slate-700">
-                        {club.tagline}
+                      <h3 className="text-lg font-bold text-[#022448] mb-2">{cell.name}</h3>
+                      <p className="text-xs text-[#43474e] leading-relaxed">{cell.desc}</p>
+                    </ContentCard>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 2: Technical Clubs */}
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10 bg-slate-50 border-y border-slate-200">
+          <div className="max-w-[1200px] mx-auto">
+            <SectionHeader
+              badge="Innovation & Tech"
+              title="Technical Societies"
+              subtitle="Student-run tech communities fostering coding, hardware engineering, artificial intelligence, and open-source contributions."
+              align="left"
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+              {TECHNICAL_CLUBS.map((club, idx) => {
+                const Icon = club.icon;
+                return (
+                  <ContentCard key={club.name} variant="white" delay={idx * 0.1}>
+                    <div className="w-12 h-12 rounded-2xl bg-[#f0f4ff] text-[#225eaa] flex items-center justify-center mb-4">
+                      <Icon size={22} />
+                    </div>
+                    <div className="text-[10px] font-bold text-[#225eaa] uppercase tracking-widest mb-1">
+                      {club.tagline}
+                    </div>
+                    <h3 className="text-lg font-bold text-[#022448] mb-2">{club.name}</h3>
+                    <p className="text-xs text-[#43474e] leading-relaxed">{club.desc}</p>
+                  </ContentCard>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3: Cultural & Extra-curricular */}
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+          <div className="w-full rounded-2xl bg-white shadow-md border border-slate-100 p-6 md:p-10 lg:p-14">
+            <div className="max-w-[1200px] mx-auto">
+              <SectionHeader
+                badge="Beyond Academics"
+                title="Cultural & Special Interest Clubs"
+                subtitle="Diverse societies celebrating performing arts, creative hobbies, literary debates, and social responsibilities."
+                align="left"
+              />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
+                {BEYOND_CLUBS.map((club, idx) => {
+                  const Icon = club.icon;
+                  return (
+                    <ContentCard key={club.name} variant="white" delay={idx * 0.05} hover={false} className="bg-slate-50 border border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow-md transition-all">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#225eaa] font-bold text-[10px] uppercase tracking-wider border border-blue-100/50">
+                          {club.category}
+                        </span>
+                        <Icon size={16} className="text-[#022448]" />
+                      </div>
+                      <h3 className="font-bold text-[#022448] text-sm mb-1.5">{club.name}</h3>
+                      <p className="text-xs text-[#43474e] leading-relaxed line-clamp-3">
+                        {club.desc}
+                      </p>
+                    </ContentCard>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 4: Annual Events Timeline */}
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+          <div className="w-full rounded-2xl bg-[#022448] shadow-md border border-[#1e3a5f] p-6 md:p-10 lg:p-14 overflow-hidden relative">
+            {/* Background Accent */}
+            <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-500 rounded-full blur-3xl opacity-10"></div>
+            
+            <div className="max-w-[1200px] mx-auto relative z-10">
+              <div className="mb-10 text-center max-w-2xl mx-auto">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#76A9FA] block mb-2">
+                  THE KGEC EXPERIENCE
+                </span>
+                <h2 className="text-2xl md:text-3xl font-bold font-serif text-white">
+                  Marquee Annual Festivals
+                </h2>
+                <p className="text-sm text-blue-100 mt-2">
+                  High-octane national-level college fests bringing together thousands of students across engineering disciplines.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {ANNUAL_EVENTS.map((evt, idx) => (
+                  <div
+                    key={evt.name}
+                    className="flex flex-col md:flex-row md:items-center justify-between p-6 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 transition-all gap-4"
+                  >
+                    <div className="md:w-1/3">
+                      <div className="flex items-center gap-3 mb-1">
+                        <div className="p-2 rounded-xl bg-blue-500/20 text-blue-300">
+                          <Calendar size={18} />
+                        </div>
+                        <h3 className="text-xl font-bold font-serif text-white">{evt.name}</h3>
+                      </div>
+                      <span className="text-[11px] font-bold text-[#76A9FA] uppercase tracking-wider ml-11">
+                        {evt.category}
                       </span>
                     </div>
-                    <h3 className="text-base font-bold text-[#1A1A1A] mb-1">{club.name}</h3>
-                    <p className="text-xs text-[#6B7280] leading-relaxed">{club.desc}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Section 3: Cultural & Beyond Activities */}
-        <section>
-          <div className="mb-8">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#2E5C9E] block mb-1">
-              CREATIVITY & CO-CURRICULARS
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold font-serif text-[#1B2A4A]">
-              Beyond Activities (Clubs & Societies)
-            </h2>
-            <p className="text-xs sm:text-sm text-[#6B7280] mt-1">
-              Nurturing artistic expression, performing arts, literature, social service, astronomy, and gaming.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {BEYOND_CLUBS.map((club) => {
-              const Icon = club.icon;
-              return (
-                <div
-                  key={club.name}
-                  className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#2E5C9E] flex items-center justify-center">
-                        <Icon size={16} />
-                      </div>
-                      <span className="text-[10px] font-bold text-slate-500">{club.category}</span>
+                    <div className="md:w-1/2 text-sm text-blue-50 leading-relaxed pl-11 md:pl-0">
+                      {evt.desc}
                     </div>
-                    <h3 className="text-sm font-bold text-[#1A1A1A] mb-1">{club.name}</h3>
-                    <p className="text-[11px] text-[#6B7280] leading-relaxed">{club.desc}</p>
+                    <div className="md:w-1/6 text-left md:text-right pl-11 md:pl-0">
+                      <span className="inline-block px-3 py-1 rounded-full bg-white/10 text-white text-[11px] font-bold border border-white/20">
+                        {evt.date}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Section 4: Annual Flagship Events */}
-        <section className="bg-white rounded-3xl border border-slate-200 p-8 md:p-12 shadow-sm">
-          <div className="mb-8">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#2E5C9E] block mb-1">
-              CAMPUS FESTIVALS
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold font-serif text-[#1B2A4A]">
-              Annual Flagship Events
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ANNUAL_EVENTS.map((evt) => (
-              <div
-                key={evt.name}
-                className="p-6 rounded-2xl border border-slate-200 bg-slate-50/60 flex flex-col justify-between hover:bg-white transition-colors"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="px-3 py-1 rounded-md bg-[#1B2A4A] text-white text-[10px] font-bold uppercase tracking-wider">
-                      {evt.category}
-                    </span>
-                    <span className="text-xs font-bold text-[#2E5C9E]">{evt.date}</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-[#1A1A1A] mb-2">{evt.name}</h3>
-                  <p className="text-xs text-[#6B7280] leading-relaxed">{evt.desc}</p>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </section>
-
-        {/* Bottom Banner Bar */}
-        <div className="bg-[#1B2A4A] text-white rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <h4 className="text-base font-bold">Experience KGEC Campus Life</h4>
-            <p className="text-xs text-slate-300">
-              Follow student society portals and participate in our upcoming annual events.
-            </p>
-          </div>
-          <Link
-            href="/gallery"
-            className="px-5 py-2.5 rounded-full bg-[#2E5C9E] hover:bg-blue-600 text-white font-bold text-xs transition-colors shrink-0"
-          >
-            View Campus Gallery
-          </Link>
         </div>
+
       </main>
 
-      <Footer />
-    </div>
+    </UnifiedPageLayout>
   );
 }

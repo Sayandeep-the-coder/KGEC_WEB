@@ -1,10 +1,9 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+
+
 import StaffProfileCard, { StaffProfile } from "@/components/StaffProfileCard";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
-  Sparkles,
   ShieldCheck,
   Building2,
   ArrowRight,
@@ -13,6 +12,9 @@ import {
 import { db } from "@/lib/db";
 import { staff } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import UnifiedPageLayout from "@/components/UnifiedPageLayout";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 const ROLE_MAP: Record<string, { roleKey: string; title: string; desc: string; badge: string }> = {
   principal: {
@@ -103,99 +105,59 @@ export default async function AdministrationRolePage({ params }: PageProps) {
   const staffList = await getStaffByRole(config.roleKey);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F6F9] font-sans w-full text-[#1A1A1A]">
-      <Header />
+    <UnifiedPageLayout>
 
-      {/* Hero Banner */}
-      <section className="w-full bg-[#1B2A4A] text-white pt-12 pb-16 px-6 relative overflow-hidden border-b border-blue-900/40">
-        <div className="max-w-7xl mx-auto relative z-10">
+      {/* Hero */}
+      <PageHero
+        badge={config.badge}
+        title={config.title}
+        subtitle={config.desc}
+      >
+        <div className="flex flex-wrap items-center gap-4">
           <Link
-            href="/administration/principal"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-200 hover:text-white transition-colors mb-6"
+            href="/contact"
+            className="inline-flex items-center gap-2 border border-white/30 rounded-full px-6 py-3 text-white font-medium hover:bg-white/10 transition-colors"
           >
-            <ArrowLeft size={14} />
-            <span>Administration Directory</span>
+            Contact Office <ArrowRight size={16} />
           </Link>
+          <Link
+            href="/about"
+            className="inline-flex items-center gap-2 border border-white/20 rounded-full px-6 py-3 text-white/80 font-medium hover:bg-white/10 transition-colors"
+          >
+            About KGEC
+          </Link>
+        </div>
+      </PageHero>
 
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold uppercase tracking-wider mb-6 backdrop-blur-md">
-            <Sparkles size={14} className="text-blue-300" />
-            <span>{config.badge}</span>
-          </div>
+      {/* Main Content */}
+      <main className="flex-1 w-full flex flex-col items-center">
+        <div className="w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-6 md:py-10 pb-16">
+          <div className="max-w-[1200px] mx-auto">
+            <SectionHeader
+              badge="Staff Profiles"
+              title="Administrative Officials & Officers"
+              align="left"
+            />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8">
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight font-serif leading-tight">
-                {config.title}
-              </h1>
-              <p className="text-blue-100/90 text-sm sm:text-base md:text-lg mt-4 max-w-2xl leading-relaxed">
-                {config.desc}
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4 mt-8">
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2E5C9E] hover:bg-blue-600 text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
-                >
-                  <span>Contact Office</span>
-                  <ArrowRight size={16} />
-                </Link>
-                <Link
-                  href="/about"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider transition-colors backdrop-blur-md"
-                >
-                  <Building2 size={16} />
-                  <span>About KGEC</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-4">
-              <div className="bg-white/10 border border-white/20 rounded-3xl p-6 backdrop-blur-md text-white">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300">
-                    <ShieldCheck size={24} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-blue-200 uppercase tracking-wider">Governance</p>
-                    <p className="text-xl font-bold font-serif">State Administration</p>
-                  </div>
+            <div className="mt-8">
+              {staffList.length === 0 ? (
+                <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center text-slate-500 text-sm shadow-sm font-medium">
+                  Official records for this section are being updated by the administrative office. Please check back shortly or visit the contact directory.
                 </div>
-                <p className="text-xs text-blue-100/80 leading-relaxed">
-                  Committed to transparent academic leadership, efficient administrative operations, and student welfare.
-                </p>
-              </div>
+              ) : (
+                <div className="space-y-6">
+                  {staffList.map((staffMember) => (
+                    <div key={staffMember.id} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                      <StaffProfileCard staff={staffMember} />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Main Content */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 space-y-12">
-        <section className="space-y-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-blue-50 text-[#2E5C9E] text-xs font-bold uppercase tracking-wider">
-              Staff Profiles
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#1B2A4A]">
-              Administrative Officials & Officers
-            </h2>
-          </div>
-
-          {staffList.length === 0 ? (
-            <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center text-slate-500 text-sm">
-              Official records for this section are being updated by the administrative office. Please check back shortly or visit the contact directory.
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {staffList.map((staffMember) => (
-                <StaffProfileCard key={staffMember.id} staff={staffMember} />
-              ))}
-            </div>
-          )}
-        </section>
       </main>
 
-      <Footer />
-    </div>
+      </UnifiedPageLayout>
   );
 }
