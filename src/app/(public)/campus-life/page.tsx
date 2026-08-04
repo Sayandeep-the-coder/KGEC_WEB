@@ -39,7 +39,7 @@ const CAMPUS_CELLS = [
     name: "Institution's Innovation Council (IIC)",
     desc: "Fosters entrepreneurship, startup ideation, and intellectual property (IPR) awareness under MoE innovation guidelines.",
     icon: Compass,
-    color: "bg-amber-50 text-amber-600",
+    color: "bg-blue-50 text-blue-600",
   },
   {
     name: "Internal Quality Assurance Cell (IQAC)",
@@ -51,7 +51,7 @@ const CAMPUS_CELLS = [
     name: "E-Cell (Entrepreneurship Cell)",
     desc: "A student-run body encouraging entrepreneurial mindsets, organizing business plan pitches and the annual E-Summit.",
     icon: Zap,
-    color: "bg-orange-50 text-orange-600",
+    color: "bg-slate-50 text-slate-600",
   },
   {
     name: "Sports Council",

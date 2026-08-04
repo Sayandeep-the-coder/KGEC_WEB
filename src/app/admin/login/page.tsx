@@ -17,19 +17,21 @@ function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-8 shadow-xl">
-      <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center mx-auto mb-6 shadow-sm">
-        <ShieldCheck size={36} />
+    <div className="w-full max-w-md bg-white border border-slate-100 rounded-[2rem] p-8 md:p-10 shadow-2xl relative overflow-hidden z-10">
+      <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 -z-10"></div>
+      
+      <div className="w-20 h-20 rounded-2xl bg-[#022448] text-white flex items-center justify-center mx-auto mb-8 shadow-xl shadow-blue-900/20 border-4 border-white z-10">
+        <ShieldCheck size={40} />
       </div>
 
-      <h1 className="text-2xl font-bold font-serif text-slate-900 text-center mb-2">KGEC Admin Portal</h1>
-      <p className="text-xs text-slate-500 leading-relaxed text-center mb-6">
+      <h1 className="text-3xl font-bold font-serif text-[#022448] text-center mb-3 z-10 relative">KGEC Admin Portal</h1>
+      <p className="text-sm text-[#43474e] font-medium leading-relaxed text-center mb-8 z-10 relative">
         Secure, allowlist-gated content management system for Kalyani Government Engineering College.
       </p>
 
       {errorMsg && (
-        <div className="mb-6 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-xs font-semibold flex items-center gap-2">
-          <AlertCircle size={16} className="shrink-0 text-red-600" />
+        <div className="mb-8 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-bold flex items-center gap-3 z-10 relative shadow-inner">
+          <AlertCircle size={20} className="shrink-0 text-red-600" />
           <span>{errorMsg}</span>
         </div>
       )}
@@ -38,9 +40,9 @@ function LoginForm() {
       <button
         type="button"
         onClick={() => signIn("google", { callbackUrl: "/admin" })}
-        className="w-full py-3 px-6 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs flex items-center justify-center gap-3 transition-colors cursor-pointer"
+        className="relative z-10 w-full py-4 px-6 rounded-xl bg-white hover:bg-slate-50 text-[#022448] border border-slate-200 font-bold text-sm flex items-center justify-center gap-4 transition-all cursor-pointer shadow-sm hover:shadow-md hover:border-[#225eaa]"
       >
-        <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
           <path
             fill="#4285F4"
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -58,11 +60,11 @@ function LoginForm() {
             d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
           />
         </svg>
-        <span>Sign in with Google</span>
+        <span className="uppercase tracking-wider">Sign in with Google</span>
       </button>
 
-      <p className="mt-6 text-center text-[11px] text-slate-500">
-        Only authorized emails in <code className="text-slate-700 font-mono font-semibold">admin_allowlist</code> can access.
+      <p className="mt-8 text-center text-[11px] text-slate-500 font-medium z-10 relative">
+        Only authorized emails in <code className="text-[#225eaa] font-mono font-bold px-1.5 py-0.5 bg-blue-50 rounded">admin_allowlist</code> can access.
       </p>
     </div>
   );
@@ -70,8 +72,11 @@ function LoginForm() {
 
 export default function AdminLoginPage() {
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 font-sans">
-      <Suspense fallback={<div className="text-sm text-slate-500">Loading...</div>}>
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 font-sans relative overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-96 bg-[#022448] skew-y-3 -mt-32 -z-10 shadow-2xl"></div>
+      
+      <Suspense fallback={<div className="text-sm font-bold uppercase tracking-widest text-[#022448]">Loading...</div>}>
         <LoginForm />
       </Suspense>
     </div>

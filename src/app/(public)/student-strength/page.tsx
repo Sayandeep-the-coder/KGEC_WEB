@@ -14,13 +14,19 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
   ResponsiveContainer,
   PieChart,
   Pie,
   Cell,
-  Legend,
 } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 
 interface DeptEnrollmentRow {
   department: string;
@@ -32,9 +38,36 @@ interface DeptEnrollmentRow {
 
 interface GenderRatioEntry {
   name: string;
+  id?: string;
   value: number;
-  color: string;
+  fill?: string;
+  color?: string;
 }
+
+const deptChartConfig = {
+  male: {
+    label: "Male Students",
+    color: "#022448",
+  },
+  female: {
+    label: "Female Students",
+    color: "#5B9BD5",
+  },
+} satisfies ChartConfig;
+
+const ratioChartConfig = {
+  value: {
+    label: "Students",
+  },
+  male: {
+    label: "Male Students",
+    color: "#1B2A4A",
+  },
+  female: {
+    label: "Female Students",
+    color: "#5B9BD5",
+  },
+} satisfies ChartConfig;
 
 export default function StudentStrengthPage() {
   const [activeView, setActiveView] = useState<"ug" | "pg">("ug");
@@ -68,8 +101,8 @@ export default function StudentStrengthPage() {
             setFemaleRatio(String(fPct));
 
             setGenderRatio([
-              { name: `Male Students (${mPct}%)`, value: m, color: "#1B2A4A" },
-              { name: `Female Students (${fPct}%)`, value: f, color: "#5B9BD5" },
+              { name: `Male Students (${mPct}%)`, id: "male", value: m, fill: "var(--color-male)" },
+              { name: `Female Students (${fPct}%)`, id: "female", value: f, fill: "var(--color-female)" },
             ]);
           }
         }
@@ -241,19 +274,17 @@ export default function StudentStrengthPage() {
                             No department data available
                           </div>
                         ) : (
-                          <ResponsiveContainer width="100%" height="100%">
+                          <ChartContainer config={deptChartConfig} className="w-full h-full min-h-[300px]">
                             <BarChart data={currentDataset} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                               <XAxis dataKey="department" stroke="#6B7280" fontSize={12} fontStyle="bold" />
                               <YAxis stroke="#6B7280" fontSize={12} />
-                              <Tooltip
-                                contentStyle={{ backgroundColor: "#022448", borderRadius: "12px", border: "none", color: "#FFFFFF" }}
-                              />
-                              <Legend />
-                              <Bar dataKey="male" name="Male Students" fill="#022448" radius={[6, 6, 0, 0]} />
-                              <Bar dataKey="female" name="Female Students" fill="#5B9BD5" radius={[6, 6, 0, 0]} />
+                              <ChartTooltip content={<ChartTooltipContent />} />
+                              <ChartLegend content={<ChartLegendContent />} />
+                              <Bar dataKey="male" fill="var(--color-male)" radius={[6, 6, 0, 0]} />
+                              <Bar dataKey="female" fill="var(--color-female)" radius={[6, 6, 0, 0]} />
                             </BarChart>
-                          </ResponsiveContainer>
+                          </ChartContainer>
                         )}
                       </div>
                     </ContentCard>
@@ -278,7 +309,7 @@ export default function StudentStrengthPage() {
                             No gender ratio data available
                           </div>
                         ) : (
-                          <ResponsiveContainer width="100%" height="100%">
+                          <ChartContainer config={ratioChartConfig} className="w-full h-full min-h-[200px]">
                             <PieChart>
                               <Pie
                                 data={genderRatio}
@@ -288,18 +319,16 @@ export default function StudentStrengthPage() {
                                 outerRadius={80}
                                 paddingAngle={4}
                                 dataKey="value"
+                                nameKey="id"
                               >
                                 {genderRatio.map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={entry.color} />
+                                  <Cell key={`cell-${index}`} fill={entry.fill} />
                                 ))}
                               </Pie>
-                              <Tooltip
-                                formatter={(val) => `${val} Students`}
-                                contentStyle={{ backgroundColor: "#022448", borderRadius: "12px", border: "none", color: "#FFFFFF" }}
-                              />
-                              <Legend />
+                              <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+                              <ChartLegend content={<ChartLegendContent />} />
                             </PieChart>
-                          </ResponsiveContainer>
+                          </ChartContainer>
                         )}
                       </div>
 

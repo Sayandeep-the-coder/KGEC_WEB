@@ -107,7 +107,7 @@ export default async function AdmissionHubPage() {
                           <span className="px-3 py-1 rounded-full bg-blue-50 text-[#225eaa] border border-blue-100 font-bold text-xs uppercase tracking-wider">
                             {prog.badge}
                           </span>
-                          <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                          <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
                             {prog.intake}
                           </span>
                         </div>

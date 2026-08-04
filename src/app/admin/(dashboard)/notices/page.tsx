@@ -175,15 +175,16 @@ export default function AdminNoticesPage() {
   });
 
   return (
-    <div className="space-y-8 max-w-6xl">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold font-serif text-slate-900">Notice Management</h1>
-          <p className="text-xs text-slate-500 mt-1">Publish, edit, filter, and control public campus announcements.</p>
+    <div className="space-y-8 max-w-6xl pb-10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-white border border-slate-100 p-6 md:p-8 rounded-[2rem] shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+        <div className="relative z-10">
+          <h1 className="text-3xl font-bold font-serif text-[#022448]">Notice Management</h1>
+          <p className="text-sm text-slate-500 mt-2 font-medium">Publish, edit, filter, and control public campus announcements.</p>
         </div>
         <Link
           href="/admin/notices/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0f2552] hover:bg-slate-800 text-white text-xs font-bold transition-colors shrink-0 shadow-md"
+          className="relative z-10 inline-flex items-center gap-3 px-6 py-3.5 rounded-xl bg-[#022448] hover:bg-[#225eaa] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-blue-900/20 hover:-translate-y-0.5 shrink-0"
         >
           <Plus size={16} />
           <span>Full Publish Page</span>
@@ -191,40 +192,40 @@ export default function AdminNoticesPage() {
       </div>
 
       {/* Quick Add Form */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
-        <h2 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3">Quick Notice Publisher</h2>
+      <div className="bg-white border border-slate-100 rounded-[2rem] p-6 md:p-8 shadow-sm space-y-6">
+        <h2 className="text-lg font-bold text-[#022448] border-b border-slate-100 pb-4">Quick Notice Publisher</h2>
 
         {message && (
           <div
-            className={`p-4 rounded-xl text-xs font-semibold flex items-center gap-2 ${
-              message.type === "success" ? "bg-emerald-50 text-emerald-800 border border-emerald-200" : "bg-red-50 text-red-800 border border-red-200"
+            className={`p-4 rounded-xl text-sm font-bold flex items-center gap-3 ${
+              message.type === "success" ? "bg-emerald-50 text-emerald-800 border border-emerald-100" : "bg-red-50 text-red-800 border border-red-100"
             }`}
           >
-            {message.type === "success" ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
+            {message.type === "success" ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
             <span>{message.text}</span>
           </div>
         )}
 
-        <form onSubmit={handleCreate} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <form onSubmit={handleCreate} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="md:col-span-2">
-              <label className="text-xs font-semibold text-slate-700 block mb-1">Notice Title *</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Notice Title *</label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Autumn Semester Exam Schedule & Room Allocation 2026"
-                className="w-full bg-slate-50 text-slate-900 text-xs rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+                className="w-full bg-slate-50 text-[#022448] text-sm rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-700 block mb-1">Notice Category *</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Notice Category *</label>
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                className="w-full bg-slate-50 text-slate-900 text-xs rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+                className="w-full bg-slate-50 text-[#022448] text-sm rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all cursor-pointer"
               >
                 <option value="general">General Notice</option>
                 <option value="academic">Academic Circular</option>
@@ -254,7 +255,7 @@ export default function AdminNoticesPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="py-2.5 px-6 rounded-xl bg-[#0f2552] hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+            className="py-3.5 px-6 rounded-xl bg-[#022448] hover:bg-[#225eaa] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-3 transition-all cursor-pointer shadow-md shadow-blue-900/10 hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none"
           >
             <Plus size={16} />
             <span>{submitting ? "Publishing..." : "Publish Notice Now"}</span>
@@ -263,9 +264,9 @@ export default function AdminNoticesPage() {
       </div>
 
       {/* Notices Table & Search Filter */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-          <h2 className="text-sm font-bold text-slate-900">Published Notices ({filteredNotices.length})</h2>
+      <div className="bg-white border border-slate-100 rounded-[2rem] p-6 md:p-8 shadow-sm space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <h2 className="text-lg font-bold text-[#022448]">Published Notices <span className="text-slate-400 font-medium text-sm ml-2">({filteredNotices.length})</span></h2>
 
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative">
@@ -274,15 +275,15 @@ export default function AdminNoticesPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search notices..."
-                className="bg-slate-50 text-slate-900 text-xs rounded-xl pl-9 pr-4 py-2 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium w-48 sm:w-64"
+                className="bg-slate-50 text-[#022448] text-sm rounded-xl pl-10 pr-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] font-medium w-full sm:w-64 transition-all"
               />
-              <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
+              <Search size={16} className="absolute left-3.5 top-3 text-slate-400" />
             </div>
 
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="bg-slate-50 text-slate-900 text-xs rounded-xl px-3 py-2 border border-slate-200 focus:outline-none font-medium cursor-pointer"
+              className="bg-slate-50 text-[#022448] text-sm rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:border-[#225eaa] font-medium cursor-pointer transition-all"
             >
               <option value="all">All Categories</option>
               <option value="general">General</option>
@@ -295,76 +296,76 @@ export default function AdminNoticesPage() {
         </div>
 
         {loading ? (
-          <p className="text-xs text-slate-500 py-8 text-center">Loading notices from database...</p>
+          <p className="text-sm font-medium text-slate-500 py-10 text-center">Loading notices from database...</p>
         ) : filteredNotices.length === 0 ? (
-          <p className="text-xs text-slate-500 py-8 text-center">No notices found matching your criteria.</p>
+          <p className="text-sm font-medium text-slate-500 py-10 text-center">No notices found matching your criteria.</p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-700">
-              <thead className="border-b border-slate-200 text-slate-500 font-semibold uppercase">
+            <table className="w-full text-left text-sm text-slate-700">
+              <thead className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-xs">
                 <tr>
-                  <th className="pb-3 px-3">Notice Title</th>
-                  <th className="pb-3 px-3">Category</th>
-                  <th className="pb-3 px-3">Status</th>
-                  <th className="pb-3 px-3">Published Date</th>
-                  <th className="pb-3 px-3 text-right">Actions</th>
+                  <th className="pb-4 px-3">Notice Title</th>
+                  <th className="pb-4 px-3">Category</th>
+                  <th className="pb-4 px-3">Status</th>
+                  <th className="pb-4 px-3">Published Date</th>
+                  <th className="pb-4 px-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-50">
                 {filteredNotices.map((notice) => (
-                  <tr key={notice.id}>
-                    <td className="py-3.5 px-3 font-semibold text-slate-900 max-w-md truncate">
+                  <tr key={notice.id} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="py-4 px-3 font-semibold text-[#022448] max-w-md truncate">
                       {notice.title}
                     </td>
-                    <td className="py-3.5 px-3">
-                      <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                    <td className="py-4 px-3">
+                      <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-[#225eaa] border border-blue-100">
                         {notice.type}
                       </span>
                     </td>
-                    <td className="py-3.5 px-3">
+                    <td className="py-4 px-3">
                       <button
                         onClick={() => handleToggleActive(notice.id, notice.isActive)}
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer transition-colors ${
+                        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-colors ${
                           notice.isActive
                             ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                             : "bg-slate-100 text-slate-500 border border-slate-200"
                         }`}
                         title="Click to toggle visibility"
                       >
-                        {notice.isActive ? <ToggleRight size={14} className="text-emerald-600" /> : <ToggleLeft size={14} className="text-slate-400" />}
+                        {notice.isActive ? <ToggleRight size={16} className="text-emerald-600" /> : <ToggleLeft size={16} className="text-slate-400" />}
                         <span>{notice.isActive ? "Public" : "Draft"}</span>
                       </button>
                     </td>
-                    <td className="py-3.5 px-3 text-slate-500 font-mono text-[11px]">
-                      {new Date(notice.publishedAt).toLocaleDateString("en-IN")}
+                    <td className="py-4 px-3 text-slate-500 font-medium text-xs">
+                      {new Date(notice.publishedAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                     </td>
-                    <td className="py-3.5 px-3 text-right space-x-2">
+                    <td className="py-4 px-3 text-right space-x-2 whitespace-nowrap">
                       {notice.fileUrl && (
                         <a
                           href={notice.fileUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 inline-flex items-center gap-1 font-semibold text-[11px]"
+                          className="p-2 rounded-lg text-[#225eaa] hover:bg-blue-50 inline-flex items-center justify-center transition-colors border border-transparent hover:border-blue-100"
                           title="View PDF Document"
                         >
-                          <Eye size={15} />
+                          <Eye size={16} />
                         </a>
                       )}
 
                       <button
                         onClick={() => openEditModal(notice)}
-                        className="p-1.5 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
-                        title="Edit Notice (PATCH)"
+                        className="p-2 rounded-lg text-slate-600 hover:text-[#225eaa] hover:bg-blue-50 transition-colors cursor-pointer border border-transparent hover:border-blue-100"
+                        title="Edit Notice"
                       >
-                        <Pencil size={15} />
+                        <Pencil size={16} />
                       </button>
 
                       <button
                         onClick={() => handleDelete(notice.id)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                        className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer border border-transparent hover:border-red-100"
                         title="Delete Notice"
                       >
-                        <Trash2 size={15} />
+                        <Trash2 size={16} />
                       </button>
                     </td>
                   </tr>
@@ -375,40 +376,43 @@ export default function AdminNoticesPage() {
         )}
       </div>
 
-      {/* Edit Modal (PATCH API) */}
+      {/* Edit Modal */}
       {editingNotice && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <Pencil size={18} className="text-blue-600" /> Edit Notice
+          <div className="bg-white border border-slate-100 rounded-[2rem] max-w-lg w-full p-8 shadow-2xl space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <h2 className="text-xl font-bold text-[#022448] flex items-center gap-3">
+                <div className="p-2 bg-blue-50 rounded-lg">
+                  <Pencil size={20} className="text-[#225eaa]" />
+                </div>
+                Edit Notice
               </h2>
               <button
                 onClick={() => setEditingNotice(null)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                className="p-2 rounded-xl text-slate-400 hover:text-[#022448] hover:bg-slate-100 transition-colors"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={handleUpdateNotice} className="space-y-4 text-xs">
+            <form onSubmit={handleUpdateNotice} className="space-y-6">
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Notice Title</label>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Notice Title</label>
                 <input
                   type="text"
                   required
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+                  className="w-full bg-slate-50 text-[#022448] text-sm rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
                 />
               </div>
 
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Category</label>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Category</label>
                 <select
                   value={editType}
                   onChange={(e) => setEditType(e.target.value)}
-                  className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+                  className="w-full bg-slate-50 text-[#022448] text-sm rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all cursor-pointer"
                 >
                   <option value="general">General Notice</option>
                   <option value="academic">Academic Circular</option>
@@ -429,19 +433,19 @@ export default function AdminNoticesPage() {
                 />
               </div>
 
-              <div className="pt-2 flex items-center gap-3">
+              <div className="pt-4 flex items-center gap-4">
                 <button
                   type="submit"
                   disabled={updating}
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-[#0f2552] hover:bg-slate-800 text-white font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-md disabled:opacity-50"
+                  className="flex-1 py-3.5 px-4 rounded-xl bg-[#022448] hover:bg-[#225eaa] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-3 transition-all cursor-pointer shadow-md disabled:opacity-50"
                 >
                   <Save size={16} />
-                  <span>{updating ? "Saving Changes..." : "Save Changes (PATCH)"}</span>
+                  <span>{updating ? "Saving..." : "Save Changes"}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditingNotice(null)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold"
+                  className="px-6 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#022448] font-bold text-xs uppercase tracking-wider transition-colors"
                 >
                   Cancel
                 </button>

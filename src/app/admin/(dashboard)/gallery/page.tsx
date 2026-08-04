@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Plus, Trash2, Search, CheckCircle2, AlertCircle, Pencil, X, Save } from "lucide-react";
+import { Plus, Trash2, Search, CheckCircle2, AlertCircle, Pencil, X, Save, Image as ImageIcon } from "lucide-react";
 import FileUpload from "@/components/FileUpload";
 
 interface GalleryImage {
@@ -152,49 +152,57 @@ export default function AdminGalleryPage() {
   );
 
   return (
-    <div className="space-y-8 max-w-6xl">
-      <div>
-        <h1 className="text-2xl font-bold font-serif text-slate-900">Media & Photo Gallery</h1>
-        <p className="text-xs text-slate-500 mt-1">Upload and manage campus photo albums, events, and student activities.</p>
+    <div className="space-y-8 max-w-6xl pb-10">
+      <div className="bg-white border border-slate-100 p-6 md:p-8 rounded-[2rem] shadow-sm relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+        <div className="relative z-10 flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-pink-50 border border-pink-100 text-pink-600 flex items-center justify-center font-bold shadow-inner">
+            <ImageIcon size={26} />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold font-serif text-[#022448]">Media Gallery</h1>
+            <p className="text-sm text-slate-500 mt-1 font-medium">Upload and manage campus photo albums, events, and student activities.</p>
+          </div>
+        </div>
       </div>
 
       {/* Add Photo Card */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
-        <h2 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3">Upload Photo to Gallery</h2>
+      <div className="bg-white border border-slate-100 rounded-[2rem] p-6 md:p-8 shadow-sm space-y-6">
+        <h2 className="text-lg font-bold text-[#022448] border-b border-slate-100 pb-4">Upload Photo</h2>
 
         {message && (
           <div
-            className={`p-4 rounded-xl text-xs font-semibold flex items-center gap-2 ${
-              message.type === "success" ? "bg-emerald-50 text-emerald-800 border border-emerald-200" : "bg-red-50 text-red-800 border border-red-200"
+            className={`p-4 rounded-xl text-sm font-bold flex items-center gap-3 ${
+              message.type === "success" ? "bg-emerald-50 text-emerald-800 border border-emerald-100" : "bg-red-50 text-red-800 border border-red-100"
             }`}
           >
-            {message.type === "success" ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
+            {message.type === "success" ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
             <span>{message.text}</span>
           </div>
         )}
 
-        <form onSubmit={handleCreate} className="space-y-4 text-xs">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleCreate} className="space-y-6 text-sm">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="text-xs font-semibold text-slate-700 block mb-1">Album Category *</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Album Category *</label>
               <input
                 type="text"
                 required
                 value={album}
                 onChange={(e) => setAlbum(e.target.value)}
                 placeholder="e.g. campus, fest2026, sports, hackathon, convocation"
-                className="w-full bg-slate-50 text-slate-900 text-xs rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+                className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-700 block mb-1">Caption (Optional)</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Caption (Optional)</label>
               <input
                 type="text"
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
                 placeholder="e.g. Annual Sports Tournament Final Match"
-                className="w-full bg-slate-50 text-slate-900 text-xs rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+                className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
               />
             </div>
           </div>
@@ -213,7 +221,7 @@ export default function AdminGalleryPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="py-2.5 px-6 rounded-xl bg-[#0f2552] hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+            className="py-3.5 px-6 rounded-xl bg-[#022448] hover:bg-[#225eaa] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center sm:justify-start gap-3 transition-all cursor-pointer shadow-md shadow-blue-900/10 hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none"
           >
             <Plus size={16} />
             <span>{submitting ? "Uploading Photo..." : "Add to Gallery"}</span>
@@ -222,52 +230,52 @@ export default function AdminGalleryPage() {
       </div>
 
       {/* Gallery Grid */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      <div className="bg-white border border-slate-100 rounded-[2rem] p-6 md:p-8 shadow-sm space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-          <h2 className="text-sm font-bold text-slate-900">Gallery Photos ({filteredImages.length})</h2>
+          <h2 className="text-lg font-bold text-[#022448]">Gallery Photos <span className="text-slate-400 font-medium text-sm ml-2">({filteredImages.length})</span></h2>
 
-          <div className="relative">
+          <div className="relative w-full sm:w-auto">
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by album or caption..."
-              className="bg-slate-50 text-slate-900 text-xs rounded-xl pl-9 pr-4 py-2 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium w-48 sm:w-64"
+              className="w-full sm:w-64 bg-slate-50 text-[#022448] text-sm rounded-xl pl-10 pr-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] font-medium transition-all"
             />
-            <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
+            <Search size={16} className="absolute left-3.5 top-3 text-slate-400" />
           </div>
         </div>
 
         {loading ? (
-          <p className="text-xs text-slate-500 py-6 text-center">Loading images...</p>
+          <p className="text-sm font-medium text-slate-500 py-10 text-center">Loading images...</p>
         ) : filteredImages.length === 0 ? (
-          <p className="text-xs text-slate-500 py-6 text-center">No photos found in gallery.</p>
+          <p className="text-sm font-medium text-slate-500 py-10 text-center">No photos found in gallery.</p>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {filteredImages.map((img) => (
-              <div key={img.id} className="relative group rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 aspect-video shadow-sm">
+              <div key={img.id} className="relative group rounded-3xl overflow-hidden border border-slate-100 bg-slate-50 aspect-square shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
                 <Image src={img.imageUrl} alt={img.caption || img.album} fill className="object-cover" />
-                <div className="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-between z-10 text-white">
-                  <span className="text-[10px] font-bold uppercase tracking-wider bg-blue-600/80 px-2 py-0.5 rounded self-start">
+                <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity p-4 flex flex-col justify-between z-10 text-white">
+                  <span className="text-[10px] font-bold uppercase tracking-wider bg-pink-500 px-3 py-1.5 rounded-lg shadow-sm self-start">
                     {img.album}
                   </span>
 
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-[11px] font-medium truncate">{img.caption || "No caption"}</p>
-                    <div className="flex items-center gap-1 shrink-0">
+                  <div className="flex flex-col gap-3">
+                    <p className="text-sm font-medium line-clamp-2 leading-relaxed">{img.caption || "No caption provided"}</p>
+                    <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={() => openEditModal(img)}
-                        className="p-1.5 rounded-lg bg-white/20 hover:bg-white/40 text-white transition-colors cursor-pointer"
-                        title="Edit Photo Details (PATCH)"
+                        className="p-2.5 rounded-xl bg-white/20 hover:bg-white/40 text-white transition-colors cursor-pointer backdrop-blur-sm"
+                        title="Edit Photo Details"
                       >
-                        <Pencil size={14} />
+                        <Pencil size={16} />
                       </button>
                       <button
                         onClick={() => handleDelete(img.id)}
-                        className="p-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white transition-colors cursor-pointer"
+                        className="p-2.5 rounded-xl bg-red-500/80 hover:bg-red-500 text-white transition-colors cursor-pointer backdrop-blur-sm"
                         title="Delete photo"
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={16} />
                       </button>
                     </div>
                   </div>
@@ -278,41 +286,44 @@ export default function AdminGalleryPage() {
         )}
       </div>
 
-      {/* Edit Photo Modal (PATCH API) */}
+      {/* Edit Photo Modal */}
       {editingItem && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <Pencil size={18} className="text-blue-600" /> Edit Photo Details
+          <div className="bg-white border border-slate-100 rounded-[2rem] max-w-md w-full p-8 shadow-2xl space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <h2 className="text-xl font-bold text-[#022448] flex items-center gap-3">
+                <div className="p-2 bg-blue-50 rounded-lg">
+                  <Pencil size={20} className="text-[#225eaa]" />
+                </div>
+                Edit Photo Details
               </h2>
               <button
                 onClick={() => setEditingItem(null)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                className="p-2 rounded-xl text-slate-400 hover:text-[#022448] hover:bg-slate-100 transition-colors"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={handleUpdateGallery} className="space-y-4 text-xs">
+            <form onSubmit={handleUpdateGallery} className="space-y-6 text-sm">
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Album Category</label>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Album Category</label>
                 <input
                   type="text"
                   required
                   value={editAlbum}
                   onChange={(e) => setEditAlbum(e.target.value)}
-                  className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none"
+                  className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
                 />
               </div>
 
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Caption</label>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Caption</label>
                 <input
                   type="text"
                   value={editCaption}
                   onChange={(e) => setEditCaption(e.target.value)}
-                  className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none"
+                  className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
                 />
               </div>
 
@@ -326,19 +337,19 @@ export default function AdminGalleryPage() {
                 />
               </div>
 
-              <div className="pt-2 flex items-center gap-3">
+              <div className="pt-4 flex items-center gap-4">
                 <button
                   type="submit"
                   disabled={updating}
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-[#0f2552] hover:bg-slate-800 text-white font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-md disabled:opacity-50"
+                  className="flex-1 py-3.5 px-4 rounded-xl bg-[#022448] hover:bg-[#225eaa] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-3 transition-all cursor-pointer shadow-md disabled:opacity-50"
                 >
                   <Save size={16} />
-                  <span>{updating ? "Saving..." : "Save Changes (PATCH)"}</span>
+                  <span>{updating ? "Saving..." : "Save Changes"}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditingItem(null)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold"
+                  className="px-6 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#022448] font-bold text-xs uppercase tracking-wider transition-colors"
                 >
                   Cancel
                 </button>

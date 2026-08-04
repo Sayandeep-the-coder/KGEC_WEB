@@ -183,7 +183,7 @@ export default async function TrainingAndPlacementPage() {
             <div className="space-y-3">
               <div className="p-3 rounded-xl bg-white/10 border border-white/10">
                 <div className="text-xs text-slate-300">International Highest Offer</div>
-                <div className="text-xl font-black text-amber-400">{highestLPA}</div>
+                <div className="text-xl font-black text-[#76A9FA]">{highestLPA}</div>
                 <div className="text-[10px] text-slate-300">Avalanche (CSE)</div>
               </div>
               <div className="p-3 rounded-xl bg-white/10 border border-white/10">

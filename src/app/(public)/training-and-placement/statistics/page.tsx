@@ -18,9 +18,17 @@ import {
   Table,
 } from "lucide-react";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar, PieChart, Pie, Cell, Legend
+  LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer,
+  BarChart, Bar, PieChart, Pie, Cell
 } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 
 interface DeptPlacementDisplay {
   department: string;
@@ -56,6 +64,50 @@ const DEPT_FULL_NAMES: Record<string, string> = {
 };
 
 const DEPT_ORDER = ["CSE", "IT", "ECE", "EE", "ME", "MCA"];
+
+const deptChartConfig = {
+  highestLPA: {
+    label: "Highest Package (LPA)",
+    color: "#022448",
+  },
+  placementRate: {
+    label: "Placement Rate (%)",
+    color: "#225eaa",
+  },
+  placed: {
+    label: "Students Placed",
+    color: "#76A9FA",
+  },
+} satisfies ChartConfig;
+
+const sectorChartConfig = {
+  value: {
+    label: "Percentage",
+  },
+  it: {
+    label: "IT & Software Services",
+    color: "#022448",
+  },
+  core: {
+    label: "Core Engineering",
+    color: "#225eaa",
+  },
+  vlsi: {
+    label: "VLSI, Telecom & Hardware",
+    color: "#76A9FA",
+  },
+} satisfies ChartConfig;
+
+const trendChartConfig = {
+  studentsPlaced: {
+    label: "Students Placed",
+    color: "#022448",
+  },
+  highestLPA: {
+    label: "Highest Package (LPA)",
+    color: "#76A9FA",
+  },
+} satisfies ChartConfig;
 
 export default function PlacementStatisticsPage() {
   const [selectedYear, setSelectedYear] = useState<number>(2024);
@@ -146,9 +198,9 @@ export default function PlacementStatisticsPage() {
   const sectorData = useMemo(() => {
     if (deptData.length === 0) {
       return [
-        { name: "IT & Software Services", value: 55, color: "#022448" },
-        { name: "Core Engineering & Manufacturing", value: 28, color: "#225eaa" },
-        { name: "VLSI, Telecom & Embedded", value: 17, color: "#76A9FA" },
+        { name: "IT & Software Services", id: "it", value: 55, fill: "var(--color-it)" },
+        { name: "Core Engineering & Manufacturing", id: "core", value: 28, fill: "var(--color-core)" },
+        { name: "VLSI, Telecom & Embedded", id: "vlsi", value: 17, fill: "var(--color-vlsi)" },
       ];
     }
 
@@ -167,9 +219,9 @@ export default function PlacementStatisticsPage() {
     const total = itOffers + coreOffers + eceOffers || 1;
 
     return [
-      { name: "IT & Software Services", value: Math.round((itOffers / total) * 100), color: "#022448" },
-      { name: "Core Engineering & Manufacturing", value: Math.round((coreOffers / total) * 100), color: "#225eaa" },
-      { name: "VLSI, Telecom & Hardware", value: Math.round((eceOffers / total) * 100), color: "#76A9FA" },
+      { name: "IT & Software Services", id: "it", value: Math.round((itOffers / total) * 100), fill: "var(--color-it)" },
+      { name: "Core Engineering & Manufacturing", id: "core", value: Math.round((coreOffers / total) * 100), fill: "var(--color-core)" },
+      { name: "VLSI, Telecom & Hardware", id: "vlsi", value: Math.round((eceOffers / total) * 100), fill: "var(--color-vlsi)" },
     ];
   }, [deptData]);
 
@@ -215,7 +267,7 @@ export default function PlacementStatisticsPage() {
                 <ContentCard variant="white" delay={0}>
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Highest Package</span>
-                    <div className="p-3 rounded-xl bg-amber-50 text-amber-600">
+                    <div className="p-3 rounded-xl bg-blue-50 text-blue-600">
                       <Award size={20} />
                     </div>
                   </div>
@@ -311,25 +363,23 @@ export default function PlacementStatisticsPage() {
                           No department placement records available for {selectedYear}
                         </div>
                       ) : (
-                        <ResponsiveContainer width="100%" height="100%">
+                        <ChartContainer config={deptChartConfig} className="w-full h-full min-h-[350px]">
                           <BarChart data={deptData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                             <XAxis dataKey="department" stroke="#6B7280" fontSize={12} fontStyle="bold" />
                             <YAxis stroke="#6B7280" fontSize={12} />
-                            <Tooltip
-                              contentStyle={{ backgroundColor: "#022448", borderRadius: "12px", border: "none", color: "#FFFFFF" }}
-                            />
+                            <ChartTooltip content={<ChartTooltipContent />} />
                             {activeTab === "packages" && (
-                              <Bar dataKey="highestLPA" name="Highest Package (LPA)" fill="#022448" radius={[8, 8, 0, 0]} />
+                              <Bar dataKey="highestLPA" fill="var(--color-highestLPA)" radius={[8, 8, 0, 0]} />
                             )}
                             {activeTab === "rates" && (
-                              <Bar dataKey="placementRate" name="Placement Rate (%)" fill="#225eaa" radius={[8, 8, 0, 0]} />
+                              <Bar dataKey="placementRate" fill="var(--color-placementRate)" radius={[8, 8, 0, 0]} />
                             )}
                             {activeTab === "placed" && (
-                              <Bar dataKey="placed" name="Students Placed" fill="#76A9FA" radius={[8, 8, 0, 0]} />
+                              <Bar dataKey="placed" fill="var(--color-placed)" radius={[8, 8, 0, 0]} />
                             )}
                           </BarChart>
-                        </ResponsiveContainer>
+                        </ChartContainer>
                       )}
                     </div>
 
@@ -451,7 +501,7 @@ export default function PlacementStatisticsPage() {
                   </div>
 
                   <div className="h-72 w-full my-6">
-                    <ResponsiveContainer width="100%" height="100%">
+                    <ChartContainer config={sectorChartConfig} className="w-full h-full min-h-[280px]">
                       <PieChart>
                         <Pie
                           data={sectorData}
@@ -461,18 +511,16 @@ export default function PlacementStatisticsPage() {
                           outerRadius={110}
                           paddingAngle={4}
                           dataKey="value"
+                          nameKey="id"
                         >
                           {sectorData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
+                            <Cell key={`cell-${index}`} fill={entry.fill} />
                           ))}
                         </Pie>
-                        <Tooltip
-                          formatter={(val) => `${val}%`}
-                          contentStyle={{ backgroundColor: "#022448", borderRadius: "12px", border: "none", color: "#FFFFFF" }}
-                        />
-                        <Legend wrapperStyle={{ paddingTop: "20px" }} />
+                        <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+                        <ChartLegend content={<ChartLegendContent />} wrapperStyle={{ paddingTop: "20px" }} />
                       </PieChart>
-                    </ResponsiveContainer>
+                    </ChartContainer>
                   </div>
 
                   <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-100 text-center">
@@ -505,39 +553,35 @@ export default function PlacementStatisticsPage() {
                         No historical trend data available
                       </div>
                     ) : (
-                      <ResponsiveContainer width="100%" height="100%">
+                      <ChartContainer config={trendChartConfig} className="w-full h-full min-h-[280px]">
                         <LineChart data={historicalTrends} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                           <XAxis dataKey="year" stroke="#6B7280" fontSize={12} />
                           <YAxis yAxisId="left" stroke="#6B7280" fontSize={12} />
                           <YAxis yAxisId="right" orientation="right" stroke="#6B7280" fontSize={12} />
-                          <Tooltip
-                            contentStyle={{ backgroundColor: "#022448", borderRadius: "12px", border: "none", color: "#FFFFFF" }}
-                          />
-                          <Legend wrapperStyle={{ paddingTop: "10px" }} />
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                          <ChartLegend content={<ChartLegendContent />} wrapperStyle={{ paddingTop: "10px" }} />
                           <Line
                             yAxisId="left"
                             type="monotone"
                             dataKey="studentsPlaced"
-                            name="Students Placed"
-                            stroke="#022448"
+                            stroke="var(--color-studentsPlaced)"
                             strokeWidth={3}
-                            dot={{ r: 6, fill: "#225eaa" }}
+                            dot={{ r: 6, fill: "var(--color-studentsPlaced)" }}
                             activeDot={{ r: 8 }}
                           />
                           <Line
                             yAxisId="right"
                             type="monotone"
                             dataKey="highestLPA"
-                            name="Highest Package (LPA)"
-                            stroke="#76A9FA"
+                            stroke="var(--color-highestLPA)"
                             strokeWidth={3}
                             strokeDasharray="5 5"
-                            dot={{ r: 5, fill: "#76A9FA" }}
+                            dot={{ r: 5, fill: "var(--color-highestLPA)" }}
                             activeDot={{ r: 7 }}
                           />
                         </LineChart>
-                      </ResponsiveContainer>
+                      </ChartContainer>
                     )}
                   </div>
 

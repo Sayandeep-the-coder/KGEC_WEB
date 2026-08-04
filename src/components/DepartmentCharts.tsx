@@ -7,11 +7,17 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
-  Legend,
   LineChart,
   Line,
 } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import { YearEnrollmentStat, YearPlacementStat } from "@/lib/data/departmentsData";
 import { Users, TrendingUp } from "lucide-react";
 
@@ -21,6 +27,28 @@ interface DepartmentChartsProps {
   enrollmentData: YearEnrollmentStat[];
   placementData: YearPlacementStat[];
 }
+
+const enrollmentChartConfig = {
+  intake: {
+    label: "Sanctioned Intake",
+    color: "#CBD5E1",
+  },
+  enrolled: {
+    label: "Enrolled Count",
+    color: "#1B2A4A",
+  },
+} satisfies ChartConfig;
+
+const placementChartConfig = {
+  placementRate: {
+    label: "Placement Rate (%)",
+    color: "#2E5C9E",
+  },
+  totalOffers: {
+    label: "Total Offers Count",
+    color: "#5B9BD5",
+  },
+} satisfies ChartConfig;
 
 export default function DepartmentCharts({
   departmentName,
@@ -57,7 +85,7 @@ export default function DepartmentCharts({
           </p>
 
           <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
+            <ChartContainer config={enrollmentChartConfig} className="w-full h-full min-h-[250px]">
               <BarChart
                 data={enrollmentData}
                 margin={{ top: 20, right: 20, left: -10, bottom: 5 }}
@@ -74,38 +102,22 @@ export default function DepartmentCharts({
                   axisLine={false}
                   tickLine={false}
                 />
-                <Tooltip
-                  cursor={{ fill: "rgba(46, 92, 158, 0.05)" }}
-                  contentStyle={{
-                    backgroundColor: "#FFFFFF",
-                    borderColor: "#E2E8F0",
-                    borderRadius: "1rem",
-                    boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
-                    fontSize: "12px",
-                  }}
-                  formatter={(value, name) => [
-                    `${value} Students`,
-                    name === "enrolled" ? "Enrolled Students" : "Sanctioned Intake",
-                  ]}
-                />
-                <Legend
-                  wrapperStyle={{ paddingTop: "12px", fontSize: "12px" }}
-                  formatter={(value) => (value === "enrolled" ? "Enrolled Count" : "Sanctioned Intake")}
-                />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <ChartLegend content={<ChartLegendContent />} wrapperStyle={{ paddingTop: "12px", fontSize: "12px" }} />
                 <Bar
                   dataKey="intake"
-                  fill="#CBD5E1"
+                  fill="var(--color-intake)"
                   radius={[6, 6, 0, 0]}
                   name="intake"
                 />
                 <Bar
                   dataKey="enrolled"
-                  fill="#1B2A4A"
+                  fill="var(--color-enrolled)"
                   radius={[6, 6, 0, 0]}
                   name="enrolled"
                 />
               </BarChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </div>
         </div>
 
@@ -142,7 +154,7 @@ export default function DepartmentCharts({
           </p>
 
           <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
+            <ChartContainer config={placementChartConfig} className="w-full h-full min-h-[250px]">
               <LineChart
                 data={placementData}
                 margin={{ top: 20, right: 20, left: -10, bottom: 5 }}
@@ -169,30 +181,15 @@ export default function DepartmentCharts({
                   axisLine={false}
                   tickLine={false}
                 />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#FFFFFF",
-                    borderColor: "#E2E8F0",
-                    borderRadius: "1rem",
-                    boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
-                    fontSize: "12px",
-                  }}
-                  formatter={(value, name) => [
-                    name === "placementRate" ? `${value}%` : `${value} Offers`,
-                    name === "placementRate" ? "Placement Rate" : "Total Offers",
-                  ]}
-                />
-                <Legend
-                  wrapperStyle={{ paddingTop: "12px", fontSize: "12px" }}
-                  formatter={(value) => (value === "placementRate" ? "Placement Rate (%)" : "Total Offers Count")}
-                />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <ChartLegend content={<ChartLegendContent />} wrapperStyle={{ paddingTop: "12px", fontSize: "12px" }} />
                 <Line
                   yAxisId="left"
                   type="monotone"
                   dataKey="placementRate"
-                  stroke="#2E5C9E"
+                  stroke="var(--color-placementRate)"
                   strokeWidth={3}
-                  dot={{ r: 5, fill: "#2E5C9E", strokeWidth: 2, stroke: "#FFFFFF" }}
+                  dot={{ r: 5, fill: "var(--color-placementRate)", strokeWidth: 2, stroke: "#FFFFFF" }}
                   activeDot={{ r: 7 }}
                   name="placementRate"
                 />
@@ -200,14 +197,14 @@ export default function DepartmentCharts({
                   yAxisId="right"
                   type="monotone"
                   dataKey="totalOffers"
-                  stroke="#5B9BD5"
+                  stroke="var(--color-totalOffers)"
                   strokeWidth={2}
                   strokeDasharray="4 4"
-                  dot={{ r: 4, fill: "#5B9BD5", strokeWidth: 2, stroke: "#FFFFFF" }}
+                  dot={{ r: 4, fill: "var(--color-totalOffers)", strokeWidth: 2, stroke: "#FFFFFF" }}
                   name="totalOffers"
                 />
               </LineChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </div>
         </div>
 

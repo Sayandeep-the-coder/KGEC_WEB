@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use } from "react";
 import Link from "next/link";
-import { ArrowLeft, UserPlus, Trash2, Mail, Phone, BookOpen, GraduationCap, Building2 } from "lucide-react";
+import { ArrowLeft, UserPlus, Trash2, Mail, Phone, BookOpen, GraduationCap, Building2, Users } from "lucide-react";
 import FileUpload from "@/components/FileUpload";
 
 interface StaffMember {
@@ -140,25 +140,26 @@ export default function DepartmentFacultyAdminPage({
   };
 
   return (
-    <div className="space-y-8 max-w-6xl">
+    <div className="space-y-8 max-w-6xl pb-10">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white border border-slate-100 p-6 md:p-8 rounded-[2rem] shadow-sm relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
         <div>
           <Link
             href="/admin"
-            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-900 mb-2 transition-colors font-medium"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-[#225eaa] mb-4 transition-colors"
           >
-            <ArrowLeft size={14} /> Back to Dashboard
+            <ArrowLeft size={16} /> Back to Dashboard
           </Link>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center font-bold shadow-sm">
-              <Building2 size={22} />
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center font-bold shadow-inner">
+              <Users size={26} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold font-serif text-slate-900 uppercase">
+              <h1 className="text-3xl font-bold font-serif text-[#022448] uppercase">
                 {deptNameUpper} Faculty Management
               </h1>
-              <p className="text-xs text-slate-500">
+              <p className="text-sm text-slate-500 mt-1 font-medium">
                 Departmental Roster & Faculty Directory for {deptNameUpper}
               </p>
             </div>
@@ -168,10 +169,10 @@ export default function DepartmentFacultyAdminPage({
 
       {message && (
         <div
-          className={`p-4 rounded-2xl text-xs font-semibold ${
+          className={`p-5 rounded-2xl text-sm font-bold shadow-inner ${
             message.type === "success"
-              ? "bg-emerald-50 border border-emerald-200 text-emerald-800"
-              : "bg-red-50 border border-red-200 text-red-800"
+              ? "bg-emerald-50 border border-emerald-100 text-emerald-800"
+              : "bg-red-50 border border-red-100 text-red-800"
           }`}
         >
           {message.text}
@@ -179,31 +180,33 @@ export default function DepartmentFacultyAdminPage({
       )}
 
       {/* Add New Faculty Form */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
-          <UserPlus size={20} className="text-blue-600" />
-          <h2 className="text-base font-bold text-slate-900">Add New {deptNameUpper} Faculty Member</h2>
+      <div className="bg-white border border-slate-100 rounded-[2rem] p-6 md:p-8 shadow-sm space-y-6">
+        <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div className="p-2 bg-indigo-50 rounded-xl">
+            <UserPlus size={20} className="text-indigo-600" />
+          </div>
+          <h2 className="text-lg font-bold text-[#022448]">Add New {deptNameUpper} Faculty Member</h2>
         </div>
 
-        <form onSubmit={handleAddFaculty} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <form onSubmit={handleAddFaculty} className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
           <div>
-            <label className="font-semibold text-slate-700 block mb-1">Full Name *</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Full Name *</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Dr. Sourav Chakraborty"
-              className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+              className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
             />
           </div>
 
           <div>
-            <label className="font-semibold text-slate-700 block mb-1">Designation *</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Designation *</label>
             <select
               value={designation}
               onChange={(e) => setDesignation(e.target.value)}
-              className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+              className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium cursor-pointer transition-all"
             >
               <option value="Professor & Head of Department">Professor & Head of Department</option>
               <option value="Professor">Professor</option>
@@ -215,46 +218,46 @@ export default function DepartmentFacultyAdminPage({
           </div>
 
           <div>
-            <label className="font-semibold text-slate-700 block mb-1">Email Address</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Email Address</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="e.g. faculty@kgec.ac.in"
-              className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+              className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
             />
           </div>
 
           <div>
-            <label className="font-semibold text-slate-700 block mb-1">Phone Number</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Phone Number</label>
             <input
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="e.g. +91 9876543210"
-              className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+              className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
             />
           </div>
 
           <div>
-            <label className="font-semibold text-slate-700 block mb-1">Qualification</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Qualification</label>
             <input
               type="text"
               value={qualification}
               onChange={(e) => setQualification(e.target.value)}
-              placeholder="e.g. Ph.D. in Computer Science (IIT Kharagpur)"
-              className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+              placeholder="e.g. Ph.D. in Computer Science"
+              className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
             />
           </div>
 
           <div>
-            <label className="font-semibold text-slate-700 block mb-1">Specialization / Research Interests</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Specialization / Research</label>
             <input
               type="text"
               value={specialization}
               onChange={(e) => setSpecialization(e.target.value)}
-              placeholder="e.g. Artificial Intelligence, Machine Learning, VLSI"
-              className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+              placeholder="e.g. AI, Machine Learning, VLSI"
+              className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
             />
           </div>
 
@@ -269,85 +272,86 @@ export default function DepartmentFacultyAdminPage({
             />
           </div>
 
-          <div className="md:col-span-2 pt-2">
+          <div className="md:col-span-2 pt-4">
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2.5 rounded-xl bg-[#0f2552] hover:bg-slate-800 text-white font-bold text-xs transition-colors cursor-pointer disabled:opacity-50 shadow-md"
+              className="py-4 px-8 rounded-xl bg-[#022448] hover:bg-[#225eaa] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center sm:justify-start gap-3 transition-all cursor-pointer shadow-md shadow-blue-900/10 hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none"
             >
-              {submitting ? "Adding Faculty..." : "Add Faculty Member"}
+              <UserPlus size={18} />
+              <span>{submitting ? "Adding Faculty..." : "Add Faculty Member"}</span>
             </button>
           </div>
         </form>
       </div>
 
       {/* Current Faculty List */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      <div className="bg-white border border-slate-100 rounded-[2rem] p-6 md:p-8 shadow-sm space-y-6">
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-          <h2 className="text-base font-bold text-slate-900">Current {deptNameUpper} Faculty ({facultyList.length})</h2>
+          <h2 className="text-lg font-bold text-[#022448]">Current {deptNameUpper} Faculty <span className="text-slate-400 font-medium text-sm ml-2">({facultyList.length})</span></h2>
         </div>
 
         {loading ? (
-          <div className="py-12 text-center text-xs text-slate-500">Loading department faculty...</div>
+          <div className="py-20 text-center text-sm font-medium text-slate-500">Loading department faculty...</div>
         ) : facultyList.length === 0 ? (
-          <div className="py-12 text-center text-xs text-slate-500">
+          <div className="py-20 text-center text-sm font-medium text-slate-500">
             No faculty members listed for {deptNameUpper} department yet. Use the form above to add faculty.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {facultyList.map((faculty) => (
               <div
                 key={faculty.id}
-                className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col justify-between space-y-4"
+                className="bg-slate-50/50 hover:bg-white border border-slate-200 hover:border-[#225eaa] rounded-3xl p-6 flex flex-col justify-between space-y-5 transition-all shadow-sm hover:shadow-md"
               >
-                <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden text-slate-600 font-bold shadow-sm">
+                <div className="flex items-start gap-5">
+                  <div className="w-20 h-20 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden text-[#022448] text-xl font-bold shadow-inner">
                     {faculty.photoUrl ? (
                       <img src={faculty.photoUrl} alt={faculty.name} className="w-full h-full object-cover" />
                     ) : (
                       faculty.name.substring(0, 2).toUpperCase()
                     )}
                   </div>
-                  <div className="space-y-1">
-                    <h3 className="text-sm font-bold text-slate-900">{faculty.name}</h3>
-                    <span className="text-[11px] font-semibold text-blue-700 block">{faculty.designation}</span>
+                  <div className="space-y-2 flex-1">
+                    <h3 className="text-base font-bold text-[#022448]">{faculty.name}</h3>
+                    <span className="inline-block px-3 py-1 rounded-lg text-[10px] uppercase font-bold tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-100">{faculty.designation}</span>
                     {faculty.qualification && (
-                      <p className="text-[11px] text-slate-600 flex items-center gap-1.5 mt-1">
-                        <GraduationCap size={13} className="shrink-0 text-slate-400" />
-                        {faculty.qualification}
+                      <p className="text-xs text-slate-600 flex items-start gap-2 mt-2 font-medium">
+                        <GraduationCap size={16} className="shrink-0 text-slate-400 mt-0.5" />
+                        <span className="leading-snug">{faculty.qualification}</span>
                       </p>
                     )}
                     {faculty.specialization && (
-                      <p className="text-[11px] text-slate-600 flex items-center gap-1.5">
-                        <BookOpen size={13} className="shrink-0 text-slate-400" />
-                        {faculty.specialization}
+                      <p className="text-xs text-slate-600 flex items-start gap-2 font-medium mt-1">
+                        <BookOpen size={16} className="shrink-0 text-slate-400 mt-0.5" />
+                        <span className="leading-snug">{faculty.specialization}</span>
                       </p>
                     )}
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
-                  <div className="space-y-0.5">
+                <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500 font-medium">
+                  <div className="space-y-1.5">
                     {faculty.email && (
-                      <div className="flex items-center gap-1.5">
-                        <Mail size={12} className="text-slate-400" />
-                        <span>{faculty.email}</span>
+                      <div className="flex items-center gap-2 hover:text-[#225eaa] transition-colors">
+                        <Mail size={14} className="text-slate-400" />
+                        <a href={`mailto:${faculty.email}`}>{faculty.email}</a>
                       </div>
                     )}
                     {faculty.phone && (
-                      <div className="flex items-center gap-1.5">
-                        <Phone size={12} className="text-slate-400" />
-                        <span>{faculty.phone}</span>
+                      <div className="flex items-center gap-2 hover:text-[#225eaa] transition-colors">
+                        <Phone size={14} className="text-slate-400" />
+                        <a href={`tel:${faculty.phone}`}>{faculty.phone}</a>
                       </div>
                     )}
                   </div>
 
                   <button
                     onClick={() => handleDelete(faculty.id, faculty.name)}
-                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                    className="p-3 text-slate-400 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-colors cursor-pointer self-end"
                     title="Delete faculty member"
                   >
-                    <Trash2 size={16} />
+                    <Trash2 size={18} />
                   </button>
                 </div>
               </div>

@@ -356,7 +356,7 @@ export default async function DepartmentDetailPage({ params }: PageProps) {
                   <span className="text-[11px] font-bold uppercase tracking-widest text-[#76A9FA] block mb-2">
                     HIGHEST PACKAGE
                   </span>
-                  <div className="text-4xl sm:text-5xl font-black text-amber-400 mt-2 tracking-tight">
+                  <div className="text-4xl sm:text-5xl font-black text-[#76A9FA] mt-2 tracking-tight">
                     {dept.recentMetrics.highestPackage}
                   </div>
                 </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Search, CheckCircle2, AlertCircle, Pencil, X, Save } from "lucide-react";
+import { Plus, Trash2, Search, CheckCircle2, AlertCircle, Pencil, X, Save, Users } from "lucide-react";
 import FileUpload from "@/components/FileUpload";
 
 interface StaffMember {
@@ -185,73 +185,81 @@ export default function AdminStaffPage() {
   });
 
   return (
-    <div className="space-y-8 max-w-6xl">
-      <div>
-        <h1 className="text-2xl font-bold font-serif text-slate-900">Staff & Faculty Directory</h1>
-        <p className="text-xs text-slate-500 mt-1">Manage administration profiles, officers, and departmental faculty directory.</p>
+    <div className="space-y-8 max-w-6xl pb-10">
+      <div className="bg-white border border-slate-100 p-6 md:p-8 rounded-[2rem] shadow-sm relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#225eaa]/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+        <div className="flex items-start gap-5 relative z-10">
+          <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 text-[#022448] flex items-center justify-center font-bold shadow-inner">
+            <Users size={26} />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold font-serif text-[#022448]">Staff & Faculty Directory</h1>
+            <p className="text-sm text-slate-500 mt-1 font-medium">Manage administration profiles, officers, and departmental faculty directory.</p>
+          </div>
+        </div>
       </div>
 
       {/* Add Staff Card */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
-        <h2 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3">Add Staff / Faculty Member</h2>
+      <div className="bg-white border border-slate-100 rounded-[2rem] p-6 md:p-8 shadow-sm space-y-6">
+        <h2 className="text-lg font-bold text-[#022448] border-b border-slate-100 pb-4">Add Staff / Faculty Member</h2>
 
         {message && (
           <div
-            className={`p-4 rounded-xl text-xs font-semibold flex items-center gap-2 ${
-              message.type === "success" ? "bg-emerald-50 text-emerald-800 border border-emerald-200" : "bg-red-50 text-red-800 border border-red-200"
+            className={`p-4 rounded-xl text-sm font-bold flex items-center gap-3 ${
+              message.type === "success" ? "bg-emerald-50 text-emerald-800 border border-emerald-100" : "bg-red-50 text-red-800 border border-red-100"
             }`}
           >
-            {message.type === "success" ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
+            {message.type === "success" ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
             <span>{message.text}</span>
           </div>
         )}
 
-        <form onSubmit={handleCreate} className="space-y-4 text-xs">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <form onSubmit={handleCreate} className="space-y-6 text-sm">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label className="font-semibold text-slate-700 block mb-1">Full Name *</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Full Name *</label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Dr. Sourav Chakraborty"
-                className="w-full bg-slate-50 text-slate-900 text-xs rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+                className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
               />
             </div>
 
             <div>
-              <label className="font-semibold text-slate-700 block mb-1">Email Address *</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Email Address *</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="sourav@kgec.ac.in"
-                className="w-full bg-slate-50 text-slate-900 text-xs rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+                className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
               />
             </div>
 
             <div>
-              <label className="font-semibold text-slate-700 block mb-1">Employee ID *</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Employee ID *</label>
               <input
                 type="text"
                 required
                 value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
                 placeholder="EMP-1001"
-                className="w-full bg-slate-50 text-slate-900 text-xs rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium font-mono"
+                className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium font-mono transition-all"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label className="font-semibold text-slate-700 block mb-1">Role *</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Role *</label>
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full bg-slate-50 text-slate-900 text-xs rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium cursor-pointer"
+                className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium cursor-pointer transition-all"
               >
                 <option value="principal">Principal</option>
                 <option value="registrar">Registrar</option>
@@ -264,11 +272,11 @@ export default function AdminStaffPage() {
             </div>
 
             <div>
-              <label className="font-semibold text-slate-700 block mb-1">Department</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Department</label>
               <select
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                className="w-full bg-slate-50 text-slate-900 text-xs rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium cursor-pointer"
+                className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium cursor-pointer transition-all"
               >
                 <option value="cse">CSE</option>
                 <option value="it">IT</option>
@@ -281,13 +289,13 @@ export default function AdminStaffPage() {
             </div>
 
             <div>
-              <label className="font-semibold text-slate-700 block mb-1">Designation</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Designation</label>
               <input
                 type="text"
                 value={designation}
                 onChange={(e) => setDesignation(e.target.value)}
                 placeholder="e.g. Professor & HOD"
-                className="w-full bg-slate-50 text-slate-900 text-xs rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
+                className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
               />
             </div>
           </div>
@@ -306,7 +314,7 @@ export default function AdminStaffPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="py-2.5 px-6 rounded-xl bg-[#0f2552] hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+            className="py-3.5 px-6 rounded-xl bg-[#022448] hover:bg-[#225eaa] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center sm:justify-start gap-3 transition-all cursor-pointer shadow-md shadow-blue-900/10 hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none"
           >
             <Plus size={16} />
             <span>{submitting ? "Adding..." : "Add Staff Profile"}</span>
@@ -315,26 +323,26 @@ export default function AdminStaffPage() {
       </div>
 
       {/* Staff Directory Table */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-          <h2 className="text-sm font-bold text-slate-900">Directory ({filteredStaff.length})</h2>
+      <div className="bg-white border border-slate-100 rounded-[2rem] p-6 md:p-8 shadow-sm space-y-6">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <h2 className="text-lg font-bold text-[#022448]">Directory <span className="text-slate-400 font-medium text-sm ml-2">({filteredStaff.length})</span></h2>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="relative">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center gap-3 w-full lg:w-auto">
+            <div className="relative w-full sm:w-auto">
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search staff..."
-                className="bg-slate-50 text-slate-900 text-xs rounded-xl pl-9 pr-4 py-2 border border-slate-200 focus:outline-none focus:bg-white focus:border-blue-600 font-medium w-44"
+                className="w-full sm:w-56 bg-slate-50 text-[#022448] text-sm rounded-xl pl-10 pr-4 py-2.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] font-medium transition-all"
               />
-              <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
+              <Search size={16} className="absolute left-3.5 top-3 text-slate-400" />
             </div>
 
             <select
               value={selectedDept}
               onChange={(e) => setSelectedDept(e.target.value)}
-              className="bg-slate-50 text-slate-900 text-xs rounded-xl px-3 py-2 border border-slate-200 focus:outline-none font-medium cursor-pointer"
+              className="w-full sm:w-auto bg-slate-50 text-[#022448] text-sm rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:border-[#225eaa] font-medium cursor-pointer transition-all"
             >
               <option value="all">All Depts</option>
               <option value="cse">CSE</option>
@@ -348,7 +356,7 @@ export default function AdminStaffPage() {
             <select
               value={selectedRole}
               onChange={(e) => setSelectedRole(e.target.value)}
-              className="bg-slate-50 text-slate-900 text-xs rounded-xl px-3 py-2 border border-slate-200 focus:outline-none font-medium cursor-pointer"
+              className="w-full sm:w-auto bg-slate-50 text-[#022448] text-sm rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none focus:border-[#225eaa] font-medium cursor-pointer transition-all"
             >
               <option value="all">All Roles</option>
               <option value="principal">Principal</option>
@@ -360,46 +368,46 @@ export default function AdminStaffPage() {
         </div>
 
         {loading ? (
-          <p className="text-xs text-slate-500 py-6 text-center">Loading staff records...</p>
+          <p className="text-sm font-medium text-slate-500 py-10 text-center">Loading staff records...</p>
         ) : filteredStaff.length === 0 ? (
-          <p className="text-xs text-slate-500 py-6 text-center">No staff records found matching criteria.</p>
+          <p className="text-sm font-medium text-slate-500 py-10 text-center">No staff records found matching criteria.</p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-700">
-              <thead className="border-b border-slate-200 text-slate-500 font-semibold uppercase">
+            <table className="w-full text-left text-sm text-slate-700">
+              <thead className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-xs">
                 <tr>
-                  <th className="pb-3 px-3">Name</th>
-                  <th className="pb-3 px-3">Employee ID</th>
-                  <th className="pb-3 px-3">Role</th>
-                  <th className="pb-3 px-3">Department</th>
-                  <th className="pb-3 px-3">Email</th>
-                  <th className="pb-3 px-3 text-right">Action</th>
+                  <th className="pb-4 px-3">Name</th>
+                  <th className="pb-4 px-3">Employee ID</th>
+                  <th className="pb-4 px-3">Role</th>
+                  <th className="pb-4 px-3">Department</th>
+                  <th className="pb-4 px-3">Email</th>
+                  <th className="pb-4 px-3 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-50">
                 {filteredStaff.map((member) => (
-                  <tr key={member.id}>
-                    <td className="py-3.5 px-3 font-semibold text-slate-900">{member.name}</td>
-                    <td className="py-3.5 px-3 font-mono text-[11px] text-slate-500">{member.employeeId}</td>
-                    <td className="py-3.5 px-3">
-                      <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                  <tr key={member.id} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="py-4 px-3 font-semibold text-[#022448]">{member.name}</td>
+                    <td className="py-4 px-3 font-mono text-[11px] text-slate-500">{member.employeeId}</td>
+                    <td className="py-4 px-3">
+                      <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-[#225eaa] border border-blue-100">
                         {member.role}
                       </span>
                     </td>
-                    <td className="py-3.5 px-3 uppercase text-slate-600 font-medium">{member.department || "—"}</td>
-                    <td className="py-3.5 px-3 text-slate-500">{member.email}</td>
-                    <td className="py-3.5 px-3 text-right space-x-2">
+                    <td className="py-4 px-3 uppercase text-slate-600 font-bold text-[11px]">{member.department || "—"}</td>
+                    <td className="py-4 px-3 text-slate-500 font-medium">{member.email}</td>
+                    <td className="py-4 px-3 text-right space-x-2 whitespace-nowrap">
                       <button
                         onClick={() => openEditModal(member)}
-                        className="p-1.5 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
-                        title="Edit Staff Member (PATCH)"
+                        className="p-2 rounded-lg text-slate-600 hover:text-[#225eaa] hover:bg-blue-50 transition-colors cursor-pointer border border-transparent hover:border-blue-100"
+                        title="Edit Staff Member"
                       >
-                        <Pencil size={15} />
+                        <Pencil size={16} />
                       </button>
 
                       <button
                         onClick={() => handleDelete(member.id)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                        className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer border border-transparent hover:border-red-100"
                         title="Delete staff record"
                       >
                         <Trash2 size={16} />
@@ -413,65 +421,68 @@ export default function AdminStaffPage() {
         )}
       </div>
 
-      {/* Edit Staff Member Modal (PATCH API) */}
+      {/* Edit Staff Member Modal */}
       {editingItem && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <Pencil size={18} className="text-blue-600" /> Edit Staff Profile
+          <div className="bg-white border border-slate-100 rounded-[2rem] max-w-2xl w-full p-8 shadow-2xl space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <h2 className="text-xl font-bold text-[#022448] flex items-center gap-3">
+                <div className="p-2 bg-blue-50 rounded-lg">
+                  <Pencil size={20} className="text-[#225eaa]" />
+                </div>
+                Edit Staff Profile
               </h2>
               <button
                 onClick={() => setEditingItem(null)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                className="p-2 rounded-xl text-slate-400 hover:text-[#022448] hover:bg-slate-100 transition-colors"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={handleUpdateStaff} className="space-y-4 text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <form onSubmit={handleUpdateStaff} className="space-y-6 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Full Name</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Full Name</label>
                   <input
                     type="text"
                     required
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none"
+                    className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Email</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Email</label>
                   <input
                     type="email"
                     required
                     value={editEmail}
                     onChange={(e) => setEditEmail(e.target.value)}
-                    className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none"
+                    className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Employee ID</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Employee ID</label>
                   <input
                     type="text"
                     required
                     value={editEmployeeId}
                     onChange={(e) => setEditEmployeeId(e.target.value)}
-                    className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none font-mono"
+                    className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium font-mono transition-all"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Role</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Role</label>
                   <select
                     value={editRole}
                     onChange={(e) => setEditRole(e.target.value)}
-                    className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none"
+                    className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium cursor-pointer transition-all"
                   >
                     <option value="principal">Principal</option>
                     <option value="registrar">Registrar</option>
@@ -484,11 +495,11 @@ export default function AdminStaffPage() {
                 </div>
 
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Department</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Department</label>
                   <select
                     value={editDepartment}
                     onChange={(e) => setEditDepartment(e.target.value)}
-                    className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none"
+                    className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium cursor-pointer transition-all"
                   >
                     <option value="cse">CSE</option>
                     <option value="it">IT</option>
@@ -500,12 +511,12 @@ export default function AdminStaffPage() {
                 </div>
 
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Designation</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">Designation</label>
                   <input
                     type="text"
                     value={editDesignation}
                     onChange={(e) => setEditDesignation(e.target.value)}
-                    className="w-full bg-slate-50 text-slate-900 rounded-xl px-4 py-2.5 border border-slate-200 focus:outline-none"
+                    className="w-full bg-slate-50 text-[#022448] rounded-xl px-4 py-3.5 border border-slate-200 focus:outline-none focus:bg-white focus:border-[#225eaa] focus:ring-4 focus:ring-blue-500/10 font-medium transition-all"
                   />
                 </div>
               </div>
@@ -520,19 +531,19 @@ export default function AdminStaffPage() {
                 />
               </div>
 
-              <div className="pt-2 flex items-center gap-3">
+              <div className="pt-4 flex items-center gap-4">
                 <button
                   type="submit"
                   disabled={updating}
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-[#0f2552] hover:bg-slate-800 text-white font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-md disabled:opacity-50"
+                  className="flex-1 py-3.5 px-4 rounded-xl bg-[#022448] hover:bg-[#225eaa] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-3 transition-all cursor-pointer shadow-md disabled:opacity-50"
                 >
                   <Save size={16} />
-                  <span>{updating ? "Saving..." : "Save Changes (PATCH)"}</span>
+                  <span>{updating ? "Saving..." : "Save Changes"}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditingItem(null)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold"
+                  className="px-6 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#022448] font-bold text-xs uppercase tracking-wider transition-colors"
                 >
                   Cancel
                 </button>
