@@ -81,17 +81,30 @@ export default function Contact() {
               </p>
 
               <div className="space-y-4">
-                {/* Address */}
-                <div className="flex gap-3 items-center">
-                  <div className="shrink-0 w-10 h-10 rounded-full bg-[#eff6ff] flex items-center justify-center text-blue-600">
-                    <MapPin size={16} />
+                {/* Geotag / Address */}
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-3 items-center mb-1">
+                    <div className="shrink-0 w-10 h-10 rounded-full bg-[#eff6ff] flex items-center justify-center text-blue-600">
+                      <MapPin size={16} />
+                    </div>
+                    <div className="flex flex-col justify-center">
+                      <h4 className="font-semibold text-slate-900 mb-0.5 text-xs md:text-sm">Address</h4>
+                      <p className="text-slate-500 text-[11px] md:text-xs leading-relaxed">
+                        Kalyani Government Engineering College, Nadia, 741235
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex flex-col justify-center">
-                    <h4 className="font-semibold text-slate-900 mb-0.5 text-xs md:text-sm">Address</h4>
-                    <p className="text-slate-500 text-[11px] md:text-xs leading-relaxed">
-                      Kalyani Government Engineering College<br/>
-                      Kalyani, Nadia, West Bengal, 741235
-                    </p>
+                  <div className="w-full h-32 md:h-40 rounded-xl overflow-hidden border border-slate-200 shadow-inner">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.3916962291585!2d88.4452140149683!3d22.97813098497551!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f894819d2dbd83%3A0xc6c429fcb1509618!2sKalyani%20Government%20Engineering%20College!5e0!3m2!1sen!2sin!4v1689260655294!5m2!1sen!2sin"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="KGEC Location"
+                    ></iframe>
                   </div>
                 </div>
 

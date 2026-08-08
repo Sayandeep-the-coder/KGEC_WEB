@@ -98,6 +98,7 @@ const MAIN_NAV_LINKS: HeaderNavItem[] = [
     href: "/campus-life",
     children: [
       { label: "Cells, Clubs & Events", href: "/campus-life" },
+      { label: "Hostels", href: "/campus-life/hostels" },
       { label: "Campus Gallery", href: "/gallery" },
       { label: "IIC", href: "/iic" },
       { label: "E-Cell", href: "/iic/e-cell" },
