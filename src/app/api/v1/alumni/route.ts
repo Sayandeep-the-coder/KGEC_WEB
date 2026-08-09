@@ -1,21 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 import { alumni } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { writeAuditLog } from "@/lib/audit";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
-export async function GET(req: NextRequest) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const category = searchParams.get("category");
-    const search = searchParams.get("search");
-
-    const query = db.select().from(alumni).orderBy(desc(alumni.batchYear));
-
-    const dbRows = await query;
-    let list = dbRows.map((r) => ({
+// ─── Cached query ──────────────────────────────────────────────────────────
+const getCachedAlumni = unstable_cache(
+  async () => {
+    const dbRows = await db.select().from(alumni).orderBy(desc(alumni.batchYear));
+    return dbRows.map((r) => ({
       id: r.id,
       name: r.name,
       role: r.currentRole,
@@ -28,6 +24,18 @@ export async function GET(req: NextRequest) {
       linkedinUrl: r.linkedinUrl,
       photoUrl: r.photoUrl,
     }));
+  },
+  ["alumni-list"],
+  { revalidate: 3600, tags: ["alumni"] }
+);
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get("category");
+    const search = searchParams.get("search");
+
+    let list = await getCachedAlumni();
 
     if (category && category !== "all") {
       list = list.filter((a) => a.category === category);
@@ -84,6 +92,7 @@ export async function POST(req: NextRequest) {
       metadata: { name: created.name },
     });
 
+    revalidateTag("alumni", "max");
     revalidatePath("/alumni");
 
     return NextResponse.json({ data: created }, { status: 201 });

@@ -1,12 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 import { downloads, downloadCategoryEnum } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { downloadSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
 import { handleApiError } from "@/lib/errors";
+
+// ─── Cached query ──────────────────────────────────────────────────────────
+const getCachedDownloads = unstable_cache(
+  async (categoryFilter: string | undefined, limit: number, offset: number) => {
+    const whereClause = categoryFilter
+      ? eq(downloads.category, categoryFilter as (typeof downloadCategoryEnum.enumValues)[number])
+      : undefined;
+
+    return db
+      .select()
+      .from(downloads)
+      .where(whereClause)
+      .orderBy(desc(downloads.uploadedAt))
+      .limit(limit)
+      .offset(offset);
+  },
+  ["downloads-list"],
+  { revalidate: 300, tags: ["downloads"] }
+);
 
 export async function GET(req: NextRequest) {
   try {
@@ -18,20 +38,10 @@ export async function GET(req: NextRequest) {
     const categoryValid =
       category &&
       (downloadCategoryEnum.enumValues as readonly string[]).includes(category)
-        ? (category as (typeof downloadCategoryEnum.enumValues)[number])
+        ? category
         : undefined;
 
-    const whereClause = categoryValid
-      ? eq(downloads.category, categoryValid)
-      : undefined;
-
-    const items = await db
-      .select()
-      .from(downloads)
-      .where(whereClause)
-      .orderBy(desc(downloads.uploadedAt))
-      .limit(limit)
-      .offset((page - 1) * limit);
+    const items = await getCachedDownloads(categoryValid, limit, (page - 1) * limit);
 
     return NextResponse.json({ data: items });
   } catch (error) {
@@ -66,6 +76,7 @@ export async function POST(req: NextRequest) {
       resourceId: newDownload.id,
     });
 
+    revalidateTag("downloads", "max");
     revalidatePath("/downloads");
 
     return NextResponse.json({ data: newDownload }, { status: 201 });

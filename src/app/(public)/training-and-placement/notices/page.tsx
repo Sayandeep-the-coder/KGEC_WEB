@@ -3,7 +3,8 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { notices } from "@/lib/db/schema";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
 import UnifiedPageLayout from "@/components/UnifiedPageLayout";
 import PageHero from "@/components/ui/PageHero";
 import {
@@ -17,15 +18,22 @@ export const metadata: Metadata = {
     "Live placement schedules, recruiter drive announcements, shortlist circulars, and internship notifications from the KGEC T&P Cell.",
 };
 
-export const dynamic = "force-dynamic";
+const getCachedPlacementNotices = unstable_cache(
+  async () => {
+    return db
+      .select()
+      .from(notices)
+      .where(eq(notices.isActive, true))
+      // .where(inArray(notices.type, ["placement", "general"])) // Alternatively do this in code, but schema only has 6 types
+      .orderBy(desc(notices.publishedAt))
+      .limit(100);
+  },
+  ["placement-notices-page"],
+  { revalidate: 300, tags: ["notices"] }
+);
 
 export default async function PlacementNoticesPage() {
-  const dbNotices = await db
-    .select()
-    .from(notices)
-    .where(eq(notices.isActive, true))
-    .orderBy(desc(notices.publishedAt))
-    .limit(100);
+  const dbNotices = await getCachedPlacementNotices();
 
   const placementNotices = dbNotices
     .filter((n) => n.type.toLowerCase().includes("placement") || n.type.toLowerCase().includes("general"))
@@ -36,7 +44,7 @@ export default async function PlacementNoticesPage() {
       fileUrl: n.fileUrl || n.pdfUrl,
       fileName: n.fileName,
       fileType: n.fileType,
-      publishedAt: n.publishedAt.toISOString(),
+      publishedAt: new Date(n.publishedAt).toISOString(),
     }));
 
   return (

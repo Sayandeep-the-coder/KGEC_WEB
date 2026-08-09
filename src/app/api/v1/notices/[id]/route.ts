@@ -4,7 +4,7 @@ import { notices } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { noticePatchSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
 import { handleApiError } from "@/lib/errors";
 import { validateUuid } from "@/lib/utils";
@@ -81,6 +81,7 @@ export async function PATCH(
       resourceId: id,
     });
 
+    revalidateTag("notices", "max");
     revalidatePath("/");
     revalidatePath("/notices");
 
@@ -118,6 +119,7 @@ export async function DELETE(
       resourceId: id,
     });
 
+    revalidateTag("notices", "max");
     revalidatePath("/");
     revalidatePath("/notices");
 

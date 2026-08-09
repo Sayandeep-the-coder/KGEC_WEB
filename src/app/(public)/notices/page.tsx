@@ -4,6 +4,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { notices } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
 import UnifiedPageLayout from "@/components/UnifiedPageLayout";
 import PageHero from "@/components/ui/PageHero";
 import { ArrowRight } from "lucide-react";
@@ -14,15 +15,30 @@ export const metadata: Metadata = {
     "Live official notices, academic circulars, examination schedules, admission updates, and administrative notifications from KGEC.",
 };
 
-export const dynamic = "force-dynamic";
+const getCachedNotices = unstable_cache(
+  async () => {
+    return db
+      .select({
+        id: notices.id,
+        title: notices.title,
+        type: notices.type,
+        fileUrl: notices.fileUrl,
+        pdfUrl: notices.pdfUrl,
+        fileName: notices.fileName,
+        fileType: notices.fileType,
+        publishedAt: notices.publishedAt,
+      })
+      .from(notices)
+      .where(eq(notices.isActive, true))
+      .orderBy(desc(notices.publishedAt))
+      .limit(100);
+  },
+  ["notices-page"],
+  { revalidate: 300, tags: ["notices"] }
+);
 
 export default async function PublicNoticesPage() {
-  const dbNotices = await db
-    .select()
-    .from(notices)
-    .where(eq(notices.isActive, true))
-    .orderBy(desc(notices.publishedAt))
-    .limit(100);
+  const dbNotices = await getCachedNotices();
 
   const initialNotices = dbNotices.map((n) => ({
     id: n.id,
@@ -31,7 +47,7 @@ export default async function PublicNoticesPage() {
     fileUrl: n.fileUrl || n.pdfUrl,
     fileName: n.fileName,
     fileType: n.fileType,
-    publishedAt: n.publishedAt.toISOString(),
+    publishedAt: new Date(n.publishedAt).toISOString(),
   }));
 
   return (

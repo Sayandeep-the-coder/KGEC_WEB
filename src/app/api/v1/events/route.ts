@@ -1,12 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 import { events } from "@/lib/db/schema";
 import { gte, asc, desc } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { eventSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
 import { handleApiError } from "@/lib/errors";
+
+// ─── Cached query ──────────────────────────────────────────────────────────
+const getCachedEvents = unstable_cache(
+  async (upcoming: boolean, limit: number, offset: number) => {
+    const whereClause = upcoming ? gte(events.eventDate, new Date()) : undefined;
+    const orderClause = upcoming ? asc(events.eventDate) : desc(events.eventDate);
+
+    return db
+      .select()
+      .from(events)
+      .where(whereClause)
+      .orderBy(orderClause)
+      .limit(limit)
+      .offset(offset);
+  },
+  ["events-list"],
+  { revalidate: 300, tags: ["events"] }
+);
 
 export async function GET(req: NextRequest) {
   try {
@@ -15,16 +34,7 @@ export async function GET(req: NextRequest) {
     const limit = Math.min(parseInt(searchParams.get("limit") || "20", 10), 100);
     const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1);
 
-    const whereClause = upcoming ? gte(events.eventDate, new Date()) : undefined;
-    const orderClause = upcoming ? asc(events.eventDate) : desc(events.eventDate);
-
-    const items = await db
-      .select()
-      .from(events)
-      .where(whereClause)
-      .orderBy(orderClause)
-      .limit(limit)
-      .offset((page - 1) * limit);
+    const items = await getCachedEvents(upcoming, limit, (page - 1) * limit);
 
     return NextResponse.json({ data: items });
   } catch (error) {
@@ -59,6 +69,7 @@ export async function POST(req: NextRequest) {
       resourceId: newEvent.id,
     });
 
+    revalidateTag("events", "max");
     revalidatePath("/");
     revalidatePath("/events");
 

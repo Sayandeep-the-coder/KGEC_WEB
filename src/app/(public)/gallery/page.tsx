@@ -1,6 +1,8 @@
 
 
 import Link from "next/link";
+import Image from "next/image";
+import { unstable_cache } from "next/cache";
 import {
   Camera,
   Image as ImageIcon,
@@ -19,12 +21,18 @@ export const metadata = {
     "Explore photo memories, campus landmarks, technical symposiums, cultural festivals (Espektro), and student life at KGEC.",
 };
 
-export const dynamic = "force-dynamic";
+const getCachedGallery = unstable_cache(
+  async () => {
+    return db.select().from(galleryImages);
+  },
+  ["gallery-page"],
+  { revalidate: 600, tags: ["gallery"] }
+);
 
 export default async function GalleryPage() {
   let images: Array<{ id: string; album: string; imageUrl: string; caption: string | null }> = [];
   try {
-    images = await db.select().from(galleryImages);
+    images = await getCachedGallery();
   } catch (err) {
     console.error("Error fetching gallery images:", err);
   }
@@ -61,10 +69,10 @@ export default async function GalleryPage() {
             {images.map((image) => (
               <div key={image.id} className="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm hover:shadow-md transition-all duration-300">
                 <div className="aspect-square relative">
-                  <img 
+                  <Image 
                     src={image.imageUrl} 
                     alt={image.caption || image.album || "Gallery Image"} 
-                    loading="lazy"
+                    fill
                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" 
                   />
                 </div>

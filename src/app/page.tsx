@@ -1,4 +1,8 @@
 import Header from "@/components/Header";
+import { unstable_cache } from "next/cache";
+import { db } from "@/lib/db";
+import { notices } from "@/lib/db/schema";
+import { desc, eq } from "drizzle-orm";
 import Hero from "@/components/Hero";
 import Highlights from "@/components/Highlights";
 import Impact from "@/components/Impact";
@@ -9,7 +13,30 @@ import Gallery from "@/components/Gallery";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
-export default function Home() {
+const getCachedHomepageNotices = unstable_cache(
+  async () => {
+    return db
+      .select()
+      .from(notices)
+      .where(eq(notices.isActive, true))
+      .orderBy(desc(notices.publishedAt))
+      .limit(5);
+  },
+  ["homepage-notices"],
+  { revalidate: 300, tags: ["notices"] }
+);
+
+export default async function Home() {
+  const latestNotices = await getCachedHomepageNotices();
+  
+  const formattedNotices = latestNotices.map((n) => ({
+    id: n.id,
+    title: n.title,
+    type: n.type,
+    fileUrl: n.fileUrl || n.pdfUrl,
+    publishedAt: new Date(n.publishedAt).toISOString(),
+  }));
+  
   return (
     <div
       className="h-screen w-full overflow-y-auto overflow-x-hidden lg:snap-y lg:snap-mandatory font-sans bg-white scroll-smooth"
@@ -35,7 +62,7 @@ export default function Home() {
 
       {/* Section 4: Announcements */}
       <section className="lg:snap-start lg:min-h-screen w-full flex flex-col justify-center bg-white">
-        <Announcements />
+        <Announcements notices={formattedNotices} />
       </section>
 
       {/* Section 5: Facilities */}

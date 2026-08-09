@@ -1,23 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 import { news } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { newsSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
 import { handleApiError } from "@/lib/errors";
+
+// ─── Cached query ──────────────────────────────────────────────────────────
+const getCachedNews = unstable_cache(
+  async (limit: number) => {
+    return db
+      .select()
+      .from(news)
+      .orderBy(desc(news.publishedAt))
+      .limit(limit);
+  },
+  ["news-list"],
+  { revalidate: 300, tags: ["news"] }
+);
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const limit = Math.min(parseInt(searchParams.get("limit") || "20", 10), 100);
 
-    const items = await db
-      .select()
-      .from(news)
-      .orderBy(desc(news.publishedAt))
-      .limit(limit);
+    const items = await getCachedNews(limit);
 
     return NextResponse.json({ data: items });
   } catch (error) {
@@ -49,6 +59,7 @@ export async function POST(req: NextRequest) {
       resourceId: newItem.id,
     });
 
+    revalidateTag("news", "max");
     revalidatePath("/");
     revalidatePath("/news");
 

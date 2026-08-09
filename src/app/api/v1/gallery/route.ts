@@ -1,28 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 import { galleryImages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { gallerySchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
 import { handleApiError } from "@/lib/errors";
 
-export async function GET(req: NextRequest) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const album = searchParams.get("album");
-    const limit = Math.min(parseInt(searchParams.get("limit") || "40", 10), 100);
-    const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1);
-
+// ─── Cached query ──────────────────────────────────────────────────────────
+const getCachedGallery = unstable_cache(
+  async (album: string | undefined, limit: number, offset: number) => {
     const whereClause = album ? eq(galleryImages.album, album) : undefined;
 
-    const items = await db
+    return db
       .select()
       .from(galleryImages)
       .where(whereClause)
       .limit(limit)
-      .offset((page - 1) * limit);
+      .offset(offset);
+  },
+  ["gallery-list"],
+  { revalidate: 600, tags: ["gallery"] }
+);
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const album = searchParams.get("album") || undefined;
+    const limit = Math.min(parseInt(searchParams.get("limit") || "40", 10), 100);
+    const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1);
+
+    const items = await getCachedGallery(album, limit, (page - 1) * limit);
 
     return NextResponse.json({ data: items });
   } catch (error) {
@@ -57,6 +67,7 @@ export async function POST(req: NextRequest) {
       resourceId: newImage.id,
     });
 
+    revalidateTag("gallery", "max");
     revalidatePath("/gallery");
 
     return NextResponse.json({ data: newImage }, { status: 201 });

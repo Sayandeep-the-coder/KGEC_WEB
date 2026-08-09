@@ -1,12 +1,46 @@
 import { NextRequest, NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 import { admissions, admissionProgramEnum } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { admissionsPatchSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
 import { handleApiError } from "@/lib/errors";
+
+// ─── Cached query ──────────────────────────────────────────────────────────
+const getCachedAdmission = unstable_cache(
+  async (program: string) => {
+    const [row] = await db
+      .select()
+      .from(admissions)
+      .where(
+        eq(
+          admissions.program,
+          program as (typeof admissionProgramEnum.enumValues)[number]
+        )
+      );
+
+    if (!row) {
+      return {
+        id: program,
+        program,
+        seatMatrix: [],
+        importantDates: [],
+      };
+    }
+
+    return {
+      id: row.id,
+      program: row.program,
+      seatMatrix: row.seatMatrix,
+      importantDates: row.importantDates,
+    };
+  },
+  ["admissions-program"],
+  { revalidate: 3600, tags: ["admissions"] }
+);
 
 export async function GET(
   req: NextRequest,
@@ -22,37 +56,9 @@ export async function GET(
       );
     }
 
-    const [row] = await db
-      .select()
-      .from(admissions)
-      .where(
-        eq(
-          admissions.program,
-          program as (typeof admissionProgramEnum.enumValues)[number]
-        )
-      );
+    const data = await getCachedAdmission(program);
 
-    if (!row) {
-      return NextResponse.json(
-        {
-          data: {
-            id: program,
-            program,
-            seatMatrix: [],
-            importantDates: [],
-          },
-        }
-      );
-    }
-
-    return NextResponse.json({
-      data: {
-        id: row.id,
-        program: row.program,
-        seatMatrix: row.seatMatrix,
-        importantDates: row.importantDates,
-      },
-    });
+    return NextResponse.json({ data });
   } catch (error) {
     return handleApiError(error, "GET /api/v1/admissions/[program]");
   }
@@ -117,6 +123,7 @@ export async function PATCH(
       metadata: { program },
     });
 
+    revalidateTag("admissions", "max");
     revalidatePath(`/admissions/${program}`);
     revalidatePath("/admissions");
 

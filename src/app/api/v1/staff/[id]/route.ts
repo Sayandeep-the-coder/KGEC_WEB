@@ -4,7 +4,7 @@ import { staff } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { staffPatchSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
 import { handleApiError } from "@/lib/errors";
 import { validateUuid } from "@/lib/utils";
@@ -74,6 +74,7 @@ export async function PATCH(
       resourceId: id,
     });
 
+    revalidateTag("staff", "max");
     revalidatePath("/staff");
 
     return NextResponse.json({ data: updated });
@@ -113,6 +114,7 @@ export async function DELETE(
       resourceId: id,
     });
 
+    revalidateTag("staff", "max");
     revalidatePath("/staff");
 
     return NextResponse.json({ data: { success: true } });

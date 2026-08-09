@@ -1,29 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 import { notices } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { noticeSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
 import { handleApiError } from "@/lib/errors";
 
-export async function GET(req: NextRequest) {
-  try {
-    const { searchParams } = req.nextUrl;
-    const type = searchParams.get("type");
-    const limit = Math.min(parseInt(searchParams.get("limit") || "20", 10), 100);
-
+// ─── Cached query ──────────────────────────────────────────────────────────
+const getCachedNotices = unstable_cache(
+  async (limit: number, type?: string) => {
+    const VALID_TYPES = ["general", "admission", "placement", "academic", "exam", "result"] as const;
     let query = db.select().from(notices).$dynamic();
 
-    const VALID_TYPES = ["general", "admission", "placement", "academic", "exam", "result"] as const;
     if (type && (VALID_TYPES as readonly string[]).includes(type)) {
       query = query.where(eq(notices.type, type as typeof VALID_TYPES[number]));
     }
 
-    const data = await query
-      .orderBy(desc(notices.publishedAt))
-      .limit(limit);
+    return query.orderBy(desc(notices.publishedAt)).limit(limit);
+  },
+  ["notices-list"],
+  { revalidate: 300, tags: ["notices"] }
+);
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = req.nextUrl;
+    const type = searchParams.get("type") || undefined;
+    const limit = Math.min(parseInt(searchParams.get("limit") || "20", 10), 100);
+
+    const data = await getCachedNotices(limit, type);
 
     return NextResponse.json({ data });
   } catch (error) {
@@ -69,6 +77,7 @@ export async function POST(req: NextRequest) {
       resourceId: newNotice.id,
     });
 
+    revalidateTag("notices", "max");
     revalidatePath("/");
     revalidatePath("/notices");
 

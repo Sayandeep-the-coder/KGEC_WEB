@@ -7,6 +7,7 @@ import { Calendar, ArrowRight, Newspaper, Bell } from "lucide-react";
 import { db } from "@/lib/db";
 import { news } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
 import UnifiedPageLayout from "@/components/UnifiedPageLayout";
 import PageHero from "@/components/ui/PageHero";
 import SectionHeader from "@/components/ui/SectionHeader";
@@ -17,13 +18,19 @@ export const metadata: Metadata = {
     "Read the latest news highlights, academic achievements, research publications, hackathon wins, and press coverage from KGEC.",
 };
 
-export const dynamic = "force-dynamic";
+const getCachedNewsArticles = unstable_cache(
+  async () => {
+    return db
+      .select()
+      .from(news)
+      .orderBy(desc(news.publishedAt));
+  },
+  ["news-page"],
+  { revalidate: 300, tags: ["news"] }
+);
 
 export default async function PublicNewsPage() {
-  const articles = await db
-    .select()
-    .from(news)
-    .orderBy(desc(news.publishedAt));
+  const articles = await getCachedNewsArticles();
 
   return (
     <UnifiedPageLayout>

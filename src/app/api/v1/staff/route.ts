@@ -1,21 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 import { staff, staffRoleEnum, departmentEnum } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { requireAdmin } from "@/lib/middlewares/auth";
 import { staffSchema } from "@/lib/validators";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { writeAuditLog } from "@/lib/audit";
 import { handleApiError } from "@/lib/errors";
 
-export async function GET(req: NextRequest) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const role = searchParams.get("role");
-    const department = searchParams.get("department");
-    const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 100);
-    const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1);
-
+// ─── Cached query ──────────────────────────────────────────────────────────
+const getCachedStaff = unstable_cache(
+  async (
+    role: string | undefined,
+    department: string | undefined,
+    limit: number,
+    offset: number
+  ) => {
     const conditions = [];
 
     if (role && (staffRoleEnum.enumValues as string[]).includes(role)) {
@@ -39,12 +40,26 @@ export async function GET(req: NextRequest) {
     const whereClause =
       conditions.length > 0 ? and(...conditions) : undefined;
 
-    const items = await db
+    return db
       .select()
       .from(staff)
       .where(whereClause)
       .limit(limit)
-      .offset((page - 1) * limit);
+      .offset(offset);
+  },
+  ["staff-list"],
+  { revalidate: 3600, tags: ["staff"] }
+);
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const role = searchParams.get("role") || undefined;
+    const department = searchParams.get("department") || undefined;
+    const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 100);
+    const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1);
+
+    const items = await getCachedStaff(role, department, limit, (page - 1) * limit);
 
     return NextResponse.json({ data: items });
   } catch (error) {
@@ -79,6 +94,7 @@ export async function POST(req: NextRequest) {
       resourceId: newStaff.id,
     });
 
+    revalidateTag("staff", "max");
     revalidatePath("/staff");
 
     return NextResponse.json({ data: newStaff }, { status: 201 });
