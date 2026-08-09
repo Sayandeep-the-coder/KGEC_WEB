@@ -43,7 +43,7 @@ export default function Contact() {
 
   return (
     <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-4 md:py-6 h-full flex flex-col justify-center overflow-hidden touch-pan-y">
-      <div className="relative z-10 w-full h-[85vh] lg:h-[88vh] min-h-150 overflow-hidden rounded-2xl bg-slate-50/50 border border-slate-100 shadow-sm flex flex-col items-center justify-center py-4 px-2 md:px-6">
+      <div className="relative z-10 w-full h-auto min-h-[90vh] lg:min-h-[95vh] overflow-hidden rounded-2xl bg-slate-50/50 border border-slate-100 shadow-sm flex flex-col items-center justify-center py-8 px-2 md:px-6">
         
         <div className="relative z-10 flex flex-col justify-center max-w-[100rem] mx-auto w-full my-auto shrink-0">
           

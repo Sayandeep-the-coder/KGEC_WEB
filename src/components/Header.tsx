@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import {
   BookOpen,
   Briefcase,
@@ -35,15 +36,7 @@ const UTILITY_LINKS = [
   { label: "Staff", icon: Users, lockIcon: Lock, href: "/administration/hods" },
 ];
 
-const CURRENT_STUDENT_LINKS: HeaderRoute[] = [
-  { label: "Notices", href: "/notices" },
-  { label: "Downloads", href: "/downloads" },
-  { label: "Campus Life", href: "/campus-life" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "Contact Office", href: "/contact" },
-];
 
-const CURRENT_STUDENT_GROUP = "current-student";
 
 const MAIN_NAV_LINKS: HeaderNavItem[] = [
   {
@@ -181,6 +174,7 @@ function HeaderDropdown({
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileGroup, setOpenMobileGroup] = useState<string | null>(null);
+  const { data: session } = useSession();
 
   const closeMobileMenu = () => {
     setIsMenuOpen(false);
@@ -255,38 +249,12 @@ export default function Header() {
             </div>
 
             <div className="flex items-center gap-5">
-              <div className="group relative">
-                <button
-                  type="button"
-                  className="flex items-center gap-1.5 rounded-full border border-slate-200 px-4 py-1.5 text-[13px] font-semibold text-[#0a1730] transition-colors hover:bg-slate-50"
-                >
-                  Current Student
-                  <ChevronDown
-                    className="h-3.5 w-3.5 text-slate-500 transition-transform group-hover:rotate-180"
-                    strokeWidth={2.5}
-                  />
-                </button>
-                <HeaderDropdown align="right" links={CURRENT_STUDENT_LINKS} />
-              </div>
-
-              <div className="flex w-60 items-center justify-between gap-2 rounded-full border border-slate-200 bg-slate-50/50 px-4 py-1.5">
-                <input
-                  type="text"
-                  placeholder="Search here..."
-                  className="w-full bg-transparent text-[13px] text-[#0a1730] placeholder:text-slate-400 focus:outline-none"
-                />
-                <Search
-                  className="h-4 w-4 shrink-0 text-slate-500"
-                  strokeWidth={2}
-                />
-              </div>
-
               <Link
-                href="/admin/login"
+                href={session ? "/admin" : "/admin/login"}
                 prefetch={false}
                 className="flex items-center gap-2 rounded-full bg-[#0a1730] px-6 py-2 text-[13px] font-bold text-white transition-colors hover:bg-[#12274d]"
               >
-                Login
+                {session ? "Dashboard" : "Login"}
                 <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.5} />
               </Link>
             </div>
@@ -341,64 +309,16 @@ export default function Header() {
         }`}
       >
         <div className="mx-auto flex max-w-[100rem] flex-col gap-4">
-          <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-            <Search className="size-4 shrink-0 text-slate-500" strokeWidth={2} />
-            <input
-              type="text"
-              placeholder="Search here..."
-              className="w-full bg-transparent text-sm text-[#0a1730] placeholder:text-slate-400 focus:outline-none"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              aria-expanded={openMobileGroup === CURRENT_STUDENT_GROUP}
-              aria-controls="mobile-nav-current-student"
-              onClick={() =>
-                setOpenMobileGroup((current) =>
-                  current === CURRENT_STUDENT_GROUP ? null : CURRENT_STUDENT_GROUP
-                )
-              }
-              className="flex items-center justify-center gap-1.5 rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-[#0a1730] transition hover:bg-slate-50"
-            >
-              Current Student
-              <ChevronDown
-                className={`size-4 text-slate-500 transition-transform ${
-                  openMobileGroup === CURRENT_STUDENT_GROUP ? "rotate-180" : ""
-                }`}
-                strokeWidth={2.5}
-              />
-            </button>
+          <div className="grid grid-cols-1 gap-2">
             <Link
-              href="/admin/login"
+              href={session ? "/admin" : "/admin/login"}
               prefetch={false}
               onClick={closeMobileMenu}
               className="flex items-center justify-center gap-2 rounded-2xl bg-[#0a1730] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#12274d]"
             >
-              Login
+              {session ? "Dashboard" : "Login"}
               <ArrowUpRight className="size-4" strokeWidth={2.5} />
             </Link>
-          </div>
-
-          <div
-            id="mobile-nav-current-student"
-            className={`grid grid-cols-2 gap-2 overflow-hidden transition-[max-height,opacity] duration-200 ${
-              openMobileGroup === CURRENT_STUDENT_GROUP
-                ? "max-h-48 opacity-100"
-                : "max-h-0 opacity-0"
-            }`}
-          >
-            {CURRENT_STUDENT_LINKS.map((link) => (
-              <Link
-                key={`${link.label}-${link.href}`}
-                href={link.href}
-                onClick={closeMobileMenu}
-                className="rounded-2xl bg-slate-50 px-3 py-2.5 text-center text-xs font-semibold text-[#0a1730] transition hover:bg-slate-100"
-              >
-                {link.label}
-              </Link>
-            ))}
           </div>
 
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
