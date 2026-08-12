@@ -20,10 +20,15 @@ export const metadata: Metadata = {
 
 const getCachedNewsArticles = unstable_cache(
   async () => {
-    return db
-      .select()
-      .from(news)
-      .orderBy(desc(news.publishedAt));
+    try {
+      return await db
+        .select()
+        .from(news)
+        .orderBy(desc(news.publishedAt));
+    } catch (error) {
+      console.warn("Database connection failed, serving empty news list:", error);
+      return [];
+    }
   },
   ["news-page"],
   { revalidate: 300, tags: ["news"] }

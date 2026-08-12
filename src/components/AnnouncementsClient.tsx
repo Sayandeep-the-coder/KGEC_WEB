@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Calendar, FileDown, FileText, ArrowRight } from "lucide-react";
+import { Calendar, FileDown, FileText, ArrowRight, Search, Filter } from "lucide-react";
 import Link from "next/link";
 
 export interface Notice {
@@ -16,139 +17,105 @@ interface AnnouncementsClientProps {
   notices: Notice[];
 }
 
-export default function AnnouncementsClient({ notices }: AnnouncementsClientProps) {
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
-  };
+const CATEGORIES = [
+  { id: "ALL", label: "All Notices" },
+  { id: "GENERAL", label: "General" },
+  { id: "ACADEMIC", label: "Academic" },
+  { id: "PLACEMENT", label: "Placement" },
+  { id: "TENDER", label: "Tenders & Bids" },
+];
 
-  const itemVariants = {
-    hidden: { opacity: 0, x: 50 },
-    show: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 100, damping: 15 } },
-  };
+export default function AnnouncementsClient({ notices }: AnnouncementsClientProps) {
+  const [activeTab, setActiveTab] = useState("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredNotices = useMemo(() => {
+    return notices.filter((notice) => {
+      const matchesTab = activeTab === "ALL" || notice.type.toUpperCase() === activeTab;
+      const matchesSearch = notice.title.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesTab && matchesSearch;
+    });
+  }, [notices, activeTab, searchQuery]);
 
   return (
-    <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-4 md:py-6 h-full flex flex-col justify-center overflow-hidden relative touch-pan-y">
-      {/* Premium Light Container */}
-      <div className="relative z-10 w-full h-auto lg:h-[88vh] min-h-[600px] rounded-2xl bg-white shadow-md border border-slate-100 overflow-hidden flex flex-col">
+    <section className="mx-auto w-full max-w-[100rem] px-0 sm:px-6 lg:px-8 py-0 sm:py-6 h-full flex flex-col justify-center overflow-hidden relative touch-pan-y">
+      <div className="relative z-10 w-full overflow-hidden rounded-none sm:rounded-2xl bg-linear-to-br from-[#022448] via-[#1e3a5f] to-[#022448] flex flex-col items-center justify-center py-10 lg:py-16 text-white shadow-none sm:shadow-md border-none sm:border border-white/5 px-4 sm:px-8">
         
-        {/* Abstract Background Glows */}
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#225eaa]/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#3b82f6]/10 rounded-full blur-[120px] translate-x-1/3 translate-y-1/3 pointer-events-none"></div>
-
-        {/* Unified Top Header matching Highlights style */}
+        {/* Section Header */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center justify-center px-5 mt-10 md:mt-14 mb-6 z-10 text-center shrink-0"
+          className="flex flex-col items-center justify-center w-full z-10 mb-6"
         >
-          <h1 className="relative w-fit px-4 uppercase mx-auto bg-[#225eaa]/5 border text-[#022448]/90 border-[#225eaa]/30 text-xs md:text-sm font-light leading-none py-1.5 inline-block mb-3">
+          <h2 className="text-3xl md:text-5xl font-bold text-white text-center drop-shadow-md tracking-tight">
             Announcements
-            <span className="absolute w-[3px] h-[3px] bg-[#022448]/60 z-10 top-0 left-0 -translate-x-1/2 -translate-y-1/2"></span>
-            <span className="absolute w-[3px] h-[3px] bg-[#022448]/60 z-10 top-0 right-0 translate-x-1/2 -translate-y-1/2"></span>
-            <span className="absolute w-[3px] h-[3px] bg-[#022448]/60 z-10 bottom-0 left-0 -translate-x-1/2 translate-y-1/2"></span>
-            <span className="absolute w-[3px] h-[3px] bg-[#022448]/60 z-10 bottom-0 right-0 translate-x-1/2 translate-y-1/2"></span>
-          </h1>
-
-          <div className="shrink-0 mt-1 text-2xl md:text-4xl lg:text-[44px] capitalize leading-tight w-[95%] md:w-[85%] lg:w-[70%] font-medium text-[#022448]">
-            Stay Updated with Latest Notices.
-          </div>
+          </h2>
         </motion.div>
 
-        {/* Centered Scrollable Notices List */}
-        <div className="w-full max-w-4xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col flex-1 pb-10 min-h-0">
-          <div className="flex items-center justify-between mb-4 shrink-0 border-b border-slate-100 pb-4">
-            <div className="flex items-center gap-3">
-              <h3 className="text-lg font-bold text-[#022448]">Recent Updates</h3>
+        {/* 3-Column Vertical Dividers Layout (IIT Bombay Style) */}
+        <div className="w-full max-w-6xl mx-auto z-10">
+          {filteredNotices.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-blue-200/60 bg-white/5 border border-white/10 rounded-2xl">
+              <FileText size={48} className="mb-3 opacity-40 text-[#79acfd]" />
+              <p className="text-base font-medium">No announcements match your selected filter.</p>
             </div>
-            
-            <Link 
-              href="/notices"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#022448] text-white font-bold text-[11px] uppercase tracking-wider hover:bg-[#225eaa] transition-all hover:gap-3 shadow-sm hover:shadow-md group"
-            >
-              View All Notices
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 divide-y md:divide-y-0 md:divide-x divide-white/15 border-y border-white/15 py-8">
+              {[0, 1, 2].map((colIndex) => {
+                const columnNotices = filteredNotices.filter((_, idx) => idx % 3 === colIndex);
+                if (columnNotices.length === 0) return null;
 
-          <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
-            {notices.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-slate-400">
-                <FileText size={48} className="mb-4 opacity-20" />
-                <p>No new announcements right now.</p>
-              </div>
-            ) : (
-              <motion.div 
-                className="space-y-4 pt-2"
-                variants={containerVariants}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-50px" }}
-              >
-                {notices.map((notice) => (
-                  <motion.div 
-                    key={notice.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4 }}
-                    className="group relative w-full p-4 md:p-5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-100 hover:border-[#225eaa]/30 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-hidden"
-                  >
-                    {/* Hover Glow Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#225eaa]/0 via-[#225eaa]/0 to-[#225eaa]/0 group-hover:from-[#225eaa]/5 group-hover:to-transparent transition-all duration-500 -z-10"></div>
-                    
-                    {/* Left Border Accent */}
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#225eaa] to-blue-400 scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top"></div>
-
-                    <div className="flex-1 space-y-2 relative z-10 pl-2">
-                      <div className="flex items-center gap-3">
-                        <span className="px-2.5 py-1 rounded-md text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-600 border border-blue-100">
-                          {notice.type}
+                return (
+                  <div key={colIndex} className="flex flex-col gap-6 md:px-8 first:pl-0 last:pr-0 pt-4 md:pt-0">
+                    {columnNotices.map((notice) => (
+                      <motion.div
+                        key={notice.id}
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3 }}
+                        className="group flex flex-col gap-1 text-left"
+                      >
+                        {notice.fileUrl ? (
+                          <a
+                            href={notice.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm sm:text-base font-medium text-white/95 group-hover:text-[#79acfd] group-hover:underline transition-colors leading-snug block"
+                          >
+                            {notice.title}
+                          </a>
+                        ) : (
+                          <h4 className="text-sm sm:text-base font-medium text-white/95 group-hover:text-[#79acfd] transition-colors leading-snug">
+                            {notice.title}
+                          </h4>
+                        )}
+                        <span className="text-[11px] text-blue-200/60 font-mono">
+                          {new Date(notice.publishedAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                         </span>
-                        <span className="text-xs text-slate-500 flex items-center gap-1 font-mono font-medium">
-                          <Calendar size={12} />
-                          {new Date(notice.publishedAt).toLocaleDateString("en-IN")}
-                        </span>
-                      </div>
-                      <h4 className="text-base font-semibold text-slate-800 group-hover:text-[#022448] transition-colors line-clamp-2">
-                        {notice.title}
-                      </h4>
-                    </div>
-
-                    <div className="shrink-0 relative z-10 pl-2">
-                      {notice.fileUrl ? (
-                        <a
-                          href={notice.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition-colors"
-                        >
-                          <FileDown size={14} />
-                          <span>PDF</span>
-                        </a>
-                      ) : (
-                        <Link
-                          href={`/notices/${notice.id}`}
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
-                        >
-                          <FileText size={14} />
-                          <span>View</span>
-                        </Link>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-          </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
+
+        {/* Centered IIT Bombay "More" Button */}
+        <div className="flex justify-center mt-10 z-10">
+          <Link
+            href="/notices"
+            className="px-10 py-2.5 rounded-xl border-2 border-[#79acfd] text-[#79acfd] font-bold text-sm uppercase tracking-wider hover:bg-[#79acfd] hover:text-[#022448] transition-all shadow-md cursor-pointer"
+          >
+            More
+          </Link>
+        </div>
+
       </div>
     </section>
   );
 }
+

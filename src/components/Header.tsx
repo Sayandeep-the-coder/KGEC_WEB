@@ -47,7 +47,15 @@ const MAIN_NAV_LINKS: HeaderNavItem[] = [
       { label: "Green Campus", href: "/about/green-campus" },
       { label: "Principal's Desk", href: "/administration/principal" },
       { label: "Student Demographics", href: "/student-strength" },
-      { label: "Administration", href: "/administration/registrar" },
+    ],
+  },
+  {
+    label: "Organization",
+    href: "/administration/registrar",
+    children: [
+      { label: "Administration & Leadership", href: "/administration/registrar" },
+      { label: "Heads of Departments", href: "/administration/hods" },
+      { label: "Governance & Authorities", href: "/about" },
     ],
   },
   {
@@ -55,8 +63,8 @@ const MAIN_NAV_LINKS: HeaderNavItem[] = [
     href: "/departments",
     children: [
       { label: "Departments Overview", href: "/departments" },
+      { label: "B.Tech, M.Tech & MCA Degrees", href: "/departments" },
       { label: "Academic Downloads", href: "/downloads?category=general" },
-      { label: "Mandatory Disclosure", href: "/downloads?category=mandatory-disclosure" },
       { label: "Academic Notices", href: "/notices" },
     ],
   },
@@ -71,75 +79,46 @@ const MAIN_NAV_LINKS: HeaderNavItem[] = [
     ],
   },
   {
-    label: "Departments",
-    href: "/departments",
-    children: [
-      { label: "CSE", href: "/departments/cse" },
-      { label: "EE", href: "/departments/ee" },
-      { label: "ECE", href: "/departments/ece" },
-      { label: "IT", href: "/departments/it" },
-      { label: "ME", href: "/departments/me" },
-      { label: "CA", href: "/departments/ca" },
-      { label: "Physics", href: "/departments/physics" },
-      { label: "Chemistry", href: "/departments/chemistry" },
-      { label: "Mathematics", href: "/departments/mathematics" },
-      { label: "Humanities", href: "/departments/humanities" },
-    ],
-  },
-  {
-    label: "Campus Life",
-    href: "/campus-life",
-    children: [
-      { label: "Cells, Clubs & Events", href: "/campus-life" },
-      { label: "Hostels", href: "/campus-life/hostels" },
-      { label: "Campus Gallery", href: "/gallery" },
-      { label: "IIC", href: "/iic" },
-      { label: "E-Cell", href: "/iic/e-cell" },
-      { label: "IIPC", href: "/iic/iipc" },
-      { label: "Startup Policy", href: "/iic/national-startup-policy" },
-    ],
-  },
-  {
-    label: "Placements",
-    href: "/training-and-placement",
-    children: [
-      { label: "T&P Cell Portal", href: "/training-and-placement" },
-      { label: "Placement Statistics", href: "/training-and-placement/statistics" },
-      { label: "Recruiter Procedure", href: "/training-and-placement#procedure" },
-      { label: "Coordinators Directory", href: "/training-and-placement#contact-tpo" },
-      { label: "Placement Notices", href: "/training-and-placement/notices" },
-    ],
-  },
-  {
-    label: "Alumni",
-    href: "/alumni",
-    children: [
-      { label: "Alumni Diaries", href: "/alumni" },
-      { label: "ISRO Lunar Mission Alumni", href: "/alumni" },
-      { label: "Connect with Alumni Cell", href: "/contact" },
-    ],
-  },
-  {
-    label: "Research",
+    label: "Research & Industry",
     href: "/research",
     children: [
-      { label: "Research", href: "/research" },
-      { label: "Institute Innovation Council", href: "/iic/institute-innovation-council" },
-      { label: "IIC Downloads", href: "/downloads?category=iic" },
+      { label: "Research Overview", href: "/research" },
+      { label: "Institute Innovation Council (IIC)", href: "/iic/institute-innovation-council" },
+      { label: "Entrepreneurship Cell (E-Cell)", href: "/iic/e-cell" },
+      { label: "Industry Interaction Cell (IIPC)", href: "/iic/iipc" },
+      { label: "Startup Policy", href: "/iic/national-startup-policy" },
+      { label: "Research Downloads", href: "/downloads?category=iic" },
     ],
   },
   {
-    label: "IQAC",
-    href: "/iqac",
+    label: "Career",
+    href: "/training-and-placement",
     children: [
-      { label: "IQAC", href: "/iqac" },
-      { label: "NAAC", href: "/naac" },
-      { label: "RTI", href: "/rti" },
-      { label: "NIRF", href: "/nirf" },
-      { label: "Reports & Minutes", href: "/downloads?category=iqac" },
+      { label: "Training & Placement Cell", href: "/training-and-placement" },
+      { label: "Placement Statistics", href: "/training-and-placement/statistics" },
+      { label: "Recruiter Procedure", href: "/training-and-placement#procedure" },
+      { label: "T&P Coordinators Directory", href: "/training-and-placement#contact-tpo" },
     ],
   },
-  { label: "Contact", href: "/contact" },
+  {
+    label: "Resources",
+    href: "/downloads?category=general",
+    children: [
+      { label: "Library & E-Resources", href: "/downloads?category=general" },
+      { label: "Academic Downloads", href: "/downloads" },
+      { label: "Mandatory Disclosure", href: "/downloads?category=mandatory-disclosure" },
+      { label: "IQAC & NAAC", href: "/iqac" },
+      { label: "RTI Information", href: "/rti" },
+    ],
+  },
+  {
+    label: "NIRF",
+    href: "/nirf",
+  },
+  {
+    label: "Contact Us",
+    href: "/contact",
+  },
 ];
 
 function HeaderDropdown({
@@ -151,20 +130,20 @@ function HeaderDropdown({
 }) {
   return (
     <div
-      className={`invisible absolute top-full z-50 mt-3 min-w-64 translate-y-1 rounded-2xl border border-white/60 bg-white/50 p-2.5 opacity-0 shadow-2xl shadow-slate-950/15 backdrop-blur-xl backdrop-saturate-150 transition duration-200 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 ${
+      className={`invisible absolute top-full z-50 mt-2 min-w-64 translate-y-1 rounded-2xl border border-white/15 bg-[#022448]/95 p-2 opacity-0 shadow-2xl backdrop-blur-xl transition duration-200 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 ${
         align === "right" ? "right-0" : "left-0"
       }`}
     >
       <div className="absolute -top-3 h-3 w-full" />
-      <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-linear-to-r from-transparent via-blue-500/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-linear-to-r from-transparent via-[#79acfd]/50 to-transparent" />
       {links.map((link) => (
         <Link
           key={`${link.label}-${link.href}`}
           href={link.href}
-          className="group/link flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 text-sm font-semibold text-[#0a1730] transition hover:bg-white/80 hover:text-blue-700 hover:shadow-sm focus:outline-none focus-visible:bg-white/90"
+          className="group/link flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 text-sm font-semibold text-white/90 transition hover:bg-white/10 hover:text-[#79acfd] focus:outline-none"
         >
           <span>{link.label}</span>
-          <ArrowUpRight className="size-3.5 opacity-0 transition group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 group-hover/link:opacity-70" />
+          <ArrowUpRight className="size-3.5 opacity-0 transition group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 group-hover/link:opacity-90 text-[#79acfd]" />
         </Link>
       ))}
     </div>
@@ -183,6 +162,28 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white shadow-sm xl:shadow-none">
+      {/* Top Urgent Announcement Ticker Bar */}
+      <div className="bg-[#022448] text-white text-xs py-1.5 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-[100rem] items-center justify-between gap-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#225eaa] px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-white shrink-0">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+              Notice Ticker
+            </span>
+            <div className="truncate text-[12px] font-medium text-slate-200">
+              <span className="font-semibold text-white">WBJEE 2026 Cutoffs Released</span> &bull; Campus Recruitment Drive 2026 Phase-1 Scheduled &bull; NPTEL / SWAYAM Course Registration Open
+            </div>
+          </div>
+          <div className="hidden md:flex items-center gap-4 shrink-0 text-[11px] font-medium text-slate-300">
+            <Link href="/notices" className="hover:text-white transition underline underline-offset-2">
+              View All Circulars &rarr;
+            </Link>
+            <span className="text-slate-500">|</span>
+            <span>Helpline: +91 (033) 2582-1309</span>
+          </div>
+        </div>
+      </div>
+
       <div className="mx-auto flex max-w-[100rem] items-center justify-between gap-4 px-4 py-2 sm:px-6 lg:px-8 xl:items-stretch xl:gap-8">
         <Link href="/" className="flex min-w-0 shrink items-center gap-2 sm:gap-3">
           <Image
@@ -248,7 +249,15 @@ export default function Header() {
               ))}
             </div>
 
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 border border-slate-200 rounded-full px-3 py-1 bg-slate-50">
+                <span className="text-blue-900 font-bold">NAAC</span>
+                <span className="text-slate-300">|</span>
+                <span className="text-blue-900 font-bold">NIRF</span>
+                <span className="text-slate-300">|</span>
+                <span>AICTE Approved</span>
+              </div>
+
               <Link
                 href={session ? "/admin" : "/admin/login"}
                 prefetch={false}
@@ -262,7 +271,7 @@ export default function Header() {
 
           <div className="h-px w-full bg-slate-200" />
 
-          <nav className="flex items-center justify-between pt-2">
+          <nav className="flex items-center justify-between mt-1.5 bg-[#022448] text-white py-2.5 px-6 rounded-lg shadow-sm border border-white/10">
             {MAIN_NAV_LINKS.map((item, index) => {
               const hasChildren = Boolean(item.children?.length);
 
@@ -271,18 +280,18 @@ export default function Header() {
                   {hasChildren ? (
                     <button
                       type="button"
-                      className="flex items-center gap-1.5 text-[15px] font-bold text-[#0a1730] transition-colors hover:text-blue-700"
+                      className="flex items-center gap-1 text-[14px] font-semibold text-white transition-colors hover:text-[#79acfd] cursor-pointer"
                     >
                       {item.label}
                       <ChevronDown
-                        className="h-4 w-4 text-slate-400 transition-transform group-hover:rotate-180 group-hover:text-blue-700"
-                        strokeWidth={2.5}
+                        className="h-3.5 w-3.5 text-blue-200/70 transition-transform group-hover:rotate-180 group-hover:text-[#79acfd]"
+                        strokeWidth={2}
                       />
                     </button>
                   ) : (
                     <Link
                       href={item.href}
-                      className="flex items-center gap-1.5 text-[15px] font-bold text-[#0a1730] transition-colors hover:text-blue-700"
+                      className="flex items-center gap-1 text-[14px] font-semibold text-white transition-colors hover:text-[#79acfd]"
                     >
                       {item.label}
                     </Link>

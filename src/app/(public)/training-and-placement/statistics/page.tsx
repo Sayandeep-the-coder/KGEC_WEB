@@ -57,11 +57,19 @@ const DEPT_ORDER = ["CSE", "IT", "ECE", "EE", "ME", "MCA"];
 export default async function PlacementStatisticsPage() {
   const DEFAULT_YEAR = 2024;
 
-  const [statsData, deptData, recData] = await Promise.all([
-    getCachedStats(),
-    getCachedDepartments(DEFAULT_YEAR),
-    getCachedRecruiters(DEFAULT_YEAR),
-  ]);
+  let statsData: any[] = [];
+  let deptData: any[] = [];
+  let recData: any[] = [];
+
+  try {
+    [statsData, deptData, recData] = await Promise.all([
+      getCachedStats(),
+      getCachedDepartments(DEFAULT_YEAR),
+      getCachedRecruiters(DEFAULT_YEAR),
+    ]);
+  } catch (err) {
+    console.warn("Database connection failed for placement statistics, serving fallback data:", err);
+  }
 
   const initialTrends = statsData.map((item) => ({
     year: item.year,
