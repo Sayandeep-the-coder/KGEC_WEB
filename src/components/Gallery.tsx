@@ -175,8 +175,8 @@ function GalleryCard({
 
 export default function Gallery() {
   return (
-    <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-4 md:py-6 h-full flex flex-col justify-center overflow-hidden relative touch-pan-y">
-      <div className="relative z-10 w-full min-h-[88vh] overflow-hidden rounded-2xl bg-linear-to-br from-[#022448] via-[#1e3a5f] to-[#022448] flex flex-col items-center justify-center py-8 lg:py-12 text-white shadow-md border border-white/5">
+    <section className="mx-auto w-full max-w-[100rem] px-0 sm:px-6 lg:px-8 py-0 sm:py-6 h-full flex flex-col justify-center overflow-hidden relative touch-pan-y">
+      <div className="relative z-10 w-full overflow-hidden rounded-none sm:rounded-2xl bg-linear-to-br from-[#022448] via-[#1e3a5f] to-[#022448] flex flex-col items-center justify-center py-10 lg:py-14 text-white shadow-none sm:shadow-md border-none sm:border border-white/5">
         {/* Title area */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}

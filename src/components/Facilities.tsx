@@ -123,8 +123,8 @@ export default function Facilities() {
   }, [showNext]);
 
   return (
-    <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-4 md:py-6 h-full flex flex-col justify-center overflow-hidden touch-pan-y">
-      <div className="relative w-full h-[85vh] lg:h-[88vh] min-h-[600px] overflow-hidden rounded-2xl bg-slate-950 shadow-md">
+    <section className="mx-auto w-full max-w-[100rem] px-0 sm:px-8 lg:px-12 py-12 sm:py-16 md:py-20 h-full flex flex-col justify-center overflow-hidden touch-pan-y">
+      <div className="relative w-full h-[85vh] lg:h-[88vh] min-h-[600px] overflow-hidden rounded-none sm:rounded-2xl bg-slate-950 shadow-none sm:shadow-md">
         
         <AnimatePresence initial={false} custom={direction}>
           <motion.div

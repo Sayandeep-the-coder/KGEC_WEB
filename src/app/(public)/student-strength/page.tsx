@@ -27,10 +27,17 @@ const getCachedEnrollmentDepartments = unstable_cache(
 );
 
 export default async function StudentStrengthPage() {
-  const [statsData, deptData] = await Promise.all([
-    getCachedEnrollmentStats(),
-    getCachedEnrollmentDepartments(),
-  ]);
+  let statsData: any[] = [];
+  let deptData: any[] = [];
+
+  try {
+    [statsData, deptData] = await Promise.all([
+      getCachedEnrollmentStats(),
+      getCachedEnrollmentDepartments(),
+    ]);
+  } catch (err) {
+    console.warn("Database connection failed for student strength, serving fallback data:", err);
+  }
 
   let totalIntake = 0;
   let maleRatio = "0";

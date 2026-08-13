@@ -59,7 +59,7 @@ export default function Impact() {
   const duplicatedData = [...impactData, ...impactData];
 
   return (
-    <section className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-8 py-4 md:py-6 h-full flex flex-col justify-center overflow-hidden touch-pan-y">
+    <section className="mx-auto w-full max-w-[100rem] px-0 sm:px-6 lg:px-8 py-0 sm:py-6 h-full flex flex-col justify-center overflow-hidden touch-pan-y">
       <style>{`
         @keyframes carousel-scroll {
           0% { transform: translateX(0); }
@@ -74,7 +74,7 @@ export default function Impact() {
       `}</style>
 
       {/* Applied gradient based on design.md primary and primary-container colors */}
-      <div className="relative w-full h-auto lg:h-[88vh] min-h-125 overflow-hidden rounded-2xl bg-gradient-to-br from-[#022448] via-[#1e3a5f] to-[#022448] shadow-md flex flex-col items-center justify-center py-8">
+      <div className="relative w-full h-auto overflow-hidden rounded-none sm:rounded-2xl bg-gradient-to-br from-[#022448] via-[#1e3a5f] to-[#022448] shadow-none sm:shadow-md flex flex-col items-center justify-center py-10 lg:py-14">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -121,8 +121,7 @@ export default function Impact() {
                 <div className="absolute flex top-0 md:group-hover/card:opacity-100 transition-all duration-500 md:opacity-0 left-0 w-full z-20">
                   <div className="p-3 md:p-4 h-max mt-auto pt-6">
                     <button className="bg-[#1e3a5f]/50 backdrop-blur-md overflow-hidden rounded-full font-medium text-white border border-[#79acfd]/30 text-xs">
-                      <div className="bg-gradient-to-r flex items-center gap-2 px-3 py-1.5 from-[#225eaa]/80 to-[#1e3a5f]/80 hover:from-[#79acfd] hover:to-[#225eaa] transition-colors">
-                        <Sparkles size={14} className="text-[#79acfd]" />{" "}
+                      <div className="bg-gradient-to-r flex items-center px-3 py-1.5 from-[#225eaa]/80 to-[#1e3a5f]/80 hover:from-[#79acfd] hover:to-[#225eaa] transition-colors">
                         {card.buttonText}
                       </div>
                     </button>

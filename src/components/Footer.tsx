@@ -8,18 +8,19 @@ import { motion, useInView } from "framer-motion";
 
 const linkColumns = [
   {
-    title: "ABOUT",
+    title: "ABOUT & STATUTORY",
     links: [
       { label: "About Us", href: "/about" },
-      { label: "Vision & Mission", href: "/about" },
       { label: "Principal's Desk", href: "/administration/principal" },
-      { label: "Student Strength", href: "/student-strength" },
+      { label: "IQAC & NAAC Cell", href: "/iqac" },
+      { label: "NIRF Disclosures", href: "/nirf" },
+      { label: "RTI Cell", href: "/rti" },
     ],
   },
   {
     title: "ACADEMICS",
     links: [
-      { label: "Departments", href: "/departments" },
+      { label: "Departments Overview", href: "/departments" },
       { label: "Academic Downloads", href: "/downloads?category=general" },
       { label: "Mandatory Disclosure", href: "/downloads?category=mandatory-disclosure" },
       { label: "Academic Notices", href: "/notices" },
@@ -28,28 +29,28 @@ const linkColumns = [
   {
     title: "ADMISSIONS",
     links: [
-      { label: "UG B.Tech Admissions", href: "/admission/ug-btech" },
-      { label: "PG M.Tech Admissions", href: "/admission/pg-mtech" },
-      { label: "PG MCA Admissions", href: "/admission/pg-mca" },
-      { label: "Admissions Notices", href: "/notices" },
+      { label: "UG B.Tech (WBJEE)", href: "/admission/ug-btech" },
+      { label: "PG M.Tech (GATE)", href: "/admission/pg-mtech" },
+      { label: "PG MCA (JECA)", href: "/admission/pg-mca" },
+      { label: "Seat Matrix & Notices", href: "/notices" },
     ],
   },
   {
-    title: "CAMPUS LIFE",
+    title: "CAMPUS & COMPLIANCE",
     links: [
-      { label: "Cells, Clubs & Events", href: "/campus-life" },
-      { label: "Campus Gallery", href: "/gallery" },
-      { label: "E-Cell", href: "/iic/e-cell" },
-      { label: "IIC", href: "/iic" },
+      { label: "Anti-Ragging Cell", href: "/contact" },
+      { label: "Cells & Clubs", href: "/campus-life" },
+      { label: "E-Cell & IIC", href: "/iic/e-cell" },
+      { label: "Hostels", href: "/campus-life/hostels" },
     ],
   },
   {
-    title: "PLACEMENTS",
+    title: "PLACEMENTS & ALUMNI",
     links: [
       { label: "T&P Cell Portal", href: "/training-and-placement" },
       { label: "Placement Statistics", href: "/training-and-placement/statistics" },
-      { label: "Alumni Diaries", href: "/alumni" },
-      { label: "Placement Notices", href: "/training-and-placement/notices" },
+      { label: "Alumni Network", href: "/alumni" },
+      { label: "Recruiter Guidelines", href: "/training-and-placement#procedure" },
     ],
   },
 ];

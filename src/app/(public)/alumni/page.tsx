@@ -12,20 +12,25 @@ export const metadata: Metadata = {
 
 const getCachedAlumniList = unstable_cache(
   async () => {
-    const dbRows = await db.select().from(alumni).orderBy(desc(alumni.batchYear));
-    return dbRows.map((r) => ({
-      id: r.id,
-      name: r.name,
-      role: r.currentRole,
-      category: r.category,
-      highlight: r.bio || r.company,
-      batchYear: r.batchYear,
-      department: r.department,
-      company: r.company,
-      location: r.location,
-      linkedinUrl: r.linkedinUrl,
-      photoUrl: r.photoUrl,
-    }));
+    try {
+      const dbRows = await db.select().from(alumni).orderBy(desc(alumni.batchYear));
+      return dbRows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        role: r.currentRole,
+        category: r.category,
+        highlight: r.bio || r.company,
+        batchYear: r.batchYear,
+        department: r.department,
+        company: r.company,
+        location: r.location,
+        linkedinUrl: r.linkedinUrl,
+        photoUrl: r.photoUrl,
+      }));
+    } catch (err) {
+      console.warn("Database connection failed for alumni page, serving empty list:", err);
+      return [];
+    }
   },
   ["alumni-page"],
   { revalidate: 3600, tags: ["alumni"] }
